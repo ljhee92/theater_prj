@@ -1,4 +1,4 @@
-package qqq;
+package VO;
 
 public class asdVO {
 
