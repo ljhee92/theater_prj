@@ -62,8 +62,9 @@ form {
 </head>
 <body>
 <div>
-	<h2>Login</h2>
+	<h2>명화관</h2>
     <form action="loginService.jsp" method="post">
+    	<lavel><h2>관리자 인증</h2></lavel>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
         <label for="password">Password:</label>
