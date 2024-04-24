@@ -8,7 +8,7 @@
     String password = request.getParameter("password");
 
     // Create an instance of AdminVO with the username and password
-    AdminVO adminVO = new AdminVO(username, password);
+    AdminVO adminVO = new AdminVO(username,password);
 
     // Create an instance of AdminLoginDao
     AdminLoginDao alDAO = new AdminLoginDao();
