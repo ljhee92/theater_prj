@@ -32,10 +32,11 @@
 <body>
 <div>
 <h1>메인 페이지</h1>
-    <% 
+    <%
         String username = (String)session.getAttribute("username");
         if (username != null) {
-            out.println("<p>Welcome, " + username + "!</p>");
+        	out.println("<div>");
+            out.println("<p>" + username + "님 로그인중</p>");
         } else {
             out.println("<p>Welcome, Guest!</p>");
         }

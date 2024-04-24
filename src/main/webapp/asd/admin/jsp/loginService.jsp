@@ -4,23 +4,24 @@
 <%@ page import="admin.AdminVO"%>
 <%
     // Get the username and password from the form
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
+    String inputId = request.getParameter("inputId");
+	String inputPassword = request.getParameter("inputPassword");
+	System.out.print(request.getParameter("inputId"));
 
     // Create an instance of AdminVO with the username and password
-    AdminVO adminVO = new AdminVO(username, password);
+    AdminVO adminVO = new AdminVO(inputId, inputPassword);
 
     // Create an instance of AdminLoginDao
     AdminLoginDao alDAO = new AdminLoginDao();
 
     // Call the adminLogin method to validate the user
     AdminVO adminLoginResultVO = alDAO.adminLogin(adminVO);
-
+	//log(adminLoginResultVO.getAdminId());
     // Check if the login was successful
     if (adminLoginResultVO != null) {
         // Login successful
-        session.setAttribute("username", username); // Save the username in session
-        response.sendRedirect("index.jsp"); // Redirect to the welcome page
+        session.setAttribute("id", adminLoginResultVO.getAdminId()); // Save the username in session
+        response.sendRedirect("dashboard.jsp"); // Redirect to the welcome page
     } else {
         // Login failed
         out.println("<h2>Login Failed</h2>");
