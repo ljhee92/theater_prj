@@ -50,7 +50,7 @@
     <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/eggupdate.css" />
     <link rel="stylesheet" media="print" type="text/css" href="https://img.cgv.co.kr/R2014/css/print.css" />    
     <link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/R2014/js/jquery.ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
-    
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>    
     <script type="text/javascript" src="/common/js/extraTheaters.js"></script>
     <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
     <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery-1.10.2.min.js"></script>
@@ -105,6 +105,60 @@
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/amcharts.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/radar.js"></script>
 
+<style>
+/* 별점 아이콘 스타일링 */
+.star-rating::before {
+    content: '★★★★★';
+    letter-spacing: 0.1em;
+    color: #ccc; /* 별점의 기본 색상 */
+}
+
+/* 실제 별점에 따라 색상을 변경하는 스타일 */
+.review-item .star-rating::before {
+    content: '★★★★★';
+    letter-spacing: 0.1em;
+    color: #f7d51d; /* 별점의 색상을 변경하려면 원하는 색상으로 변경 */
+}
+
+/* 리뷰 리스트 스타일 */
+.review-list {
+    margin-top: 20px;
+}
+
+.review-item {
+    margin-bottom: 10px;
+}
+
+.user-id {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.review-content {
+    margin-top: 5px;
+}
+
+/* 별점에 따라 별이 채워지도록 수정 */
+.star-rating[data-rating="1"]::before {
+    content: '★☆☆☆☆'; /* 1점일 때 */
+}
+
+.star-rating[data-rating="2"]::before {
+    content: '★★☆☆☆'; /* 2점일 때 */
+}
+
+.star-rating[data-rating="3"]::before {
+    content: '★★★☆☆'; /* 3점일 때 */
+}
+
+.star-rating[data-rating="4"]::before {
+    content: '★★★★☆'; /* 4점일 때 */
+}
+
+.star-rating[data-rating="5"]::before {
+    content: '★★★★★'; /* 5점일 때 */
+}
+</style>
 
     <!--/각페이지 Header End--> 
     <script type="text/javascript">
@@ -211,17 +265,16 @@
 
         //]]>
     </script>
-    
-
-    
-</head>
-<body class="">
 <script type="text/javascript">
     $(function() {
 
     }); // ready
 </script>
-	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    
+
+    
+</head>
+<body class="">
 
 	<div class="skipnaiv">
 		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
@@ -248,15 +301,7 @@
 					<ul class="memberInfo_wrap">
 						<!-- Advertisement -->
 
-						<div class="ad-partner">
-							<a
-								href="http://www.cgv.co.kr/culture-event/event/detailViewUnited.aspx?seq=31426&menu=006">
-								<img
-								src="https://img.cgv.co.kr/WingBanner/2023/0208/16758461047540.png"
-								alt="현대M포인트"
-								onerror="this.onerror=null;javascript:;$('.ad-partner').hide();" />
-							</a>
-						</div>
+				
 
 						<!-- /Advertisement -->
 
@@ -268,11 +313,6 @@
 						<li><a href="/user/join/"><img
 								src="https://img.cgv.co.kr/R2014/images/common/ico/loginJoin.png"
 								alt="회원가입" /><span>회원가입</span></a></li>
-
-
-						<li><a href="/user/mycgv/"><img
-								src="https://img.cgv.co.kr/R2014/images/common/ico/loginMember.png"
-								alt="MY CGV" /><span>MY CGV</span></a></li>
 						<li><a href="/support/default.aspx"><img
 								src="https://img.cgv.co.kr/R2014/images/common/ico/loginCustomer.png"
 								alt="고객센터" /><span>고객센터</span></a></li>
@@ -644,23 +684,17 @@
 						</li>
 					</ul>
 				</div>
-			</div>
+			</div><!-- end nav -->
 			<!-- 서브 메뉴 -->
-		</div>
+		</div><!-- end header -->
 		<!-- E Header -->
 
 		<!-- Contaniner -->
 		<div id="contaniner" class="">
 			<!-- 벽돌 배경이미지 사용 시 class="bg-bricks" 적용 / 배경이미지가 없을 경우 class 삭제  -->
-
-
 			<!-- Contents Area -->
 			<div id="contents" class="">
-
-
 				<!-- Contents Start -->
-
-
 				<!-- 실컨텐츠 시작 -->
 				<div class="wrap-movie-detail" id="select_main">
 
@@ -931,19 +965,9 @@
 									</div>
 								</div>
 							</div>
-							<!-- .sect-stillcut -->
-
-
-
-
-
-
 							<div class="paging">
 								<ul id="paging_point"></ul>
 							</div>
-
-
-
 
 
 						</div>
@@ -959,395 +983,79 @@
 							<input type="hidden" name="userid" id="frmPointUserId">
 							<input type="hidden" name="nick" id="frmPointNick">
 						</form>
-
-
-
-
-						<!--<div class="sect-sns">
-    <ul>                	
-        <li><a class="link-facebook" href="#" id="link_facebook">FaceBook</a></li>
-        <li><a class="link-twitter" href="#" id="link_twitter">Twitter</a></li>
-    </ul>
-    <div class="share">
-        <div id="fb-root"></div>
-        <script>
-            (function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&appId=341385562539159&version=v2.0";
-                fjs.parentNode.insertBefore(js, fjs);
-            } (document, 'script', 'facebook-jssdk'));
-        </script>
-
-        <div class="fb-like" style="z-index:2" data-href="http%3a%2f%2fwww.cgv.co.kr%2fmovies%2fdetail-view%2fdefault.aspx%3fmidx%3d88104" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
-    </div>-->
-
-
-
-
-					</div>
-
-				</div>
-				<span style="display: none" class="modifyCommentDummy"></span>
-			</div>
-			<!-- 실컨텐츠 끝 -->
-			<script type="text/javascript">
-    _TRK_CP = _TRK_CP.replace("{0}", "주요정보");
-</script>
-
-
-
-
-
-			<!-- 평점 작성/수정시 하단에 운영원칙 버튼 클릭시 노출 -->
-			<script id="temp_view" type="text/template">
-<div class="layer-contents on-shadow" style="width:633px;">
-    <div class="popwrap sect-operation-rule">
-        <h1>운영원칙</h1>
-        <div class="pop-contents">
-            <p>
-                CGV는 올바른 커뮤니티를 지향하기 위하여 몇 가지 운영원칙을 마련하고 있습니다.<br/>
-                운영원칙에 어긋나는 게시물로 판단되는 글은 적발 시, 경고 없이 삭제되며 아이디 중지 등의<br/>
-                제재 조치를 받을 수 있습니다.<br/>
-                <br/>
-                CGV는 보다 건전한 인터넷 문화를 지향합니다.
-            </p>
-            <div class="box-info"> 
-                <strong>게시물 삭제 기준</strong>
-                <ul>
-                    <li> - 개인정보(실명, 상호명, 사진, 전화번호, 주민등록번호 등) 유포</li>
-                    <li> - 동일 내용의 게시글/덧글 반복(도배)</li>
-                    <li> - 특정인 대상의 <span class="txt-red">비방/욕설</span> 등의 표현으로 불쾌감을 주는 내용</li>
-                    <li> - 음란성 또는 청소년에게 부적합한 내용</li>
-                    <li> - 서비스 취지(성격)에 맞지 않은 내용</li>
-                    <li> - <span class="txt-red">비방/허위사실 유포</span> 등의 명예훼손 관련 게시물</li>
-                    <li> - 저작권 관련 게시물 등 기타 관련 법률에 위배되는 글</li>
-                </ul>
-            </div>
-        </div>
-
-        <button type="button" class="btn-close">운영원칙 닫기</button>
-    </div>
 </div>
-</script>
-
-			<!-- 2020.05.07 추가 실관람평 > 관람 포인트 선택 등록 -->
-			<script id="charmPoint" type="text/template">
-    <div class="layer-wrap" id="movie-emotion-select" style="width:0px; top:0px;">
-    <div class="popwrap" style="width:516px;margin-top:0px;margin-left:-268px">
-        <h1>관람 포인트 선택</h1>
-        <div class="pop-contents">
-            <!-- Contents Addon -->
-            <div class="movie-emotion-select">
-                <div class="header">
-                    <p class="main">이 영화의 관람 포인트를 선택해주세요! </p>
-                    <p class="sub"><span>중복선택</span>이 가능합니다.</p>
-                </div>
-                <div class="box">
-                    <div class="name">
-                        매력 포인트
-                    </div>
-                    <div class="wrap_input">
-                        <label><input type="checkbox" name="charm1" id="effect" /><span>감독연출</span></label>
-                        <label><input type="checkbox" name="charm2" id="story" /><span>스토리</span></label>
-                        <label><input type="checkbox" name="charm3" id="visual" /><span>영상미</span></label>
-                        <label><input type="checkbox" name="charm4" id="acting" /><span>배우연기</span></label>
-                        <label><input type="checkbox" name="charm5" id="ost" /><span>OST</span></label>
-                    </div>
-                </div>
-
-                <div class="box">
-                    <div class="name">
-                        감정 포인트
-                    </div>
-                    <div class="wrap_input">
-                        <label><input type="checkbox" name="emotion1" id="emotion1" /><span>${Emotion1Text}</span></label>
-                        <label><input type="checkbox" name="emotion2" id="emotion2" /><span>${Emotion2Text}</span></label>
-                        <label><input type="checkbox" name="emotion3" id="emotion3" /><span>${Emotion3Text}</span></label>
-                        <label><input type="checkbox" name="emotion4" id="emotion4" /><span>${Emotion4Text}</span></label>
-                        <label><input type="checkbox" name="emotion5" id="emotion5" /><span>${Emotion5Text}</span></label>
-                    </div>
-                </div>
-            </div>
-            <!-- //Contents Addon -->
-            <div class="set-btn fix-width">
-                <button type="submit" id="charmRegBtn" class="round inred"><span>확인</span></button>
-            </div>
-
-            <input type="hidden" id="charmGenre_SMS1" value="${Genre_SMS1}" />
-            <input type="hidden" id="RegCommentIdx" value="${CommentIdx}" />
-        </div>
-        <button type="button" class="btn-close" id="regCharmCloseBtn">관람 포인트 선택 팝업 닫기</button>
-    </div>
 </div>
-<!-- //관람 포인트 선택 팝업 팝업 -->
-</script>
+<div class="review-list">
+     <ul style="margin: 0 auto; width: fit-content;">
 
 
-			<script type="text/javascript">
-    $(function () { 
-        // 관람 포인트 등록 팝업 닫기 버튼 클릭시
-        $(document.body).on("click", "#regCharmCloseBtn", function () {
-            location.reload();
-            $('.layer-wrap').remove();
-        });
+    </ul> 
+</div> <!-- //end review-list-->
 
-        // 관람 포인트 등록 확인 버튼 클릭시   
-        $(document.body).on("click", "#charmRegBtn", function () {
-            var commentIdx = $("#RegCommentIdx").val();
-            var movieIdx = 88104;
-            if(commentIdx == ""){
-                return; 
-            }
-            
-            var acting = 'N';
-            var story = 'N';
-            var visual = 'N';
-            var ost = 'N';
-            var effect = 'N';
-            var emotion1 = 'N';
-            var emotion2 = 'N';
-            var emotion3 = 'N';
-            var emotion4 = 'N';
-            var emotion5 = 'N';
-            var genre_sms1 = $("#charmGenre_SMS1").val();
-        
-            if ($('#acting').prop("checked")) {
-                acting = 'Y';
-            }
-            if ($('#story').prop("checked")) {
-                story = 'Y';
-            }
-            if ($('#visual').prop("checked")) {
-                visual = 'Y';
-            }
-            if ($('#ost').prop("checked")) {
-                ost = 'Y';
-            }
-            if ($('#effect').prop("checked")) {
-                effect = 'Y';
-            }
-            if ($('#emotion1').prop("checked")) {
-                emotion1 = 'Y'
-            }
-            if ($('#emotion2').prop("checked")) {
-                emotion2 = 'Y'
-            }
-            if ($('#emotion3').prop("checked")) {
-                emotion3 = 'Y'
-            }
-            if ($('#emotion4').prop("checked")) {
-                emotion4 = 'Y'
-            }
-            if ($('#emotion5').prop("checked")) {
-                emotion5 = 'Y'
-            }
-            if(acting == 'N' && story == 'N' && visual == 'N' && ost == 'N' && effect == 'N'){
-                alert("매력 포인트를 1개 이상 선택해주세요.");
-                return;
-            }
 
-            if (emotion1 == "N" && emotion2 == "N" && emotion3 == "N" && emotion4 == "N" && emotion5 == "N") {
-                alert("감정 포인트를 1개 이상 선택해주세요.");
-                return;
-            }  
 
-            // 관람 포인트 선택 저장
-            var pointObj = app.movie();
-            if (!pointObj.setCharmEdit) {
-                pointObj.setCharmEdit = function (data, callback, error) {
-                    var url = '/common/ajax/point.aspx/setCharm_AddEmotion';
-                    app.ajax().set({ dataType: 'json', url: url, data: data, contentType: "application/json; charset=utf-8", successHandler: callback });
-                }
 
-            };
-            pointObj.setCharmEdit(JSON.stringify({ 'commentIdx': commentIdx
-                                                    , 'movieIdx' : movieIdx
-                                                    , 'acting': acting
-                                                    , 'story': story
-                                                    , 'visual': visual
-                                                    , 'ost': ost
-                                                    , 'effect': effect
-                                                    , 'genre_sms1': genre_sms1
-                                                    , 'emotion1': emotion1
-                                                    , 'emotion2': emotion2
-                                                    , 'emotion3': emotion3
-                                                    , 'emotion4': emotion4
-                                                    , 'emotion5': emotion5
-                                                    }), resultCharmingCallback);
-                   
-            //결과
-            function resultCharmingCallback(result) {
-                switch (result.resultCode) {
-                    case "1":
-                        alert("관람 포인트가 등록되었습니다.");
-                        $('.layer-wrap').remove();
-                        location.reload();
-                        break;
-                    case "-1":
-                        alert("등록 중 오류가 발생 되었습니다.");
-                        break;
-                    default:
+</div>
+<!-- 별점 리뷰함수 -->
+<script>
+    $(document).ready(function() {
+    	// 페이지 로드 시 별점 데이터를 가져와서 HTML에 채워넣음
+    	function fetchStarRatings() {
+    	    // 서버로부터 별점 데이터를 가져와서 처리하는 코드
+    	    // 예: $.ajax 를 사용하여 API 호출
+    	    // 별점 데이터를 가져온 후 아래의 함수 호출: displayStarRatings(starData);
 
-                        break;
-                }
-            }
-        });
+    	    // 가상의 별점 데이터 (예시)
+    	    var starData = [
+    	        { userId: "사용자1", rating: 5, reviewContent: "리뷰 내용1" },
+    	        { userId: "사용자2", rating: 4, reviewContent: "리뷰 내용2" },
+    	        { userId: "사용자3", rating: 1, reviewContent: "리뷰 내용3" },
+    	        { userId: "사용자4", rating: 5, reviewContent: "리뷰 내용4" },
+    	        { userId: "사용자5", rating: 5, reviewContent: "리뷰 내용5" },
+    	        { userId: "사용자6", rating: 3, reviewContent: "리뷰 내용6" },
+    	        { userId: "사용자7", rating: 5, reviewContent: "리뷰 내용7" },
+    	        { userId: "사용자8", rating: 2, reviewContent: "리뷰 내용8" },
+    	        { userId: "사용자9", rating: 3, reviewContent: "리뷰 내용9" },
+    	        { userId: "사용자10", rating: 1, reviewContent: "리뷰 내용10" },
+    	        // 여기에 별점 데이터 추가
+    	    ];
+
+    	    // 별점 데이터를 가져온 후 아래의 함수 호출
+    	    displayStarRatings(starData);
+    	}
+
+    	// 별점을 HTML에 채워넣는 함수
+    	function displayStarRatings(starData) {
+    	    var $reviewList = $('.review-list ul');
+    	    $reviewList.empty(); // 기존의 리뷰 리스트를 비움
+
+    	    // 가져온 별점 데이터를 기반으로 리뷰 아이템을 생성하여 추가
+    	    for (var i = 0; i < starData.length; i++) {
+    	        var starRating = starData[i];
+    	        var $reviewItem = $('<li style=\"width:300px; float:left\"><div class="review-item"><span class="user-id">' + starRating.userId + '</span><span class="star-rating" data-rating="' + starRating.rating + '"></span><div class="review-content">' + starRating.reviewContent + '</div></div></li>');
+    	        $reviewList.append($reviewItem);
+    	    }
+    	    // 별점 데이터를 가져와서 HTML에 채워넣은 후에 각 별점 아이콘에 적절한 색상을 적용하기 위해 별점 아이콘의 data-rating 속성을 설정
+    	    $reviewList.find('.star-rating').each(function() {
+    	        var rating = $(this).data('rating');
+    	        $(this).attr('data-rating', rating); // data-rating 속성 설정
+    	    });
+    	}
+
+    	// 페이지 로드 시 별점 데이터를 가져와서 HTML에 채워넣음
+    	fetchStarRatings();
+
     });
-
-    // 2020.05.07 관람 포인트 등록 레이어팝업
-    function charmPointPop(commentIdx) {
-        // 관람 포인트 항목 조회
-        var charmObj = app.movie();
-        if (!charmObj.GetCharmPoint) {
-            charmObj.GetCharmPoint = function (data, callback, error) {
-                var url = '/common/ajax/point.aspx/GetCharmPoint_AddEmotion';
-                app.ajax().set({ dataType: 'json', url: url, data: data, contentType: "application/json; charset=utf-8", successHandler: callback });
-            }
-        };
-        charmObj.GetCharmPoint(JSON.stringify({ 'commentIdx': commentIdx }), resultCharmCallback);
-
-        //결과
-        function resultCharmCallback(result) {
-            var $std = $(this),
-	        options = {
-		        '$target': $std,
-		        'type': 'center',
-		        'html': $('#charmPoint').tmpl(result),
-                'independence': true,
-		        'mask': 'none'
-            };
-            app.instWin.add(options);
-        };
-    }   
 </script>
 
-			<!-- 내가 쓴 평점 -->
-			<script id="movie_my_point" type="text/x-jquery-tmpl">
-<li class="user_my_point_list" id="liCommentFirst${CommentIdx}">
-    <div class="box-image">
-        <span class="thumb-image">     
-            <img src="${UserSmallImage}"  alt="사용자 프로필" onerror="errorImage(this, {'type':'profile'})"/>                                            
-            <span class="profile-mask"></span>                                                        
-            <div class="theater-sticker">
-				{{if MediaTypeCode.indexOf("412") > -1  }} <span class="imax">IMAX</span> {{/if}}
-                {{if MediaTypeCode.indexOf("1969") > -1  }} <span class="fourdx">4DX</span> {{/if}}
-                {{if MediaTypeCode.indexOf("2202") > -1  }} <span class="screenx">SCREENX</span> {{/if}}
-			</div>
-        </span>
-    </div>
-    <div class="box-contents">
-        <ul class="writerinfo">                                        
-            
-            <li class="writer-name">                
-                <span class="{{if EggPoint == 0 && Point > 0 }}  {{else  EggPoint == 1 }} egg-icon {{else  EggPoint == 2 }} egg-icon good {{else}} {{/if}}"></span>${UserIdNicName}
-            </li>
-            <li class="writer-etc">
-                			
-				<span class="day">${RegistDate}</span>
-				<span class="like point_like" id="${CommentIdx}" data-isMyGood="${IsMyGOOD}" data-CommentIdx="${CommentIdx}">
-					<a href="javascript:return false;" class="btn_point_like"><span><img {{if IsMyGOOD }}src="http://img.cgv.co.kr/R2014/images/point/ico_point_like.png"{{else}}src="http://img.cgv.co.kr/R2014/images/point/ico_point_default.png"{{/if}} alt="like" class="like_red" /></span><span id='idLikeValue'>${GOODCNT}</span></a>
-				</span>
-			</li>
 
-            <li class="point_edit">
-                <a href="" class="btn_edit">평점 수정/삭제 하기</a>
-                <div class="edit_wrap">
-                    <ul>
-                        <li><a href="javascript:return false;" class="ico_edit" data-CommentIdx="${CommentIdx}" data-MovieIdx="${MovieIdx}" data-MovieTitle="${MovieTitle}"><span>평점수정</span></a></li>
-                        <li><a href="javascript:return false;" class="ico_delete" data="${CommentIdx}"><span>평점삭제</span></a></li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div class="box-comment">
-        <p id="pCommentText${CommentIdx}">${CommentText}</p>
-    </div>
-                            
-</li>
-</script>
-			<script id="movie_point_template" type="text/x-jquery-tmpl">
 
-<li class={{if (SPOILERCNT >= 2 && REPORTCNT >= 2) }} "user_spolierswear"
-            {{else (SPOILERCNT >= 2)}} "user_spolier"
-            {{else (REPORTCNT >= 2)}} "user_swearword"
-            {{else}} "" {{/if}}
-    id="liCommentFirst${CommentIdx}"
-    data-SPOILERCNT="${SPOILERCNT}"
-    data-REPORTCNT="${REPORTCNT}"
->
-
-    <a href="javascript:return false;" class="screen_spoiler">&nbsp;</a>
-    <div class="box-image">
-        <span class="thumb-image">   
-                <img src="${UserSmallImage}"  alt="사용자 프로필" onerror="errorImage(this, {'type':'profile'})"/>                                            
-                <span class="profile-mask">
-                </span>
-                <div class="theater-sticker">
-				    {{if MediaTypeCode.indexOf("412") > -1  }} <span class="imax">IMAX</span> {{/if}}
-                    {{if MediaTypeCode.indexOf("1969") > -1  }} <span class="fourdx">4DX</span> {{/if}}
-                    {{if MediaTypeCode.indexOf("2202") > -1  }} <span class="screenx">SCREENX</span> {{/if}}
-			    </div>
-            </a>   
-                                    
-        </span>
-    </div>
-
-    <div class="box-contents">
-        <ul class="writerinfo">     
-        <li class="writer-name">            
-            <span class="{{if EggPoint == 0 && Point > 0 }}  {{else  EggPoint == 1 }} egg-icon {{else  EggPoint == 2 }} egg-icon good {{else}} {{/if}}"></span>${UserIdNicName}
-        </li>
-        <li class="writer-etc">
-              
-				<span class="day">${RegistDate}</span>
-				<span class="like point_like" id="${CommentIdx}" data-isMyGood="${IsMyGOOD}" data-CommentIdx="${CommentIdx}">
-					<a href="javascript:return false;" class="btn_point_like"><span><img {{if IsMyGOOD }}src="http://img.cgv.co.kr/R2014/images/point/ico_point_like.png"{{else}}src="http://img.cgv.co.kr/R2014/images/point/ico_point_default.png"{{/if}} alt="like" class="like_red" /></span><span id='idLikeValue'>${GOODCNT}</span></a>
-				</span>
-			</li>   
-           
-            {{if UserID == "" }}
-            <li class="point_edit">
-                <a href="##" class="btn_edit">평점 수정/삭제 하기</a>
-                <div class="edit_wrap">
-                    <ul>
-                        <li><a href="javascript:return false;" class="ico_edit"><span>평점수정</span></a></li>
-                        <li><a href="javascript:return false;" class="ico_delete" data="${CommentIdx}" ><span>평점삭제</span></a></li>
-                    </ul>
-                </div>
-            </li>
-            {{else}}
-            <li class="point_notify">
-                <a href="" class="btn_notify">스포일러, 욕설/비방 신고</a>
-                <div class="notify_wrap">
-                    <ul>
-                        <li><a href="javascript:return false;" class="ico_spoiler" data-CommentIdx="${CommentIdx}" data-isMySpoiler="${IsMySPOILER}" data-SPOILERCNT="${SPOILERCNT}" ><span>{{if IsMySPOILER }}스포일러 신고 취소{{else}}스포일러 신고{{/if}}</span></a></li>
-                        <li><a href="javascript:return false;" class="ico_swearword" data-CommentIdx="${CommentIdx}" data-IsMyREPORT="${IsMyREPORT}" data-REPORTCNT="${REPORTCNT}" ><span>{{if IsMyREPORT }}욕설/비방 신고 취소{{else}}욕설/비방 신고{{/if}}</span></a></li>
-                    </ul>
-                </div>
-            </li>
-            {{/if}}
-            
-        </ul>
-    </div>
-    <div class="box-comment">
-        <p>${CommentText}</p>
-    </div>
-                            
-</li>
-</script>
-			<script type="text/javascript">
+<script type="text/javascript">
 //<![CDATA[
 var commentOptions;
     (function ($) {
         $(function () {
-            //골든 에그 지수 add_css82
-            $("#goldenEggAlert").on("click", function () {
-                // 2020.05.07 프리에그 문구 추가
-                alert("Pre Egg는 개봉 전 영화에 대한\n기대 평가 입니다.\n\nGolden Egg는 실관람객의\n영화 관람 후 평가 입니다.");
-             });
+
             var myPointPage = 0;    
             var mypointYN = false;    
             var mypointPaneltyYN = false;    
@@ -1382,11 +1090,7 @@ var commentOptions;
             }
             $stillCut.visualMotion(stillOptions);
 
-          
-                        
-  
-
-                
+                       
             
             // 평점 리스트 조회
             function searchPointList(page, isGetTotalCount, filterType, orderType) {
@@ -1434,376 +1138,14 @@ var commentOptions;
     })(jQuery);
 //]]>
 </script>
+</div>
 
 
 
 
-
-
-			<script type="text/javascript">
-//<![CDATA[
-    (function ($) {
-        $(function () {
-            var isLogin = app.config('isLogin');
-
-            // 평점 삭제하기 클릭 event
-            $('.btn-delete').on('click', function () {
-                removePointComment($(this).attr('data'), $(this).attr('midx'));
-                return false;
-            });
-
-            // 실관람평 수정(작성하기를 클릭하였으나, 이미 작성한 관람평이 있을경우)
-            $(document).on("click", ".modifyCommentDummy", function () {
-                var movieIdx = 88104;
-                var $std = $(this);
-                app.movie().getCommentMy({ 'movieIdx': parseInt(movieIdx) }, getCommentResult);
-                
-                function getCommentResult(result) {
-
-                    options = {
-                        '$target': $std,
-                        'type': 'center',
-                        'html': $("#Script2").tmpl(result),
-                        'independence': true,
-                        'mask': 'none'
-                    };
-                    app.instWin.add(options);
-                    updateLayerSetting();
-                    return false;
-                }
-            });
-
-            /*[2015-12-15] 평점 수정 레이어 팝업 start : add_mwpark*/
-            $(document).on("click", ".ico_edit", function () {
-                
-                var movieIdx = 88104;
-                var $std = $(this);
-                app.movie().getCommentMy({ 'movieIdx': parseInt(movieIdx) }, getCommentResult);
-                
-                function getCommentResult(result) {
-                    options = {
-                        '$target': $std,
-                        'type': 'center',
-                        'html': $("#Script2").tmpl(result),
-                        'independence': true,
-                        'mask': 'none'
-                    };
-                    app.instWin.add(options);
-                    updateLayerSetting();
-                    return false;
-                }
-            });
-            /*[2015-12-15] 평점 수정 레이어 팝업 end : add_mwpark*/
-
-            /*[2015-12-15]레이어 팝업 띄운 후 이벤트 및 각종 설정 처리. start : add_mwpark*/
-            function updateLayerSetting() {
-                // 가져온 comment text 의 바이트 수 보이기.
-                $('#text_count').text(fnTextLength($("#my-list-commentTextArea").val()));
-
-                //글자 입력시 바이트 수 반영. 
-                $('#my-list-commentTextArea').count({
-                    useMember: true,
-                    callback: function (c) {
-                        $('#text_count').text(c);
-                    }
-                });
-               
-                // 평점 수정 버튼 클릭
-                $("#my-list-uptBtn").on("click", function () {
-
-                    var textReviewContent = $('#my-list-commentTextArea').val();
-
-                    textReviewContent = textReviewContent.replace(/^\s+/, "");
-                    textReviewContent = textReviewContent.replace(/\s+$/g, "");
-                    textReviewContent = textReviewContent.replace(/\n/g, "");
-                    textReviewContent = textReviewContent.replace(/\r/g, "");
-
-                    if (textReviewContent == "") {
-                        alert("내용을 입력하지 않았습니다.");
-                        $('#my-list-commentTextArea').focus();
-                        return;
-                    }
-
-                    // 2018.04.26 박인선 실관람평 10자 미만 등록불가
-                    if (textReviewContent.replace(/\s*/g,"").length < 10) {
-                        alert("문자를 포함하여 10자 이상(공백 제외) 작성하셔야 등록됩니다.");
-                        $('#my-list-commentTextArea').focus();
-                        return;
-                    } 
-
-                    if (confirm("작성한 관람평을 수정하시겠습니까?")) {
-                        if (isLogin) {
-                            editData();
-                        } else {
-                            app.goLogin();
-                        }
-                    }
-                    
-                    return false;
-                });
-                                
-                /*[2015-12-15]평점 수정 start : add_mwpark*/
-                function editData() {
-                    var eggValue = $("input:radio[name='likeornot1']:checked").val();
-                    var textReviewContent = $('#my-list-commentTextArea').val();
-                
-                    textReviewContent = textReviewContent.replace(/^\s+/, "");
-                    textReviewContent = textReviewContent.replace(/\s+$/g, "");
-                    textReviewContent = textReviewContent.replace(/\n/g, "");
-                    textReviewContent = textReviewContent.replace(/\r/g, "");
-
-                    app.movie().setCommentEdit(JSON.stringify({ 'commentIdx': Number($("#my-list-commentIdx").val())
-                                                                                , "commentText": textReviewContent
-                                                                                , 'movieIdx': Number($("#my-list-movieIdx").val())
-                                                                                , 'isShowView': "Y"
-                                                                                , 'withViewCnt': Number($("#my-list-withviewcnt").val())
-                                                                                , 'withViewer': $("#my-list-withviewer").val()
-                                                                                , 'eggPoint': Number(eggValue)
-                    }), resultCallback);
-
-                    function resultCallback(result) {
-                        switch (result.resultCode) {
-                            case "1":
-                                if (confirm("관람평이 수정되었습니다.\n관람하신 영화의 관람 포인트를\n선택하시겠습니까?") == false) {
-                                    $("#my-list-uptLayer").remove();
-                                    location.reload()
-                                    return;
-                                } else {
-                                    $("#my-list-uptLayer").remove();
-                                    GetCharm(result.resultIndex);
-                                }
-                                break;
-                            case "0":
-                                alert("등록 중 오류가 발생 되었습니다.");
-                                break;
-                            case "2":
-                                alert("문자를 포함하여 10자 이상(공백 제외) 작성하셔야 등록됩니다.");
-                                break;
-                            case "-9999":
-                                alert("잘못된 접근 입니다.");
-                                break;
-                            default:
-                                alert(result.resultCode);
-                                break;
-                        }
-                    }
-                } 
-
-                //좋아요 , 별로에요 클릭시 빨간 테두리 on
-                $('.likebox label').on('click', function () {
-                    var $wrap = $(this).parents('.likebox');
-                    $wrap.siblings().removeClass('on');
-                    $wrap.addClass('on');
-                });
-
-                //좋아요 , 별로에요 클릭시 빨간 테두리 on
-                $('.likebox input').on('focusin', function () {
-                    var $wrap = $(this).parents('.likebox');
-                    $wrap.siblings().removeClass('on');
-                    $wrap.addClass('on');
-                });
-
-                //운영원칙 ? 클릭시 팝업.
-                $('#viewpopup').on('click', function () {
-                    var $std = $(this),
-					options = {
-					    '$target': $std,
-					    'type': 'center',
-					    'html': $('#temp_view').html(),
-					    'independence': true,
-					    'mask': 'none'
-					};
-                    app.instWin.add(options);
-                    return false;
-                });
-
-                /*[2015-12-15]레이어팝업 "닫음" 버튼 클릭 처리.: add_mwpark*/
-                $("#my-list-uptCloseBtn").on("click", function () {
-                    $("#my-list-uptLayer").remove();
-                });
-            }
-            /*[2015-12-15]레이어 팝업 띄운 후 이벤트 및 각종 설정 처리. end : add_mwpark*/
-
-            /*[2015-12-15]입력 글자 바이트 check start : add_mwpark*/
-            function fnTextLength(content) {
-                var cnt = 0;
-                var ch = '';
-                for (var i = 0; i < content.length; i++) {
-                    ch = content.charAt(i);
-                    if (escape(ch).length > 4) {
-                        cnt += 2;
-                    } else {
-                        cnt += 1;
-                    }
-                }
-                return cnt;
-            }
-            /*[2015-12-15]입력 글자 바이트 end : add_mwpark*/
-        });
-    })(jQuery);
-
-    //2014.12 추가
-    //내가 작성한 평점 내용 불러오기 현재 now
-    function getCommentEditResult(movieIdx) {
-        app.movie().getCommentMy({ 'movieIdx': parseInt(movieIdx) }, callback);
-
-        function callback(result) {
-            if (!result || result.length < 1) {
-                return false;
-            }
-
-            var commentText = result['CommentText'];
-            var registDate = result['registDate'];
-            var commentIdx = result['CommentIdx'];
-            var pointDb = result['Point'];
-            var isShowView = result['IsShowView'];
-
-            $("div[id*='" + commentIdx + "']").find('.point-on').attr('style', "width: " + pointDb + "0%;");
-            $("em[id*='" + commentIdx + "']").html(pointDb);
-            $("p[id*='" + commentIdx + "']").html(commentText);
-            
-            if (isShowView) {
-                $("li[id*='" + commentIdx + "']").find(".vr").attr('style', "display:");
-            } else {
-                $("li[id*='" + commentIdx + "']").find(".vr").attr('style', "display:none");
-            }
-        }
-    }
-
-    /*회원 평점 모아보기. mwpark_RR2015*/
-    /**
-    function getPopList1(userid, nick) {
-
-        // 2017.07.11 화면 호출 시 POST 방식 호출 변경
-        $("#frmPointPopup").attr("target", "ifrm_movie_time_table1");
-        $("#frmPointUserId").val(userid);
-        $("#frmPointNick").val(escape(nick));
-        $("#frmPointPopup").submit();
-
-        $("#ifrm_movie_time_table1").show();
-    }
-    **/
-
-    function resizeTopIframe() {
-
-        $("#ifrm_movie_time_table1").hide();
-    }
-    function resizeTop(height) {
-        document.getElementById("ifrm_movie_time_table1").height = parseInt(height) + 10;
-    }
-	    /*페이징 처리 추가. mwpark_RR2015 2016-02-17*/
-    //function searchReviewList(page, isGetTotalCount) {
-	//    if(!isGetTotalCount) { isGetTotalCount = false; }
-
-	//    app.movie().getReviewSearchList({ 'movieIdx': 88104, 'pageIndex': page, 'pageSize': 5, 'isTotalCount' : isGetTotalCount}, setReviewListBuild);
-    //}
-
-    //function setReviewListBuild(result) {
-	   // if(result == null || result.List == null || result.TotalCount  == null) {
-		  //  return;
-	   // }
- 
-	   // $("#movie_review_list_container").empty();
-	   // $("#movie_review_template").tmpl(result.List).appendTo("#movie_review_list_container");
- 
-	    //if(result.List.length <= result.TotalCount) {
-	    //	setPagingNavigation(result.TotalCount, 5, '#paging_review', '#movie_review_list_container', searchReviewList);
-	    //}
-
-	    //$('.view_review_detail_popup').on('click', function () {
-	    //	getReviewDetail($(this));
-	    //	return false;
-	    //});
-
-	    //$('.btn-admit').on('click', function () {
-	    //	addMovieReviewCommunityAdmit($(this));
-	    //});
-    //}
-</script>
-
-
-
-			<!--/ Contents End -->
-		</div>
 		<!-- /Contents Area -->
-	</div>
+		
 	<!-- E Contaniner -->
-
-	<!-- S Popup -->
-	<div class="com_pop_wrap">
-		<div class="com_pop_fog"></div>
-	</div>
-	<div class="pop_wrap">
-		<!-- S > [팝업] 지원 OS 업데이트 유도-->
-		<div id="pop_supportOS" class="popup" style="display: none">
-			<div class="pop_iexp_wrap"
-				style="position: fixed; left: 50%; top: 50%; width: 600px; margin: -165px 0 0 -300px; z-index: 1000;">
-				<div class="pi_headline">
-					<img
-						src="https://img.cgv.co.kr/images/popup/1606_iexp/pop_iexp_headline2.jpg"
-						alt="CGV 홈페이지는 고객님께서 사용중인 MS Windows XP에서 정상적인 서비스 이용이 어려울 수 있으며, OS업데이트를 권장합니다." />
-				</div>
-				<div class="down_app">
-					<p>
-						<img
-							src="https://img.cgv.co.kr/images/popup/1606_iexp/pop_iexp_downtxt.jpg"
-							alt="OS 업데이트가 어려운 경우 모바일앱을 이용하세요!!!" />
-					</p>
-					<a class="btn"
-						href="https://itunes.apple.com/kr/app/id370441190?mt=8"
-						target="_blank"><img
-						src="https://img.cgv.co.kr/images/popup/1606_iexp/btn_down_ios.jpg"
-						alt="Ios down" /></a> <a class="btn"
-						href="https://play.google.com/store/apps/details?id=com.cgv.android.movieapp"
-						target="_blank"><img
-						src="https://img.cgv.co.kr/images/popup/1606_iexp/btn_down_android.jpg"
-						alt="Android down" /></a>
-				</div>
-				<a class="btn_close">닫기</a>
-			</div>
-		</div>
-		<!-- S > [팝업] 지원 브라우저 다운로드 유도-->
-		<div id="pop_supportBrower" class="popup" style="display: none">
-			<div class="pop_iexp_wrap"
-				style="position: fixed; left: 50%; top: 50%; width: 600px; margin: -265px 0 0 -300px; z-index: 1000;">
-				<div class="pi_headline">
-					<img
-						src="https://img.cgv.co.kr/images/popup/1606_iexp/pop_iexp_headline1.jpg"
-						alt="CGV 홈페이지는 Internet Explorer 9이상에서 최적의 서비스 이용이 가능합니다. IE9 이하 브라우저에서 이용 시 정상적인 서비스 이용이 어려울 수 있으며, 브라우저 업그레이드 하시기를 권장합니다." />
-				</div>
-				<ul class="down_browser">
-					<li><a href="https://www.microsoft.com/ko-kr/edge"
-						target="_blank"><img
-							src="https://img.cgv.co.kr/images/popup/1606_iexp/btn_down_ie.jpg"
-							alt="Internet Explorer 다운받기" /></a></li>
-					<li><a
-						href="https://www.google.com/chrome/browser/desktop/index.html"
-						target="_blank"><img
-							src="https://img.cgv.co.kr/images/popup/1606_iexp/btn_down_chrome.jpg"
-							alt="Chrome 다운받기" /></a></li>
-				</ul>
-				<div class="down_app">
-					<p>
-						<img
-							src="https://img.cgv.co.kr/images/popup/1606_iexp/pop_iexp_downtxt.jpg"
-							alt="OS 업데이트가 어려운 경우 모바일앱을 이용하세요!" />
-					</p>
-					<a class="btn"
-						href="https://itunes.apple.com/kr/app/id370441190?mt=8"
-						target="_blank"><img
-						src="https://img.cgv.co.kr/images/popup/1606_iexp/btn_down_ios.jpg"
-						alt="Ios down" /></a> <a class="btn"
-						href="https://play.google.com/store/apps/details?id=com.cgv.android.movieapp "
-						target="_blank"><img
-						src="https://img.cgv.co.kr/images/popup/1606_iexp/btn_down_android.jpg"
-						alt="Android down" /></a>
-				</div>
-				<a class="btn_close">닫기</a>
-			</div>
-		</div>
-	</div>
-
-	<!-- E Popup -->
 
 	<!-- S 예매하기 및 TOP Fixed 버튼 -->
 	<div class="fixedBtn_wrap">
@@ -1874,13 +1216,6 @@ var commentOptions;
 
 	</footer>
 
-
-
-
-	</div>
-
-
-
-
+</div>
 </body>
 </html>
