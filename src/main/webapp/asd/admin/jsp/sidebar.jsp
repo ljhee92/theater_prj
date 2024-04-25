@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
-
+<%
+	String sbid = (String)session.getAttribute("id");
+%>
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -9,7 +11,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3"><span>admin</span>님</div>
+                <div class="sidebar-brand-text mx-3"><span><%=sbid%></span>님</div>
                 <div class="sidebar-brand-text mx-3">로그인 중</div>
             </a>
 

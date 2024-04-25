@@ -47,20 +47,20 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Admin Page Login</h1>
                                     </div>
-                                    <form class="user">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control form-control-user"
-                                                id="inputId" aria-describedby="emailHelp"
-                                                placeholder="ID">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="inputPassword" placeholder="Password">
-                                        </div>
-                                        <a href="http://localhost/thingTheater_prj/asd/admin/jsp/dashboard.jsp" class="btn btn-primary btn-user btn-block">
-                                            Login
-                                        </a>
-                                     </form>
+                                    <form class="user" action="loginService.jsp" method="post">
+									    <div class="form-group">
+									        <input type="text" class="form-control form-control-user"
+									            id="inputId" name="inputId" aria-describedby="emailHelp"
+									            placeholder="ID">
+									    </div>
+									    <div class="form-group">
+									        <input type="password" class="form-control form-control-user"
+									            id="inputPassword" name="inputPassword" placeholder="Password">
+									    </div>
+									    <button type="submit" class="btn btn-primary btn-user btn-block">
+									        Login
+									    </button>
+									</form>
 								</div>
 							</div>
                         </div>
