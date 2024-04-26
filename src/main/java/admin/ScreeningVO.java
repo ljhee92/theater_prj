@@ -16,4 +16,5 @@ public class ScreeningVO {
 	private String movieName;
 	private String screeningDate;
 	private String screeningRound;
+	
 }
