@@ -33,7 +33,10 @@
            "https://play.google.com/store/apps/details?id=com.cgv.android.movieapp&pli=1" ]
     }
     </script>
-    
+
+	<!-- 무비상세 css -->    
+    <link rel="stylesheet" type="text/css" href="../css/movieDetail.css">
+
     
     <meta id="ctl00_og_image" property="og:image" content="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88104/88104_185.jpg"></meta>
     <link rel="alternate" href="http://m.cgv.co.kr" />
@@ -361,39 +364,7 @@
             }
         });
 
-        /********************************************************
-        //서브메뉴 구글 GA Analytics 로그 처리 - 2022.01.12 myilsan
-        ********************************************************/
-        //cgv화이트 메뉴클릭
-        $('.nav > .contents > h1 > a').on({
-             click: function (e) {
-                 gaEventLog('PC_GNB', '홈', '');
-            }
-        });
-
-        //주메뉴 클릭
-        $('.nav_menu > li > h2 > a').on({
-            click: function (e) {
-                gaEventLog('PC_GNB', '주메뉴_' + this.text, '');
-            }
-        });
-
-        //주메뉴 하위메뉴 클릭
-        $('.nav_overMenu > dd > h3 > a').on({
-            click: function (e) {
-                var target = e.target;
-                var parText = $(target).parents('.nav_overMenu').find('dt')[0].innerText;
-                gaEventLog('PC_GNB', parText + '_' + this.text, '');
-            }
-        });
-
-        //하위메뉴 최상위 클릭
-        $(".nav_overMenu > dt > h2 > a").on({
-            click: function (e) {
-                gaEventLog('PC_GNB',this.text + '_' + this.text, '');
-            }
-        });
-
+        
         //------------------end----------------------- [@,.o]>
 
         $('.nav').on({
@@ -458,70 +429,11 @@
                 }, 400);
             }
         });
-
-        //통합검색 상단 검색 버튼
-        $('#btn_header_search').on('click', function () {
-           
-            if ($('#header_ad_keyword').val() != "")
-                goSearch($('#header_ad_keyword'));      //광고
-            else
-                goSearch($('#header_keyword'));
-
-            
-            return false;
-        });
-
-        //통합검색 검색어 입력창
-        $('#header_keyword').keyup(function (e) {
-            if (e.keyCode == 13) goSearch($('#header_keyword'));
-        });
-
-         //검색 입력창 클릭 시 광고값 reset
-        $('#header_keyword').on('click', function () {
-            // 24.03 홈페이지 內 검색 영역 광고 텍스트 미노출의 件
-            $(this).val('');
-           // $(this).attr('placeholder', '');
-            $('#header_ad_keyword').val('');
-        });
-
     });
 
-    //통합검색
-    function goSearch($objKeyword) {
-        alert
-        if ($objKeyword.val() == "") {
-            alert("검색어를 입력해 주세요");
-            $objKeyword.focus();
-            return false;
-        }
+ 
 
-        //GA 검색로그
-        gaEventLog('PC_GNB', '검색', $objKeyword.val());
-        location = "/search/?query=" + escape($objKeyword.val());
-    }
 
-   
-
-    //상단 키워드 광고 (S)
-    // 24.03 홈페이지 內 검색 영역 광고 텍스트 미노출의 件 (기존 방식 주석 처리)
-    //function AdSearchExt(txt, SearchText) {
-    //    $('#header_keyword').attr('placeholder', txt);
-    //    $('#header_ad_keyword').val(SearchText);
-    // }
-
-    function hdIcoSet(left, sh) { }
-    //상단 키워드 광고 (E)
-
-    //상단광고닫기
-    function hideCgvTopAd() {
-        $(".cgv-ad-wrap").hide();
-        $('#wrap_main_notice').parent('div').css('top', 280);
-    }
-
-    //비즈스프링 클릭로그
-    function setClickLog(title) {
-        // eval("try{trk_clickTrace('EVT', '" + title + "')}catch(_e){}");
-    }
 
 </script>
 			<div class="nav">
@@ -800,16 +712,13 @@
 								<li class="on"><a title="현재 선택됨"
 									href="/movies/detail-view/?midx=88104#menu">주요정보 </a></li>
 								<li><a
-									href="/movies/detail-view/trailer.aspx?midx=88104#menu">트레일러</a></li>
-								<li><a
 									href="/movies/detail-view/still-cut.aspx?midx=88104#menu">스틸컷</a></li>
 								<li><a href="/movies/detail-view/?midx=88104#commentReg">평점/리뷰</a></li>
 								<li class="last"><a
 									href="/movies/detail-view/show-times.aspx?midx=88104#menu">상영시간표</a></li>
 							</ul>
 							<div class="sect-story-movie">
-								신종 마약 사건 3년 뒤,<br /> 괴물형사 &lsquo;마석도&rsquo;(마동석)와 서울 광수대는<br />
-								배달앱을 이용한 마약 판매 사건을 수사하던 중<br /> 수배 중인 앱 개발자가 필리핀에서 사망한 사건이<br />
+								신종 마약 사건 3년 뒤,<br /> 괴물형사 &lsquo;마석도&rsquo;(마동석)와 서울 광수대는								배달앱을 이용한 마약 판매 사건을 수사하던 중<br /> 수배 중인 앱 개발자가 필리핀에서 사망한 사건이<br />
 								대규모 온라인 불법 도박 조직과 연관되어 있음을 알아낸다.<br /> <br /> 필리핀에 거점을 두고 납치,
 								감금, 폭행, 살인 등으로<br /> 대한민국 온라인 불법 도박 시장을 장악한<br /> 특수부대 용병 출신의
 								빌런 &lsquo;백창기&rsquo;(김무열)와<br /> 한국에서 더 큰 판을 짜고 있는 IT업계 천재 CEO
@@ -820,92 +729,14 @@
 									거침없이 싹 쓸어버린다!
 								</strong>
 							</div>
-							<!-- .sect-story -->
-							<!-- 2020.05.07 성별예매분포, 연령별예매분포 UI 변경 -->
-							<div id="ctl00_PlaceHolderContent_Section_Chart"
-								class="sect-graph sect-graph-emotion">
-								<ul class="graph">
-									<li><strong>성별 예매 분포</strong>
-										<div id="jqplot_sex" class="chart"></div></li>
-									<li><strong>연령별 예매 분포</strong>
-										<div id="jqplot_age" class="chart"></div></li>
-								</ul>
-							</div>
-							<!-- .sect-graph -->
 
-							<div class="movie-detail-ad">
-								<iframe
-									src="http://ad.cgv.co.kr/NetInsight/html/CGV/CGV_201401/sub@SponsorBar_800"
-									width="800" height="90" title="" frameborder="0" scrolling="no"
-									marginwidth="0" marginheight="0" name="SponsorBar_800"
-									id="SponsorBar_800"></iframe>
-							</div>
-							<!-- .sect-staff -->
-							<div id="ctl00_PlaceHolderContent_Section_Trailer"
-								class="sect-trailer">
-								<div class="heading">
-									<h4>트레일러</h4>
-									<span id="ctl00_PlaceHolderContent_TrailerTotalCount"
-										class="count">2건</span><a class="link-more"
-										href="trailer.aspx?midx=88104">더보기</a>
-								</div>
-								<ul>
-									<!-- 사진 동영상 조회 -->
-
-									<li>
-										<div class="box-image">
-											<!-- TODO : 동영상 팝업 창 작업 후 링크 걸어야 함 //-->
-											<a href="#" title="새창" class="movie_player_popup"
-												data-gallery-idx="224731"> <span class="thumb-image">
-													<img
-													src="https://img.cgv.co.kr/Movie/Thumbnail/Trailer/88104/88104224731_1024.jpg"
-													alt="[범죄도시4]메인 예고편"
-													onerror="errorImage(this, {'type':'landscape'})" /> <span
-													class="ico-play">영상보기</span>
-											</span>
-											</a>
-										</div>
-										<div class="box-contents">
-											<a href="#" title="새창" class="movie_player_popup"
-												data-gallery-idx="224731"> <strong class="title">
-
-													<span class="ico-trailer hd">HD</span> 메인 예고편
-											</strong>
-											</a> <span class="txt-info">2024.04.02</span>
-										</div>
-									</li>
-
-									<li>
-										<div class="box-image">
-											<!-- TODO : 동영상 팝업 창 작업 후 링크 걸어야 함 //-->
-											<a href="#" title="새창" class="movie_player_popup"
-												data-gallery-idx="224234"> <span class="thumb-image">
-													<img
-													src="https://img.cgv.co.kr/Movie/Thumbnail/Trailer/88104/88104224234_1024.jpg"
-													alt="[범죄도시4]티저 예고편"
-													onerror="errorImage(this, {'type':'landscape'})" /> <span
-													class="ico-play">영상보기</span>
-											</span>
-											</a>
-										</div>
-										<div class="box-contents">
-											<a href="#" title="새창" class="movie_player_popup"
-												data-gallery-idx="224234"> <strong class="title">
-
-													<span class="ico-trailer hd">HD</span> 티저 예고편
-											</strong>
-											</a> <span class="txt-info">2024.03.15</span>
-										</div>
-									</li>
-
-								</ul>
-							</div>
+					
 							<!-- .sect-trailer -->
 							<div id="ctl00_PlaceHolderContent_Section_Still_Cut"
 								class="sect-stillcut">
 								<div class="heading">
 									<h4>스틸컷</h4>
-									<span class="count"><strong id="stillcut_current">1</strong>/68건</span><a
+									<span class="count"><strong id="stillcut_current">1</strong>/2</span><a
 										class="link-more" href="still-cut.aspx?midx=88104">더보기</a>
 								</div>
 								<div class="slider-wrap">
@@ -926,40 +757,6 @@
 													alt="범죄도시4" onerror="errorImage(this)" />
 											</div>
 										</div>
-
-										<div class="item-wrap">
-											<div class="item">
-												<img
-													data-src="https://img.cgv.co.kr/Movie/Thumbnail/StillCut/000088/88104/88104224994_727.jpg"
-													alt="범죄도시4" onerror="errorImage(this)" />
-											</div>
-										</div>
-
-										<div class="item-wrap">
-											<div class="item">
-												<img
-													data-src="https://img.cgv.co.kr/Movie/Thumbnail/StillCut/000088/88104/88104224993_727.jpg"
-													alt="범죄도시4" onerror="errorImage(this)" />
-											</div>
-										</div>
-
-										<div class="item-wrap">
-											<div class="item">
-												<img
-													data-src="https://img.cgv.co.kr/Movie/Thumbnail/StillCut/000088/88104/88104224992_727.jpg"
-													alt="범죄도시4" onerror="errorImage(this)" />
-											</div>
-										</div>
-
-										<div class="item-wrap">
-											<div class="item">
-												<img
-													data-src="https://img.cgv.co.kr/Movie/Thumbnail/StillCut/000088/88104/88104224991_727.jpg"
-													alt="범죄도시4" onerror="errorImage(this)" />
-											</div>
-										</div>
-
-
 										<button type="button" class="btn-prev">이전 페이지 이동</button>
 										<button type="button" class="btn-next">다음 페이지 이동</button>
 									</div>
@@ -968,33 +765,45 @@
 							<div class="paging">
 								<ul id="paging_point"></ul>
 							</div>
-
-
 						</div>
-						<!-- .col-detail -->
-						<iframe class="layer-wrap review_pop"
-							name="ifrm_movie_time_table1" id="ifrm_movie_time_table1"
-							style="display: none" title="상세리스트" height="993px" width="849px"
-							frameborder="0" marginheight="0" marginwidth="0" scrolling="no"
-							allowTransparency="true"></iframe>
-						<!--회원 평점 모아보기 iframe. mwpark_RR2015-->
-						<form method="post" id="frmPointPopup"
-							action="/movies/point/default-irm.aspx">
-							<input type="hidden" name="userid" id="frmPointUserId">
-							<input type="hidden" name="nick" id="frmPointNick">
-						</form>
 </div>
 </div>
+<div id="reviewTime">
+<h1 class="rowLine">Review</h1>
+   	<ul class="sort" id="sortTab">
+		<li class="sortTab on" id="test"><a href="javascript:void(0);" title="현재선택">최신순<span class="arrow-down"></span></a></li>
+ 		<li class="sortTab" ><a href="javascript:void(0);">추천순<span class="arrow-down"></span></a></li>
+    </ul>
+</div>  
+<script type="text/javascript">
+$(function() {
+    var sortTabs = $(".sortTab"); // 모든 정렬 탭을 선택합니다.
+
+    // 각 탭에 대해 클릭 이벤트를 추가합니다.
+    sortTabs.click(function() {
+        // 모든 탭의 클래스를 제거합니다.
+        sortTabs.removeClass("on");
+
+        // 클릭된 탭에 클래스를 추가합니다.
+        $(this).addClass("on");
+
+        // 클릭된 탭의 화살표 요소를 찾습니다.
+        var arrow = $(this).find(".arrow-down");
+
+        // 다른 탭의 화살표를 숨깁니다.
+        $(".arrow-down").hide();
+
+        // 클릭된 탭의 화살표를 보여줍니다.
+        if (arrow.length > 0) {
+            arrow.show();
+        }
+    });
+});
+</script>                    
 <div class="review-list">
      <ul style="margin: 0 auto; width: fit-content;">
-
-
     </ul> 
 </div> <!-- //end review-list-->
-
-
-
-
 </div>
 <!-- 별점 리뷰함수 -->
 <script>
@@ -1032,7 +841,7 @@
     	    // 가져온 별점 데이터를 기반으로 리뷰 아이템을 생성하여 추가
     	    for (var i = 0; i < starData.length; i++) {
     	        var starRating = starData[i];
-    	        var $reviewItem = $('<li style=\"width:300px; float:left\"><div class="review-item"><span class="user-id">' + starRating.userId + '</span><span class="star-rating" data-rating="' + starRating.rating + '"></span><div class="review-content">' + starRating.reviewContent + '</div></div></li>');
+    	        var $reviewItem = $('<li><div class="review-item"><span class="user-id">' + starRating.userId + '</span><span class="star-rating" data-rating="' + starRating.rating + '"></span><div class="review-content">' + starRating.reviewContent + '</div></div></li>');
     	        $reviewList.append($reviewItem);
     	    }
     	    // 별점 데이터를 가져와서 HTML에 채워넣은 후에 각 별점 아이콘에 적절한 색상을 적용하기 위해 별점 아이콘의 data-rating 속성을 설정
