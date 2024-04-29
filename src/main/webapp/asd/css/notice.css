@@ -1,0 +1,21 @@
+.tbl_notice_list {
+    width: 100%;
+}
+
+.tbl_notice_list th, .tbl_notice_list td {
+    padding: 10px;
+    
+}
+
+.tbl_notice_list th {
+    background-color: #f7f7f7; /* 회색 계열 배경색 */
+    color: #333; /* 글자색 */
+}
+
+.tbl_notice_list tr:nth-child(even) {
+    background-color: #f9f9f9; /* 연한 회색 계열 배경색 */
+}
+.txt :hover {
+    
+}
+
