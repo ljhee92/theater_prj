@@ -266,6 +266,9 @@
             - 검색 값 있는 경우 영역 미노출
             - 관람제한 (12.png, 15.png, 19.png, all.png, notyet.png)
  -->
+ 
+ 
+ 
 			<div class="movieChartBeScreen_wrap">
 				<div class="contents">
 					<div class="movieChartBeScreen_btn_wrap">

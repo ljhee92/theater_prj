@@ -1,5 +1,5 @@
-<%@page import="VO.UserVO"%>
-<%@page import="VO.AdminVO"%>
+<%@page import="user.VO.UserVO"%>
+<%@page import="admin.AdminVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
  pageEncoding="UTF-8" 
  info="" %>
@@ -110,7 +110,7 @@
 /* 로그인 최종버전 */
 .box-login button[type="submit"] > span {display:block;width:258px;height:36px; border:1px solid #ffff; color:#f8f8f8; font-size:15px; font-weight:500;}
 .box-login .login > button[type="submit"] {position:absolute; top:0; left:198px; display:block; width:100px; height:86px; padding:2px; background:#fb4357; line-height:78px; text-align:center;}
-.sect-login > .box-login fieldset {position:relative;}
+.sect-login > .box-login fieldset {position:relative ;}
 
 
 /*140804 로그인 UI 수정 및 캡챠 시작 */
@@ -148,9 +148,7 @@
 .box-login.nomember .box-operationguide dt{ text-align:right;}
 .box-login.nomember .box-operationguide dd{ padding:5px 0 0 0; border-left:none; background:url('../images/common/bg/dot_horizontal.gif') 0 0 repeat-x;}
 .box-login.nomember .box-operationguide dt + dd{ padding-top:0; background:none;}
-	
-	
-	
+
 	
 	
 	
@@ -158,26 +156,93 @@
 </style>
 <script type="text/javascript">
 	
-	$(function(){
+	
+	
+$(function(){
+
+	
+	
+	
+	
+	
+<%-- 	$(document).ready(function() {
+
+/* 		alert("페이지 로딩되었음"); */
 		
-		$("#submit").click(function(){
-			alert("로그인버튼 클릭");
-			
-			
-			
-			
-			
-			
-			
-		})
+		<%
+		String id="";
+		
+		if (session.getAttribute("id") != null) {%>
+		window.location.href = "index.jsp";
+
+		<%}%>
 
 		
-	})//ready
+	    $("#txtUserId").focus();
+	});
+	 --%>
 	
 	
 	
 	
 	
+	
+
+    $("#txtUserId").on('keypress', function(e) {
+        if(e.which === 13) {
+            e.preventDefault(); 
+            let id = $("#txtUserId").val();
+            if(id === "") {
+                alert("아이디를 입력해주세요.");
+            } else {
+                $("#txtPassword").focus();
+            }
+        }
+    });
+
+
+    $("#txtPassword").on('keypress', function(e) {
+        if(e.which === 13) { 
+            e.preventDefault(); 
+            let pw = $("#txtPassword").val();
+            if(pw === "") {
+                alert("비밀번호를 입력해주세요.");
+            } else {
+                $("#submit").click();
+            }
+        }
+    });
+
+
+
+});
+	
+	function checkNull(){
+
+		
+	//alert("클릭되었음")
+	let id = $("#txtUserId").val();
+	let pw = $("#txtPassword").val();
+	
+   // alert(id)
+   // alert(pw);
+	
+    // ID나 비밀번호가 비어 있는지 확인
+    if(id === "" && pw === "") {
+        alert("ID와 비밀번호를 입력해주세요.");
+        return false;
+    } else if(id === "") {
+        alert("ID를 입력해주세요.");
+        return false; 
+    } else if(pw === "") {
+        alert("비밀번호를 입력해주세요.");
+        return false; 
+    }
+	
+
+	}
+
+
 	
 	
 </script>
@@ -189,297 +254,34 @@
 
 
 
+
+
+
+
+
+
 <!-- 실컨텐츠 시작 -->
-		<!-- S Header
-        Description
-        - class 'nav' 에 class 'active' 추가시 서브메뉴노출
-        - class 'nav' 에 class 'fixed' 추가시 상단고정되며 스타일 변경됨
-     -->
-		<div class="header">
-			<!-- 서비스 메뉴 -->
-
-			<div class="header_content">
-				<div class="contents">
-					<h1 onclick=""><a href="main.jsp"><img src="https://img.cgv.co.kr/R2014/images/common/logo/logoRed.png"
-								alt="CGV" /></a><span>CULTUREPLEX</span></h1>
-					<ul class="memberInfo_wrap">
-
-
-
-						<li><a href="login.jsp"><img
-									src="https://img.cgv.co.kr/R2014/images/common/ico/loginPassword.png"
-									alt="로그인" /><span>로그인</span></a></li>
-						<li><a href="/user/join/"><img src="https://img.cgv.co.kr/R2014/images/common/ico/loginJoin.png"
-									alt="회원가입" /><span>회원가입</span></a></li>
-						<li><a href="/user/mycgv/"><img
-									src="https://img.cgv.co.kr/R2014/images/common/ico/loginMember.png"
-									alt="MY CGV" /><span>MY CGV</span></a></li>
-					</ul>
-				</div>
-			</div>
-
-			<script>
-				//GA Analytics TopMenu 영역 LOG
-				//빨강 CGV클릭
-				$('.header_content > .contents > h1 > a').on({
-					click: function (e) {
-						gaEventLog('PC_GNB', '홈', '');
-					}
-				});
-				//서비스 메뉴
-				$('.header_content > .contents > ul > li > a').on({
-					click: function (e) {
-						gaEventLog('PC_GNB', '서비스메뉴_' + this.text, '');
-					}
-				});
-
-
-
-			</script>
-			<!-- 서비스 메뉴 -->
-
-			<!-- 서브 메뉴 -->
-
-			<script type="text/javascript">
-				$(document).ready(function () {
-					$('.nav_menu > li > h2 > a').on({
-						mouseenter: function (e) {
-							var target = e.target;
-							$(target).parents('.nav_menu').find('.nav_overMenu').slideDown(function () {
-								$('.nav').addClass('active');
-							});
-						},
-						click: function (e) {
-							var target = e.target;
-							if (!$('.nav').hasClass('active')) {
-								$(this).trigger('mouseenter');
-							} else {
-								$('.nav').trigger('mouseleave');
-							}
-						}
-					});
-
-					/********************************************************
-					//서브메뉴 구글 GA Analytics 로그 처리 - 2022.01.12 myilsan
-					********************************************************/
-					//cgv화이트 메뉴클릭
-					$('.nav > .contents > h1 > a').on({
-						click: function (e) {
-							gaEventLog('PC_GNB', '홈', '');
-						}
-					});
-
-					//주메뉴 클릭
-					$('.nav_menu > li > h2 > a').on({
-						click: function (e) {
-							gaEventLog('PC_GNB', '주메뉴_' + this.text, '');
-						}
-					});
-
-					//주메뉴 하위메뉴 클릭
-					$('.nav_overMenu > dd > h3 > a').on({
-						click: function (e) {
-							var target = e.target;
-							var parText = $(target).parents('.nav_overMenu').find('dt')[0].innerText;
-							gaEventLog('PC_GNB', parText + '_' + this.text, '');
-						}
-					});
-
-					//하위메뉴 최상위 클릭
-					$(".nav_overMenu > dt > h2 > a").on({
-						click: function (e) {
-							gaEventLog('PC_GNB', this.text + '_' + this.text, '');
-						}
-					});
-
-					//------------------end----------------------- [@,.o]>
-
-					$('.nav').on({
-						mouseleave: function (e) {
-							$(this).find('.nav_overMenu').slideUp(200, function () {
-								$('.nav').removeClass('active');
-							});
-						}
-					});
-
-
-
-					$(this).on({
-						scroll: function (e) {
-							/* S GNB fixed */
-							var headerOffsetT = $('.header').offset().top;
-							var headerOuterH = $('.header').outerHeight(true);
-							var fixedHeaderPosY = headerOffsetT + headerOuterH;
-							var scrollT = $(this).scrollTop();
-							var scrollL = $(this).scrollLeft();
-
-							if (scrollT >= fixedHeaderPosY) {
-								$('.nav').addClass('fixed');
-								$('.fixedBtn_wrap').addClass('topBtn');
-							} else {
-								$('.nav').removeClass('fixed');
-								$('.fixedBtn_wrap').removeClass('topBtn');
-							}
-
-							/* S > GNB fixed 좌우 스크롤
-							Description
-							- GNB가 fixed 되었을때 좌우 스크롤 되게 처리
-							*/
-							if ($('.nav').hasClass('fixed')) {
-								$('.nav').css({'left': -1 * scrollL})
-							} else {
-								$('.nav').css({'left': 0})
-							}
-							/* E > GNB fixed 좌우 스크롤 */
-							/* S GNB fixed */
-						}
-					});
-
-					$('.btn_gotoTop').on({
-						click: function () {
-							$('html, body').stop().animate({
-								scrollTop: '0'
-							}, 400);
-						}
-					});
+	<!-- S Header -->
+	<jsp:include page="header.jsp"></jsp:include>
+	<!-- E Header -->
 
 
 
 
-				});
+<!-- S 로그인 세션 확인  -->
+<script type="text/javascript">
+<%
+String id="";
+
+if (session.getAttribute("id") != null) {%>
+window.location.href = "index.jsp";
+
+<%}%>
 
 
-
-
-
-
-
-
-			</script>
-			<div class="nav">
-				<div class="contents">
-					<h1><a href="/" tabindex="-1"><img
-								src="https://img.cgv.co.kr/R2014/images/common/logo/logoWhite.png" alt="CGV" /></a></h1>
-					<ul class="nav_menu">
-						<li>
-							<h2><a href="/movies/?lt=1&ft=0">영화</a></h2>
-							<dl class="nav_overMenu">
-								<dt>
-									<h2><a href="/movies/?lt=1&ft=0" tabindex="-1">영화</a></h2>
-								</dt>
-
-								<dd>
-									<h3><a href="/movies/?lt=1&ft=0">무비차트</a></h3>
-								</dd>
-							</dl>
-						</li>
-
-						<li>
-							<h2><a href="/ticket/"><strong>예매</strong></a></h2>
-
-							<dl class="nav_overMenu">
-								<dt>
-									<h2><a href="/ticket/" tabindex="-1">예매</a></h2>
-								</dt>
-
-								<dd>
-									<h3><a href="/ticket/">빠른예매</a></h3>
-								</dd>
-
-							</dl>
-						</li>
-
-						<li>
-							<h2><a href="/culture-event/popcorn-store/">스토어</a></h2>
-
-							<dl class="nav_overMenu">
-								<dt>
-									<h2><a href="/culture-event/popcorn-store/" tabindex="-1">스토어</a></h2>
-								</dt>
-
-								<dd>
-									<h3><a
-											href="/culture-event/popcorn-store/store-category.aspx?CategoryIdx=2">영화관람권</a>
-									</h3>
-								</dd>
-
-								<dd>
-									<h3><a href="/culture-event/popcorn-store/store-category.aspx?CategoryIdx=4">콤보</a>
-									</h3>
-								</dd>
-
-								<dd>
-									<h3><a href="/culture-event/popcorn-store/store-category.aspx?CategoryIdx=5">팝콘</a>
-									</h3>
-								</dd>
-
-								<dd>
-									<h3><a href="/culture-event/popcorn-store/store-category.aspx?CategoryIdx=6">음료</a>
-									</h3>
-								</dd>
-
-								<dd>
-									<h3><a href="/culture-event/popcorn-store/store-category.aspx?CategoryIdx=7">스낵</a>
-									</h3>
-								</dd>
-
-
-							</dl>
-						</li>
-
-						<li>
-							<h2><a href="/culture-event/event/defaultNew.aspx">커뮤니티</a>
-							</h2>
-							<dl class="nav_overMenu">
-								<dt>
-									<h2><a href="/culture-event/event/defaultNew.aspx?mCode=001" tabindex="-1">커뮤니티</a>
-									</h2>
-								</dt>
-
-								<dd>
-									<h3><a href="/culture-event/event/defaultNew.aspx?mCode=001">영화게시판</a></h3>
-								</dd>
-
-								<dd>
-									<h3><a href="/culture-event/event/defaultNew.aspx?mCode=004">영화리뷰</a></h3>
-								</dd>
-
-							</dl>
-						</li>
-
-						<li>
-							<h2 onclick="gaEventLog('PC_GNB','주메뉴_해택','')"><a
-									href="/discount/discountlist.aspx">공지사항</a></h2>
-
-							<dl class="nav_overMenu">
-
-								<dt>
-									<h2><a href="/discount/discountlist.aspx" tabindex="-1">공지사항</a></h2>
-								</dt>
-
-							</dl>
-						</li>
-
-						<li>
-							<h2 onclick="gaEventLog('PC_GNB','주메뉴_해택','')"><a href="/discount/discountlist.aspx">자주찾는
-									질문</a></h2>
-
-							<dl class="nav_overMenu">
-
-								<dt>
-									<h2><a href="/discount/discountlist.aspx" tabindex="-1">자주찾는 질문</a></h2>
-								</dt>
-
-							</dl>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<!-- 서브 메뉴 -->
-		</div>
-		<!-- E Header -->
-
-
+$("#txtUserId").focus();
+</script>
+<!-- E 로그인 세션 확인  -->
 
 <div class="wrap-login">
     <div class="sect-login">
@@ -489,7 +291,7 @@
         </ul>
         <div class="box-login">
             <h3 class="hidden">회원 로그인</h3>
-            <form id="form1" method="post" action="#" novalidate="novalidate" onsubmit="return false">
+            <form id="form1" method="post" action="loginAction.jsp" novalidate="novalidate" onsubmit="return checkNull()" >
             <fieldset>
                 <legend>회원 로그인</legend>
                 <p>로그인</p>
@@ -527,59 +329,10 @@
 </div>
 <!-- 실컨텐츠 끝 --> 
 
-<footer>
-			<!-- footer_area (s) -->
-
-			<div id="BottomWrapper" class="sect-ad">
-				<iframe src="https://ad.cgv.co.kr/NetInsight/html/CGV/CGV_201401/main@Bottom" width="100%" height="240"
-					title="" frameborder="0" scrolling="no" marginwidth="0" marginheight="0" name="Bottom"
-					id="Bottom"></iframe>
-			</div>
-			<ul class="policy_list">
-				<li><a href="http://corp.cgv.co.kr/company/" target="_blank">회사소개</a></li>
-				<li><a href="http://www.cgv.co.kr/rules/service.aspx">이용약관</a></li>
-				<li><a href="http://www.cgv.co.kr/rules/privacy.aspx"><strong>개인정보처리방침</strong></a></li>
-				<li><a href="http://www.cgv.co.kr/rules/disclaimer.aspx">법적고지</a></li>
-				<li><a href="http://www.cgv.co.kr/rules/emreject.aspx">이메일주소무단수집거부</a></li>
-			</ul>
-			<article class="company_info_wrap">
-				<section class="company_info">
-
-					<address>(16293)경기도 수원시 장안구 조원동 광교산 임광그대가 101동 1002호</address>
-
-					<dl class="company_info_list">
-						<dt>대표이사</dt>
-						<dd>윤웅찬</dd>
-						<dt>사업자등록번호</dt>
-						<dd>010-8623-5905</dd>
-						<dt>통신판매업신고번호</dt>
-						<dd>1998-경기수원-0513 <a href="#none" onclick="goFtc()" class="btn_goFtc">사업자정보확인<a></a></a></dd>
-					</dl>
-
-					<dl class="company_info_list">
-						<dt>호스팅사업자</dt>
-						<dd>CJ올리브네트웍스</dd>
-						<dt>개인정보보호 책임자</dt>
-						<dd>도형구</dd>
-						<dt>대표이메일</dt>
-						<dd>cjcgvmaster@cj.net</dd>
-
-					</dl>
-
-					<p class="copyright">&copy; 예찬,주희,지민,무영,웅찬 LET'S GO</p>
-				</section>
-			</article>
-			<script>
-				//footer GA Analytics 영역 LOG
-				$('.policy_list > li > a').on({
-					click: function (e) {
-						gaEventLog('PC_footer', this.text, '');
-					}
-				});
-			</script>
-
-		</footer>
-		<!-- E Footer -->
+		<!-- S footer_area -->
+		
+	<jsp:include page="footer.jsp"></jsp:include>
+		<!-- E footer_area -->
 
 
 </body>

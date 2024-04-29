@@ -9,7 +9,7 @@
 			<div class="header_content">
 				<div class="contents">
 					<h1 onclick="">
-						<a href="main.jsp"><img
+						<a href="index.jsp"><img
 							src="https://img.cgv.co.kr/R2014/images/common/logo/logoRed.png"
 							alt="CGV" /></a><span>CULTUREPLEX</span>
 					</h1>
@@ -17,12 +17,36 @@
 
 
 
-						<li><a href="login.jsp"><img
-								src="https://img.cgv.co.kr/R2014/images/common/ico/loginPassword.png"
-								alt="로그인" /><span>로그인</span></a></li>
+						<%
+						String id="";
+						
+						if (session.getAttribute("id") != null) {
+							id = session.getAttribute("id").toString();
+						}
+						%>
+						
+						<li>
+						
+						<% if( id.equals("")){ %>
+						
+						<a href="login.jsp">
+							<img src="https://img.cgv.co.kr/R2014/images/common/ico/loginPassword.png" alt="로그인" />
+							<span>로그인</span></a></li>
+							
 						<li><a href="/user/join/"><img
 								src="https://img.cgv.co.kr/R2014/images/common/ico/loginJoin.png"
 								alt="회원가입" /><span>회원가입</span></a></li>
+							
+							
+							<%}else{ %>
+							
+						<li><a href="logout.jsp" class="logout" title="로그아웃" >
+							<img src="https://img.cgv.co.kr/R2014/images/common/ico/loginPassword.png" alt="로그아웃" />
+							<span>로그아웃</span></a></li>
+							<% } %>
+								
+								
+
 						<li><a href="/user/mycgv/"><img
 								src="https://img.cgv.co.kr/R2014/images/common/ico/loginMember.png"
 								alt="MY CGV" /><span>MY CGV</span></a></li>
