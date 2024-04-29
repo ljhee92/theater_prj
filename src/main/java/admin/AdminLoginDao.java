@@ -59,6 +59,7 @@ public class AdminLoginDao {
 			// 6. 리소스 해제
 			dbcon.dbClose(rs, pstmt, con);
 		}
+		
 
 		return aresultVO;
 	}// AdminLogin
