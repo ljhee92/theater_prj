@@ -31,7 +31,9 @@
 </style>
 <script type = "text/javascript">
 	$(function() {
-
+		$("#btnWrite").click(function(){
+			location.href = "notice_write.jsp";
+		}); // click
 	}); // ready
 </script>
 </head>
@@ -56,22 +58,61 @@
 	                    <h1 class="h3 mb-0 text-gray-800">공지사항관리</h1>
 	                </div>
 	                
-	                <table class="table">
-	                	<tr>
-	                		<th style = "width: 100px;">번호</th>
-	                		<th style = "width: 200px;">구분</th>
-	                		<th style = "width: 500px;">제목</th>
-	                		<th style = "width: 200px;">작성일</th>
-	                		<th style = "width: 100px;">조회수</th>
-	                	</tr>
-	                	<tr>
-	                		<td>1</td>
-	                		<td>행사/이벤트</td>
-	                		<td>제목입니다</td>
-	                		<td>2024.04.18</td>
-	                		<td>12345</td>
-                		</tr>
-	                </table>
+	                <div style = "display: flex;">
+	                	<select class = "form-control form-control-user" style = "width: 150px; margin-right: 20px;">
+	                		<option value = "N/A">구분 선택</option>
+	                		<option value = "1">행사/이벤트</option>
+	                		<option value = "2">극장</option>
+	                		<option value = "3">시스템점검</option>
+	                		<option value = "4">기타</option>
+	                	</select>
+	                	<input type = "text" class = "form-control form-control-user" style = "width: 500px; margin-right: 20px;" placeholder = "검색할 내용을 입력해주세요."/>
+	                	<input type = "button" class = "btn btn-primary btn-user btn-block" style = "width: 100px;" value = "검색">
+	                </div>
+	                
+	                <div style = "height: 520px;">
+		                <table class="table" style = "margin-top: 50px;">
+		                <thead>
+		                	<tr>
+		                		<th style = "width: 100px;">번호</th>
+		                		<th style = "width: 200px;">구분</th>
+		                		<th style = "width: 500px;">제목</th>
+		                		<th style = "width: 200px;">작성일</th>
+		                		<th style = "width: 100px;">조회수</th>
+		                	</tr>
+		                </thead>
+		                <tbody>
+		                	<tr>
+		                		<td>1</td>
+		                		<td>행사/이벤트</td>
+		                		<td>제목입니다</td>
+		                		<td>2024.04.18</td>
+		                		<td>12345</td>
+	                		</tr>
+		                	<tr>
+		                		<td>2</td>
+		                		<td>행사/이벤트</td>
+		                		<td>제목입니다</td>
+		                		<td>2024.04.29</td>
+		                		<td>1230</td>
+	                		</tr>
+	                	</tbody>
+		                </table>
+	                </div>
+	                
+	                <div style="display: flex; justify-content: space-between;">
+						<span style="display: flex; align-items: flex-end; margin: auto;">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px;" value="1">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px;" value="2">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px;" value="3">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px;" value="4">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px;" value=">">
+						</span>
+						<span style="align-self: flex-end;">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 120px;" value="글쓰기" id = "btnWrite">
+						</span>
+					</div>
+	                
 				</div>
                 <!-- /.container-fluid -->
 
