@@ -38,11 +38,11 @@
 
 					<dl class="company_info_list">
 						<dt>호스팅사업자</dt>
-						<dd>CJ올리브네트웍스</dd>
+						<dd>SSANGYONG</dd>
 						<dt>개인정보보호 책임자</dt>
-						<dd>도형구</dd>
+						<dd>윤웅찬</dd>
 						<dt>대표이메일</dt>
-						<dd>cjcgvmaster@cj.net</dd>
+						<dd>woong@sist.co.kr</dd>
 
 					</dl>
 
