@@ -11,8 +11,6 @@
 <meta http-equiv="imagetoolbar" content="no" />
 <meta name="viewport" content="width=1024" />
 
-
-
 <meta id="ctl00_og_image" property="og:image"
 	content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png">
 </meta>
@@ -315,12 +313,82 @@
 					<!--.section-pop-left-->
 
 					<div class="section-pop-right">
-						<div class="wrap-timetable-head" style = "align-content: center;">
+						<div class="wrap-timetable-head" style="align-content: center;">
 							<h4 class="title">시간표</h4>
-							
+
 						</div>
 						<div class="wrap-timetable">
-							<p class="ready">영화관과 영화를 선택하면 시간표가 나옵니다.</p>
+							<!-- inside .wrap-timetable -->
+							<div class="title">
+								<span class="rate-all">0</span>쿵푸팬더4
+							</div>
+							<div class="theater-info">
+								10관 <span class="all-seats">(91석)</span>
+							</div>
+							<div class="time-box">
+
+								<div class="time" data-sproperty="0" data-playdate="20240502"
+									data-screenplanid="789241" data-playnumber="6" data-grade="0">
+
+									<span class="from">18:00<span class="to">~19:41</span></span> <span
+										class="seats "> 91석 </span>
+								</div>
+
+							</div>
+
+							<!-- inside .wrap-timetable -->
+							<div class="title">
+								<span class="rate-12">12</span>남은 인생 10년
+							</div>
+							<div class="theater-info">
+								10관 <span class="all-seats">(91석)</span>
+							</div>
+							<div class="time-box">
+
+								<div class="time" data-sproperty="2" data-playdate="20240502"
+									data-screenplanid="792100" data-playnumber="8" data-grade="12">
+
+									<span class="from">22:00<span class="to">~24:12</span></span> <span
+										class="seats "> 83석 </span>
+								</div>
+
+							</div>
+
+							<!-- inside .wrap-timetable -->
+							<div class="title">
+								<span class="rate-15">15</span>스턴트맨
+							</div>
+							<div class="theater-info">
+								4관 <span class="all-seats">(140석)</span>
+							</div>
+							<div class="time-box">
+
+								<div class="time" data-sproperty="1048576"
+									data-playdate="20240502" data-screenplanid="790252"
+									data-playnumber="5" data-grade="15">
+
+									<span class="from">17:00<span class="to">~19:14</span></span> <span
+										class="seats "> 131석 </span>
+								</div>
+
+								<div class="time" data-sproperty="1048576"
+									data-playdate="20240502" data-screenplanid="790253"
+									data-playnumber="6" data-grade="15">
+
+									<span class="from">19:30<span class="to">~21:44</span></span> <span
+										class="seats "> 139석 </span>
+								</div>
+
+
+								<div class="time" data-sproperty="2" data-playdate="20240502"
+									data-screenplanid="790254" data-playnumber="7" data-grade="15">
+
+									<span class="from">22:00<span class="to">~24:14</span></span> <span
+										class="seats "> 140석 </span>
+								</div>
+
+							</div>
+
 						</div>
 					</div>
 					<!--.section-pop-left-->
@@ -351,8 +419,7 @@
 		<jsp:include page="footer.jsp"></jsp:include>
 		<!-- E footer_area -->
 	</div>
-	
-	
+
 <script type="text/javascript">
 	function simpleReserv(playDate, theaterCode, movieCode, screenPlanId) {
 		$.desktop.reserve.open({
@@ -397,16 +464,16 @@
 			mouseOverMinimap : null,
 
 			init : function() {
-				$.desktop.reservepop.option.theaterCode = $("div.popup").data(
-						"theatercode");
-				$.desktop.reservepop.option.movieCode = $("div.popup").data(
-						"moviecode");
+				$.desktop.reservepop.option.theaterCode = $("div.popup")
+						.data("theatercode");
+				$.desktop.reservepop.option.movieCode = $("div.popup")
+						.data("moviecode");
 				$.desktop.reservepop.option.playDate = $("div.popup").data(
 						"playdate");
-				$.desktop.reservepop.option.screenPlanId = $("div.popup").data(
-						"screenplanid");
-				$.desktop.reservepop.option.playNumber = $("div.popup").data(
-						"playnumber");
+				$.desktop.reservepop.option.screenPlanId = $("div.popup")
+						.data("screenplanid");
+				$.desktop.reservepop.option.playNumber = $("div.popup")
+						.data("playnumber");
 
 				$.desktop.firstScreenPlanId = $.desktop.reservepop.option.screenPlanId;
 				$.desktop.reservepop.initLoad = true;
@@ -425,18 +492,21 @@
 				$.desktop.reservepop
 						.loadMovie($.desktop.reservepop.option.sortType);
 
-				$.desktop.reservepop.dateWidget = $("div.wrap-date #rsvcal",
-						"div.popup").hide().datepicker(
-						{
-							minDate : "2024-04-30",
-							maxDate : "2024-05-30",
-							dateFormat : "yy-mm-dd",
-							onSelect : function(d, i) {
-								var selectedDate = d.replace(/-/gi, "");
-								$.desktop.reservepop.loadPlayDate(selectedDate,
-										selectedDate);
-							}
-						});
+				$.desktop.reservepop.dateWidget = $(
+						"div.wrap-date #rsvcal", "div.popup")
+						.hide()
+						.datepicker(
+								{
+									minDate : "2024-04-30",
+									maxDate : "2024-05-30",
+									dateFormat : "yy-mm-dd",
+									onSelect : function(d, i) {
+										var selectedDate = d.replace(/-/gi,
+												"");
+										$.desktop.reservepop.loadPlayDate(
+												selectedDate, selectedDate);
+									}
+								});
 			},
 
 			_initEvent : function() {
@@ -469,28 +539,31 @@
 					return false;
 				});
 
-				$("div.section-pop-top", "div.popup").on("click",
-						"a.btn-rsv-reset", function() {
-							if (confirm("모든 선택정보가 사라집니다. 계속하시겠습니까?") == false) {
-								return false;
-							}
-							/* var theaterCode = $("div#popup_olddata").data("theatercode");
-							var movieCode = $("div#popup_olddata").data("moviecode");
-							var playDate = $("div#popup_olddata").data("playdate");
-							var screenPlanId = $("div#popup_olddata").data("screenplanid");
-							var playNumber = $("div#popup_olddata").data("playnumber");
+				$("div.section-pop-top", "div.popup")
+						.on(
+								"click",
+								"a.btn-rsv-reset",
+								function() {
+									if (confirm("모든 선택정보가 사라집니다. 계속하시겠습니까?") == false) {
+										return false;
+									}
+									/* var theaterCode = $("div#popup_olddata").data("theatercode");
+									var movieCode = $("div#popup_olddata").data("moviecode");
+									var playDate = $("div#popup_olddata").data("playdate");
+									var screenPlanId = $("div#popup_olddata").data("screenplanid");
+									var playNumber = $("div#popup_olddata").data("playnumber");
 
-							$.desktop.reserve.openPrev(
-							    {
-							        playDate: playDate,
-							        theaterCode: theaterCode,
-							        movieCode: "",
-							        screenPlanId: "",
-							        playNumber: "",
-							    }
-							); */
-							location.href = "ticket.jsp"
-						});
+									$.desktop.reserve.openPrev(
+									    {
+									        playDate: playDate,
+									        theaterCode: theaterCode,
+									        movieCode: "",
+									        screenPlanId: "",
+									        playNumber: "",
+									    }
+									); */
+									location.href = "ticket.jsp"
+								});
 
 				$("div.wrap-date", "div.popup").on("click", "a.viewDate",
 						function(event) {
@@ -511,19 +584,22 @@
 										var date = $(this).data("date");
 										var selectDate = $(this).data(
 												"selectdate");
-										$("div.wrap-date #rsvcal", "div.popup")
+										$("div.wrap-date #rsvcal",
+												"div.popup")
 												.val(selectDate);
 
 										$.desktop.reservepop.option.playDate = date;
 										$(this).closest("ul").find(
-												"li.datelist>a").removeClass(
-												"selected");
+												"li.datelist>a")
+												.removeClass("selected");
 										$(this).closest("ul").find(
-												"li.datelist>a._sat").addClass(
-												"sat").removeClass("_sat");
+												"li.datelist>a._sat")
+												.addClass("sat")
+												.removeClass("_sat");
 										$(this).closest("ul").find(
-												"li.datelist>a._sun").addClass(
-												"sun").removeClass("_sun");
+												"li.datelist>a._sun")
+												.addClass("sun")
+												.removeClass("_sun");
 
 										$(this).addClass("selected");
 
@@ -578,7 +654,8 @@
 											.each(
 													function(e) {
 														$.desktop.reservepop.selectedMovieCode
-																.push($(this)
+																.push($(
+																		this)
 																		.val());
 													});
 									$.desktop.reservepop
@@ -599,8 +676,9 @@
 												"div.popup")
 												.each(
 														function() {
-															if ($(this).prop(
-																	"disabled") == false) {
+															if ($(this)
+																	.prop(
+																			"disabled") == false) {
 																$.desktop.reservepop.selectedMovieCode
 																		.push($(
 																				this)
@@ -680,7 +758,8 @@
 																					- h_pop
 																					- h_this
 																					+ 7));
-															if ($this.index() % 3 == 2) {
+															if ($this
+																	.index() % 3 == 2) {
 																$timeTable
 																		.css(
 																				"left",
@@ -708,28 +787,31 @@
 													})
 								});
 
-				$("div.wrap-timetable", "div.popup").on(
-						"mouseleave",
-						".time",
-						function() {
-							$("div.wrap-timetable div.pop-map", "div.popup")
-									.remove();
-						});
+				$("div.wrap-timetable", "div.popup")
+						.on(
+								"mouseleave",
+								".time",
+								function() {
+									$("div.wrap-timetable div.pop-map",
+											"div.popup").remove();
+								});
 
-				$("div.wrap-timetable", "div.popup").on(
-						"click",
-						".time",
-						function(e) {
-							$(".wrap-timetable .time").removeClass("on");
-							$.desktop.reservepop.option.screenPlanId = $(this)
-									.data("screenplanid");
-							$.desktop.reservepop.option.grade = $(this).data(
-									"grade");
-							$.desktop.reservepop.option.screenPropertyCode = $(
-									this).data("sproperty");
+				$("div.wrap-timetable", "div.popup")
+						.on(
+								"click",
+								".time",
+								function(e) {
+									$(".wrap-timetable .time").removeClass(
+											"on");
+									$.desktop.reservepop.option.screenPlanId = $(
+											this).data("screenplanid");
+									$.desktop.reservepop.option.grade = $(
+											this).data("grade");
+									$.desktop.reservepop.option.screenPropertyCode = $(
+											this).data("sproperty");
 
-							$(this).toggleClass("on");
-						});
+									$(this).toggleClass("on");
+								});
 
 				$(".section-pop-bottom", "div.popup")
 						.on(
@@ -774,13 +856,12 @@
 			},
 
 			_initSelected : function() {
-				$("div.wrap-theater div.theater-box", "div.popup").find("a")
-						.removeClass("selected");
 				$("div.wrap-theater div.theater-box", "div.popup")
-						.find(
-								"a[data-theatercode="
-										+ $.desktop.reservepop.option.theaterCode
-										+ "]").addClass("selected");
+						.find("a").removeClass("selected");
+				$("div.wrap-theater div.theater-box", "div.popup").find(
+						"a[data-theatercode="
+								+ $.desktop.reservepop.option.theaterCode
+								+ "]").addClass("selected");
 			},
 
 			loadDate : function(viewDate) {
@@ -791,8 +872,8 @@
 				}, function(data) {
 					var $data = $(data);
 					var maxdate = $data.data("maxdate");
-					$("div.wrap-date #rsvcal", "div.popup").hide().datepicker(
-							"option", "maxDate", maxdate);
+					$("div.wrap-date #rsvcal", "div.popup").hide()
+							.datepicker("option", "maxDate", maxdate);
 					$("div.wrap-date ul.cal-week", "div.popup").html(
 							$data.html());
 
@@ -812,8 +893,8 @@
 					$("div.wrap-date ul.cal-week", "div.popup").html(
 							$data.html());
 					$.desktop.reservepop.option.playDate = playDate;
-					$(this).closest("ul").find("li.datelist>a").removeClass(
-							"selected");
+					$(this).closest("ul").find("li.datelist>a")
+							.removeClass("selected");
 					$(this).addClass("selected");
 
 					$.desktop.reservepop.loadMovie();
@@ -826,8 +907,8 @@
 
 				if ($(
 						"div.wrap-date ul.cal-week a[data-date="
-								+ $.desktop.reservepop.option.playDate + "]",
-						"div.popup").hasClass("disabled") == true) {
+								+ $.desktop.reservepop.option.playDate
+								+ "]", "div.popup").hasClass("disabled") == true) {
 					$("div.wrap-movielist input.p-movie-check", "div.popup")
 							.prop("disabled", true).prop("checked", false);
 					$.desktop.reservepop.clearScreenPlan();
@@ -845,16 +926,18 @@
 									"SortType" : $.desktop.reservepop.option.sortType
 								},
 								function(data) {
-									$("div.wrap-movielist", "div.popup").html(
-											data);
+									$("div.wrap-movielist", "div.popup")
+											.html(data);
 
 									var selectMovieCode = new Array();
-									$("div.wrap-movielist input.p-movie-check",
+									$(
+											"div.wrap-movielist input.p-movie-check",
 											"div.popup")
 											.each(
 													function() {
 														for (var i = 0; i < $.desktop.reservepop.selectedMovieCode.length; i++) {
-															if ($(this).val() == $.desktop.reservepop.selectedMovieCode[i]) {
+															if ($(this)
+																	.val() == $.desktop.reservepop.selectedMovieCode[i]) {
 																if ($(this)
 																		.prop(
 																				"disabled") == true) {
@@ -884,23 +967,30 @@
 					return;
 				}
 
-				$.post("/popup/ReserveScreenPlan", {
-					"theaterCode" : $.desktop.reservepop.option.theaterCode,
-					"playDate" : $.desktop.reservepop.option.playDate,
-					"movieCode" : movieCodeList.toString()
-				}, function(data) {
-					if ($.trim(data) == "")
-						$.desktop.reservepop.clearScreenPlan();
-					else
-						$("div.wrap-timetable", "div.popup").html(data);
-					if ($.desktop.firstScreenPlanId != "")
-						$(
-								"div.wrap-timetable div[data-screenplanid="
-										+ $.desktop.firstScreenPlanId + "]",
-								"div.popup").click();
+				$
+						.post(
+								"/popup/ReserveScreenPlan",
+								{
+									"theaterCode" : $.desktop.reservepop.option.theaterCode,
+									"playDate" : $.desktop.reservepop.option.playDate,
+									"movieCode" : movieCodeList.toString()
+								},
+								function(data) {
+									if ($.trim(data) == "")
+										$.desktop.reservepop
+												.clearScreenPlan();
+									else
+										$("div.wrap-timetable", "div.popup")
+												.html(data);
+									if ($.desktop.firstScreenPlanId != "")
+										$(
+												"div.wrap-timetable div[data-screenplanid="
+														+ $.desktop.firstScreenPlanId
+														+ "]", "div.popup")
+												.click();
 
-					$.desktop.firstScreenPlanId = "";
-				});
+									$.desktop.firstScreenPlanId = "";
+								});
 			},
 
 			clearScreenPlan : function() {
@@ -911,10 +1001,10 @@
 	});
 </script>
 
-	<script type="text/javascript">
-		$(function() {
-			$.desktop.reservepop.init();
-		})
-	</script>
+<script type="text/javascript">
+	$(function() {
+		$.desktop.reservepop.init();
+	})
+</script>
 </body>
 </html>
