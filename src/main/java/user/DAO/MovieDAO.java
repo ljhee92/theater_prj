@@ -63,6 +63,7 @@ public class MovieDAO {
                         .rating(rs.getString("MOVIE_RATING"))
                         .releaseDate(rs.getDate("MOVIE_RELEASE_DATE"))
                         .build();
+				
 				System.out.println(mVO.getCode());
 				mVOList.add(mVO);
 
