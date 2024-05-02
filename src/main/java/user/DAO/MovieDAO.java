@@ -64,7 +64,6 @@ public class MovieDAO {
                         .movieReleaseDate(rs.getDate("MOVIE_RELEASE_DATE").toString())
                         .build();
 				
-				System.out.println(mVO.getMovieCode());
 				mVOList.add(mVO);
 
 			}
