@@ -262,7 +262,7 @@
 								</tr>
 								<tr>
 									<th>시간</th>
-									<td class="time">18:25</td>
+									<td class="time">18:20</td>
 								</tr>
 								<tr>
 									<th>인원</th>
