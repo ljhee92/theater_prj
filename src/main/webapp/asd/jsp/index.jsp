@@ -27,9 +27,7 @@
 	content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png">
 </meta>
 <link rel="alternate" href="http://m.cgv.co.kr" />
-<link rel="shortcut icon"
-	href="https://img.cgv.co.kr/theater_img/favicon.ico"
-	type="image/x-icon" />
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
 <title id="ctl00_headerTitle">명화 그 이상의 감동. 띵화관</title>
 
 <link rel="shortcut icon" type="image/x-icon"
