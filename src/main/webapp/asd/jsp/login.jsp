@@ -317,7 +317,9 @@ window.location.href = prevPage;
 
 	
 
-
+		<!-- S 예매하기 및 TOP Fixed 버튼 -->
+	<jsp:include page="sideTicketingAndTop.jsp"/>
+		<!-- E 예매하기 및 TOP Fixed 버튼 -->
 
 
 
