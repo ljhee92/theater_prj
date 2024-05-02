@@ -5,7 +5,7 @@
 
 		<div class="fixedBtn_wrap">
 
-			<a href="/ticket/" class="btn_fixedTicketing">예매하기</a> <a
+			<a href="ticket.jsp" class="btn_fixedTicketing">예매하기</a> <a
 				href="#none" class="btn_gotoTop"><img
 				src="https://img.cgv.co.kr/R2014/images/common/btn/gotoTop.png"
 				alt="최상단으로 이동" /></a>
