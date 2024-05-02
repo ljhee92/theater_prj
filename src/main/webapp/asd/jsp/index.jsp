@@ -308,28 +308,26 @@ for (MovieVO tempMovie : mVO) {
     String title = tempMovie.getMovieTitle();
     String rating = tempMovie.getMovieRating(); // All, 12, 15, 18
     
-/*      // 영화 개봉일에서 오늘 날짜를 뺀 값을 계산하여 dDay 변수에 할당
-     Date movieReleaseDate = tempMovie.getReleaseDate();
+ 	// 문자열로 된 날짜
+    String movieReleaseDate = tempMovie.getMovieReleaseDate();
+    
+ 	// 문자열을 LocalDate로 변환
+    LocalDate specifiedDate = LocalDate.parse(movieReleaseDate);
+ 	
+    // 현재 날짜
     LocalDate today = LocalDate.now();
-    
-    // Date를 LocalDate로 변환
-   Instant instant = movieReleaseDate.toInstant();
-    ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
-    LocalDate releaseLocalDate = zonedDateTime.toLocalDate();  */
-    
-    
 
-    
-    
-    
-    int dDay = 3;//ChronoUnit.DAYS.between(today, releaseLocalDate); 
+    // 두 날짜의 차이 계산
+    long dDay = ChronoUnit.DAYS.between(today,specifiedDate);
     
 
 
 %>
+
 <div class="swiper-slide swiper-slide-movie">
     <div class="img_wrap" data-scale="false">
-        <img src="<%= posterPath %>" alt="<%= code %>">
+
+        <img src="../images/movie/<%= posterPath %>" alt="<%= code %>">
         <div class="movieAgeLimit_wrap">
             <!-- 영상물 등급 노출 변경 -->
             <i class="cgvIcon etc age<%= rating %>"><%= rating %></i>
@@ -364,6 +362,7 @@ for (MovieVO tempMovie : mVO) {
 						
 						
 						
+		    	
 						
 						
 						
@@ -373,202 +372,10 @@ for (MovieVO tempMovie : mVO) {
 						
 						
 						
-						
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img src="../images/KakaoTalk_20240419_162826511.jpg"
-										alt="범죄도시4" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc ageAll">All</i> <i
-											class="cgvIcon etc age12">12</i> <i class="cgvIcon etc age15">15</i>
-										<i class="cgvIcon etc age18">18</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/15.png" alt="15세"> -->
-										<!-- <div class='dDay_wrap'><span>5</span></div>-->
-										<i class='cgvIcon etc ageDay' data-before-text='D - 365'>D
-											Day</i>
-
-									</div>
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88104"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '범죄도시4');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20035938&MOVIE_CD_GROUP=20035938"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','범죄도시4')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">웅찬도시4</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img src="../images/KakaoTalk_20240419_162826511.jpg"
-										alt="쿵푸팬더4" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc ageAll">All</i> <i
-											class="cgvIcon etc age12">12</i> <i class="cgvIcon etc age15">15</i>
-										<i class="cgvIcon etc age18">18</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/All.png" alt="All세"> -->
-										<!-- -->
-										<i class='cgvIcon etc ageDay' data-before-text='D - 3'>D
-											Day</i>
 
 
 
-									</div>
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=87948"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '쿵푸팬더4');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036058&MOVIE_CD_GROUP=20035291"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','쿵푸팬더4')"
-											class='btn_movieChart_ticketing'>예매하기</a>
 
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">웅찬팬더4</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img src="../images/KakaoTalk_20240419_162826511.jpg"
-										alt="슈가│어거스트 디 투어 ‘디-데이’ 더 무비" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc ageAll">All</i> <i
-											class="cgvIcon etc age12">12</i> <i class="cgvIcon etc age15">15</i>
-										<i class="cgvIcon etc age18">18</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/12.png" alt="12세"> -->
-										<!-- -->
-										<i class='cgvIcon etc ageDay' data-before-text='D - 2'>D
-											Day</i>
-
-
-									</div>
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88110"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '슈가│어거스트 디 투어 ‘디-데이’ 더 무비');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036129&MOVIE_CD_GROUP=20035956"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','슈가│어거스트 디 투어 ‘디-데이’ 더 무비')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">웅찬│어거스트 디 투어 ‘디-데이’ 더 무비</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img src="../images/KakaoTalk_20240419_162826511.jpg"
-										alt="듄-파트2" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc ageAll">All</i> <i
-											class="cgvIcon etc age12">12</i> <i class="cgvIcon etc age15">15</i>
-										<i class="cgvIcon etc age18">18</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/12.png" alt="12세"> -->
-										<!-- -->
-										<i class='cgvIcon etc ageDay' data-before-text='D - 1'>D
-											Day</i>
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=87947"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '듄-파트2');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20035290&MOVIE_CD_GROUP=20035290"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','듄-파트2')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">웅찬-파트2</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img src="../images/KakaoTalk_20240419_162826511.jpg" alt="파묘"
-										onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc ageAll">All</i> <i
-											class="cgvIcon etc age12">12</i> <i class="cgvIcon etc age15">15</i>
-										<i class="cgvIcon etc age18">18</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/15.png" alt="15세"> -->
-										<!-- -->
-										<i class='cgvIcon etc ageDay' data-before-text='D - 0'>D
-											Day</i>
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88012"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '파묘');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20035675&MOVIE_CD_GROUP=20035602"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','파묘')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">파묘</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88103/88103_320.jpg"
-										alt="고스트버스터즈: 오싹한 뉴욕" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc ageAll">All</i> <i
-											class="cgvIcon etc age12">12</i> <i class="cgvIcon etc age15">15</i>
-										<i class="cgvIcon etc age18">18</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/12.png" alt="12세"> -->
-										<!-- -->
-
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88103"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '고스트버스터즈: 오싹한 뉴욕');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036276&MOVIE_CD_GROUP=20035937"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','고스트버스터즈: 오싹한 뉴욕')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">고스트버스터즈: 오싹한 뉴욕</strong>
-								</div>
-							</div>
 
 							<div class="swiper-slide swiper-slide-movie">
 								<div class="img_wrap" data-scale="false">
@@ -591,14 +398,18 @@ for (MovieVO tempMovie : mVO) {
 											href="/ticket/?MOVIE_CD=20036007&MOVIE_CD_GROUP=20036007"
 											onclick="gaEventLog('PC_메인', '무비차트_예매하기','남은 인생 10년')"
 											class='btn_movieChart_ticketing'>예매하기</a>
-
-
 									</div>
 								</div>
 								<div class="movie_info_wrap">
 									<strong class="movieName">남은 인생 10년</strong>
 								</div>
 							</div>
+
+
+
+
+
+
 
 							<div class="swiper-slide swiper-slide-movie">
 								<div class="img_wrap" data-scale="false">
@@ -610,10 +421,7 @@ for (MovieVO tempMovie : mVO) {
 										<i class="cgvIcon etc age12">12</i>
 										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/12.png" alt="12세"> -->
 										<!-- -->
-
-
 									</div>
-
 									<div class="movieChart_btn_wrap">
 										<a href="/movies/detail-view/?midx=88080"
 											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '극장판 스파이 패밀리 코드-화이트');"
@@ -640,9 +448,24 @@ for (MovieVO tempMovie : mVO) {
 										<i class="cgvIcon etc age15">15</i>
 										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/15.png" alt="15세"> -->
 										<!-- -->
-
-
 									</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 									<div class="movieChart_btn_wrap">
 										<a href="/movies/detail-view/?midx=88077"
