@@ -279,18 +279,6 @@
  
 
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 			<div class="movieChartBeScreen_wrap">
 				<div class="contents">
 					<div class="movieChartBeScreen_btn_wrap">
@@ -1280,18 +1268,12 @@ for (MovieVO tempMovie : mVO) {
 
 
 		<!-- S 예매하기 및 TOP Fixed 버튼 -->
-		<div class="fixedBtn_wrap">
-
-			<a href="/ticket/" class="btn_fixedTicketing">예매하기</a> <a
-				href="#none" class="btn_gotoTop"><img
-				src="https://img.cgv.co.kr/R2014/images/common/btn/gotoTop.png"
-				alt="최상단으로 이동" /></a>
-		</div>
+	<jsp:include page="sideTicketingAndTop.jsp"/>
 		<!-- E 예매하기 및 TOP Fixed 버튼 -->
 
 	
 		<!-- S footer_area -->
-	<jsp:include page="footer.jsp"></jsp:include>
+	<jsp:include page="footer.jsp"/>
 		<!-- E footer_area -->
 		
 
