@@ -57,14 +57,14 @@ public class MovieDAO {
 			while (rs.next()) {
 				mVO = null;
 				mVO = MovieVO.builder()
-						.code(rs.getString("MOVIE_CODE"))
-                        .posterPath(rs.getString("MOVIE_POSTER_PATH"))
-                        .title(rs.getString("MOVIE_TITLE"))
-                        .rating(rs.getString("MOVIE_RATING"))
-                        .releaseDate(rs.getDate("MOVIE_RELEASE_DATE"))
+						.movieCode(rs.getString("MOVIE_CODE"))
+                        .moviePosterPath(rs.getString("MOVIE_POSTER_PATH"))
+                        .movieTitle(rs.getString("MOVIE_TITLE"))
+                        .movieRating(rs.getString("MOVIE_RATING"))
+                        .movieReleaseDate(rs.getDate("MOVIE_RELEASE_DATE").toString())
                         .build();
 				
-				System.out.println(mVO.getCode());
+				System.out.println(mVO.getMovieCode());
 				mVOList.add(mVO);
 
 			}

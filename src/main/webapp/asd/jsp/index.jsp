@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8" info=""%>
 <%@page import="java.util.Date"%>
 <%@page import="java.time.ZoneId"%>
 <%@page import="java.time.ZonedDateTime"%>
@@ -7,8 +9,7 @@
 <%@page import="VO.MovieVO"%>
 <%@page import="java.time.temporal.ChronoUnit"%>
 <%@page import="java.time.LocalDate"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" info=""%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -316,10 +317,10 @@
  List<MovieVO> mVO = mDAO.selectMovieList();
  
 for (MovieVO tempMovie : mVO) {
-	String code = tempMovie.getCode();
-    String posterPath = tempMovie.getPosterPath();
-    String title = tempMovie.getTitle();
-    String rating = tempMovie.getRating(); // All, 12, 15, 18
+	String code = tempMovie.getMovieCode();
+    String posterPath = tempMovie.getMoviePosterPath();
+    String title = tempMovie.getMovieTitle();
+    String rating = tempMovie.getMovieRating(); // All, 12, 15, 18
     
 /*      // 영화 개봉일에서 오늘 날짜를 뺀 값을 계산하여 dDay 변수에 할당
      Date movieReleaseDate = tempMovie.getReleaseDate();
@@ -352,7 +353,7 @@ for (MovieVO tempMovie : mVO) {
             <% } %>
         </div>
         <div class="movieChart_btn_wrap">
-            <a href="<%= code %>"
+            <a href= "movieDetail.jsp?midx=<%= code %>"                
                 onclick="gaEventLog('PC_메인', '무비차트_영화상세', '<%= title %>');"
                 class="btn_movieChart_detail">상세보기</a>
             <a href="<%-- <%=  ticketURL %> --%>#"
