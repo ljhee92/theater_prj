@@ -10,7 +10,7 @@
 				<div class="contents">
 					<h1 onclick="">
 						<a href="index.jsp"><img
-							src="https://img.cgv.co.kr/R2014/images/common/logo/logoRed.png"
+							src="../logo.png"
 							alt="CGV" /></a><span>CULTUREPLEX</span>
 					</h1>
 					<ul class="memberInfo_wrap">
@@ -285,19 +285,19 @@
 
 						<li>
 							<h2>
-								<a href="/ticket/"><strong>예매</strong></a>
+								<a href="ticket.jsp"><strong>예매</strong></a>
 							</h2>
 
 							<dl class="nav_overMenu">
 								<dt>
 									<h2>
-										<a href="/ticket/" tabindex="-1">예매</a>
+										<a href="ticket.jsp" tabindex="-1">예매</a>
 									</h2>
 								</dt>
 
 								<dd>
 									<h3>
-										<a href="/ticket/">빠른예매</a>
+										<a href="ticket.jsp">빠른예매</a>
 									</h3>
 								</dd>
 
