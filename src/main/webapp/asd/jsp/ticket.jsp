@@ -113,22 +113,6 @@
 	src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
 <!-- 예매 CSS, JS -->
 
-<style type="text/css">
-.kcpTransDiv {
-	filter: alpha(opacity = 10);
-	-khtml-opacity: 0.1;
-	-moz-opacity: 0.1;
-	opacity: 0.1;
-	top: 0px;
-	left: 0;
-	background-color: #000000;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	z-index: 10000;
-}
-</style>
-
 <!-- 로그인/로그아웃 script 시작 -->
 <!-- <script type="text/javascript">
     $(function () {
@@ -208,7 +192,167 @@
     });
 </script> -->
 <!-- 로그인/로그아웃 script 종료 -->
+</head>
+<body class="">
 
+	<div class="skipnaiv">
+		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
+	</div>
+
+	<div id="wrap">
+		<!-- S Header -->
+		<jsp:include page="header.jsp"></jsp:include>
+		<!-- E Header -->
+
+		<!-- Contaniner -->
+		<div id="container" class>
+			<!-- Contents Area -->
+			<div id="contents" class style="padding-bottom: 0px;">
+				<!-- Contents Start -->
+				<input type="hidden" id="isOpenUserEmailYNPopup"
+					name="isOpenUserEmailYNPopup" value="False" />
+
+				<!-- 예매 본문 -->
+				<div class="popup" data-theatercode="6001" data-moviecode=""
+					data-playdate="20240430" data-screenplanid="" data-playnumber="">
+					<div class="section-pop-top">
+						<!--<h3 class="title">제목</h3>-->
+						<a href="#" class="btn-rsv-reset">다시 예매</a>
+					</div>
+
+					<div class="section-pop-left">
+						<div class="wrap-date">
+							<h4 class="title">날짜</h4>
+							<a href="#" class="btn-show-cal">달력보기</a> <input type="hidden"
+								name="cal" id="rsvcal" class="input-cal hasDatepicker"
+								value="2024-04-30" style="display: none;">
+							<ul class="cal-week">
+								<li><a href="#" class="prev viewDate" data-viewdate="">이전</a></li>
+								<li class="datelist"><a href="#" data-date="20240430"
+									data-selectdate="2024-04-30" class="today selected"><span
+										class="day">오늘</span>30</a></li>
+								<li class="datelist"><a href="#" data-date="20240501"
+									data-selectdate="2024-05-01" class=""><span class="day">수</span>1</a></li>
+								<li class="datelist"><a href="#" data-date="20240502"
+									data-selectdate="2024-05-02" class=""><span class="day">목</span>2</a></li>
+								<li class="datelist"><a href="#" data-date="20240503"
+									data-selectdate="2024-05-03" class=""><span class="day">금</span>3</a></li>
+								<li class="datelist"><a href="#" data-date="20240504"
+									data-selectdate="2024-05-04" class="sat"><span class="day">토</span>4</a></li>
+								<li class="datelist"><a href="#" data-date="20240505"
+									data-selectdate="2024-05-05" class="sun"><span class="day">일</span>5</a></li>
+								<li class="datelist"><a href="#" data-date="20240506"
+									data-selectdate="2024-05-06" class=""><span class="day">월</span>6</a></li>
+								<li class="datelist"><a href="#" data-date="20240507"
+									data-selectdate="2024-05-07" class=""><span class="day">화</span>7</a></li>
+								<li class="datelist"><a href="#" data-date="20240508"
+									data-selectdate="2024-05-08" class="disabled"><span
+										class="day">수</span>8</a></li>
+								<li class="datelist"><a href="#" data-date="20240509"
+									data-selectdate="2024-05-09" class="disabled"><span
+										class="day">목</span>9</a></li>
+								<li><a href="#" class="next viewDate"
+									data-viewdate="20240510">이전</a></li>
+							</ul>
+						</div>
+						<div class="wrap-theater">
+							<h4 class="title">영화관</h4>
+							<div class="theater-box">
+								<a href="#" class="theater" data-theatercode="1001">신도림</a> <a
+									href="#" class="theater" data-theatercode="2001">동탄</a> <a
+									href="#" class="theater" data-theatercode="4101">천안불당</a> <a
+									href="#" class="theater selected" data-theatercode="6001">경주보문</a>
+								<a href="#" class="theater" data-theatercode="6002">구미봉곡</a> <a
+									href="#" class="theater" data-theatercode="2002">남양주다산</a> <a
+									href="#" class="theater" data-theatercode="6006">대구이시아</a> <a
+									href="#" class="theater" data-theatercode="2102">청라</a> <a
+									href="#" class="theater" data-theatercode="4002">보은</a> <a
+									href="#" class="theater" data-theatercode="6005">영덕예주</a> <a
+									href="#" class="theater" data-theatercode="6003">칠곡호이</a>
+							</div>
+						</div>
+						<div class="wrap-theater wrap-movielist">
+
+							<h4 class="title">영화</h4>
+							<div class="btn-box1">
+								<a href="#" class="" data-type="select">전체 선택</a> <a href="#"
+									class="" data-type="reload">전체 해제</a>
+							</div>
+							<div class="btn-box2">
+								<a href="#" class="selected" data-sorttype="1">예매율순</a> <a
+									href="#" class="" data-sorttype="2">가나다순</a>
+							</div>
+							<ul class="list-movie-name" style="height: 278px;">
+								<li><input type="checkbox" id="pm_20228797"
+									name="movie_movieCode" value="20228797" class="p-movie-check"><label
+									for="pm_20228797"><span class="rate-15">15</span>범죄도시4</label><span
+									class="check"></span></li>
+								<li><input type="checkbox" id="pm_20236614"
+									name="movie_movieCode" value="20236614" class="p-movie-check"><label
+									for="pm_20236614"><span class="rate-all">0</span>쿵푸팬더4</label><span
+									class="check"></span></li>
+								<li><input type="checkbox" id="pm_20249318"
+									name="movie_movieCode" value="20249318" class="p-movie-check"><label
+									for="pm_20249318"><span class="rate-15">15</span>챌린저스</label><span
+									class="check"></span></li>
+								<li><input type="checkbox" id="pm_20248466"
+									name="movie_movieCode" value="20248466" class="p-movie-check"><label
+									for="pm_20248466"><span class="rate-12">12</span>고스트버스터즈:
+										오싹한 뉴욕</label><span class="check"></span></li>
+
+								<li><input type="checkbox" id="pm_20235613"
+									name="movie_movieCode" value="20235613" disabled=""
+									class="p-movie-check"><label for="pm_20235613"><span
+										class="rate-15">15</span>스턴트맨</label><span class="check"></span></li>
+								<li><input type="checkbox" id="pm_20249313"
+									name="movie_movieCode" value="20249313" disabled=""
+									class="p-movie-check"><label for="pm_20249313"><span
+										class="rate-all">0</span>포켓몬스터: 성도지방 이야기, ...</label><span
+									class="check"></span></li>
+							</ul>
+						</div>
+					</div>
+					<!--.section-pop-left-->
+
+					<div class="section-pop-right">
+						<div class="wrap-timetable-head" style = "align-content: center;">
+							<h4 class="title">시간표</h4>
+							
+						</div>
+						<div class="wrap-timetable">
+							<p class="ready">영화관과 영화를 선택하면 시간표가 나옵니다.</p>
+						</div>
+					</div>
+					<!--.section-pop-left-->
+
+					<div class="section-pop-bottom">
+						<div class="wrap-rsv-select">
+							<a href="#" class="btn-rsv-next">다음</a>
+						</div>
+					</div>
+				</div>
+
+				<!--/ Contents End -->
+			</div>
+			<!-- /Contents Area -->
+		</div>
+		<!-- E Contaniner -->
+
+		<!-- S 예매하기 및 TOP Fixed 버튼 -->
+		<div class="fixedBtn_wrap">
+
+			<a href="#none" class="btn_gotoTop"><img
+				src="https://img.cgv.co.kr/R2014/images/common/btn/gotoTop.png"
+				alt="최상단으로 이동" /></a>
+		</div>
+		<!-- E 예매하기 및 TOP Fixed 버튼 -->
+
+		<!-- S footer_area -->
+		<jsp:include page="footer.jsp"></jsp:include>
+		<!-- E footer_area -->
+	</div>
+	
+	
 <script type="text/javascript">
 	function simpleReserv(playDate, theaterCode, movieCode, screenPlanId) {
 		$.desktop.reserve.open({
@@ -766,166 +910,6 @@
 		}
 	});
 </script>
-
-</head>
-<body class="">
-
-	<div class="skipnaiv">
-		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
-	</div>
-
-	<div id="cgvwrap">
-		<!-- S Header -->
-		<jsp:include page="header.jsp"></jsp:include>
-		<!-- E Header -->
-
-		<!-- Contaniner -->
-		<div id="container" class>
-			<!-- Contents Area -->
-			<div id="contents" class style="padding-bottom: 0px;">
-				<!-- Contents Start -->
-				<input type="hidden" id="isOpenUserEmailYNPopup"
-					name="isOpenUserEmailYNPopup" value="False" />
-
-				<!-- 예매 본문 -->
-				<div class="popup" data-theatercode="6001" data-moviecode=""
-					data-playdate="20240430" data-screenplanid="" data-playnumber="">
-					<div class="section-pop-top">
-						<!--<h3 class="title">제목</h3>-->
-						<a href="#" class="btn-rsv-reset">다시 예매</a>
-					</div>
-
-					<div class="section-pop-left">
-						<div class="wrap-date">
-							<h4 class="title">날짜</h4>
-							<a href="#" class="btn-show-cal">달력보기</a> <input type="hidden"
-								name="cal" id="rsvcal" class="input-cal hasDatepicker"
-								value="2024-04-30" style="display: none;">
-							<ul class="cal-week">
-								<li><a href="#" class="prev viewDate" data-viewdate="">이전</a></li>
-								<li class="datelist"><a href="#" data-date="20240430"
-									data-selectdate="2024-04-30" class="today selected"><span
-										class="day">오늘</span>30</a></li>
-								<li class="datelist"><a href="#" data-date="20240501"
-									data-selectdate="2024-05-01" class=""><span class="day">수</span>1</a></li>
-								<li class="datelist"><a href="#" data-date="20240502"
-									data-selectdate="2024-05-02" class=""><span class="day">목</span>2</a></li>
-								<li class="datelist"><a href="#" data-date="20240503"
-									data-selectdate="2024-05-03" class=""><span class="day">금</span>3</a></li>
-								<li class="datelist"><a href="#" data-date="20240504"
-									data-selectdate="2024-05-04" class="sat"><span class="day">토</span>4</a></li>
-								<li class="datelist"><a href="#" data-date="20240505"
-									data-selectdate="2024-05-05" class="sun"><span class="day">일</span>5</a></li>
-								<li class="datelist"><a href="#" data-date="20240506"
-									data-selectdate="2024-05-06" class=""><span class="day">월</span>6</a></li>
-								<li class="datelist"><a href="#" data-date="20240507"
-									data-selectdate="2024-05-07" class=""><span class="day">화</span>7</a></li>
-								<li class="datelist"><a href="#" data-date="20240508"
-									data-selectdate="2024-05-08" class="disabled"><span
-										class="day">수</span>8</a></li>
-								<li class="datelist"><a href="#" data-date="20240509"
-									data-selectdate="2024-05-09" class="disabled"><span
-										class="day">목</span>9</a></li>
-								<li><a href="#" class="next viewDate"
-									data-viewdate="20240510">이전</a></li>
-							</ul>
-						</div>
-						<div class="wrap-theater">
-							<h4 class="title">영화관</h4>
-							<div class="theater-box">
-								<a href="#" class="theater" data-theatercode="1001">신도림</a> <a
-									href="#" class="theater" data-theatercode="2001">동탄</a> <a
-									href="#" class="theater" data-theatercode="4101">천안불당</a> <a
-									href="#" class="theater selected" data-theatercode="6001">경주보문</a>
-								<a href="#" class="theater" data-theatercode="6002">구미봉곡</a> <a
-									href="#" class="theater" data-theatercode="2002">남양주다산</a> <a
-									href="#" class="theater" data-theatercode="6006">대구이시아</a> <a
-									href="#" class="theater" data-theatercode="2102">청라</a> <a
-									href="#" class="theater" data-theatercode="4002">보은</a> <a
-									href="#" class="theater" data-theatercode="6005">영덕예주</a> <a
-									href="#" class="theater" data-theatercode="6003">칠곡호이</a>
-							</div>
-						</div>
-						<div class="wrap-theater wrap-movielist">
-
-							<h4 class="title">영화</h4>
-							<div class="btn-box1">
-								<a href="#" class="" data-type="select">전체 선택</a> <a href="#"
-									class="" data-type="reload">전체 해제</a>
-							</div>
-							<div class="btn-box2">
-								<a href="#" class="selected" data-sorttype="1">예매율순</a> <a
-									href="#" class="" data-sorttype="2">가나다순</a>
-							</div>
-							<ul class="list-movie-name" style="height: 278px;">
-								<li><input type="checkbox" id="pm_20228797"
-									name="movie_movieCode" value="20228797" class="p-movie-check"><label
-									for="pm_20228797"><span class="rate-15">15</span>범죄도시4</label><span
-									class="check"></span></li>
-								<li><input type="checkbox" id="pm_20236614"
-									name="movie_movieCode" value="20236614" class="p-movie-check"><label
-									for="pm_20236614"><span class="rate-all">0</span>쿵푸팬더4</label><span
-									class="check"></span></li>
-								<li><input type="checkbox" id="pm_20249318"
-									name="movie_movieCode" value="20249318" class="p-movie-check"><label
-									for="pm_20249318"><span class="rate-15">15</span>챌린저스</label><span
-									class="check"></span></li>
-								<li><input type="checkbox" id="pm_20248466"
-									name="movie_movieCode" value="20248466" class="p-movie-check"><label
-									for="pm_20248466"><span class="rate-12">12</span>고스트버스터즈:
-										오싹한 뉴욕</label><span class="check"></span></li>
-
-								<li><input type="checkbox" id="pm_20235613"
-									name="movie_movieCode" value="20235613" disabled=""
-									class="p-movie-check"><label for="pm_20235613"><span
-										class="rate-15">15</span>스턴트맨</label><span class="check"></span></li>
-								<li><input type="checkbox" id="pm_20249313"
-									name="movie_movieCode" value="20249313" disabled=""
-									class="p-movie-check"><label for="pm_20249313"><span
-										class="rate-all">0</span>포켓몬스터: 성도지방 이야기, ...</label><span
-									class="check"></span></li>
-							</ul>
-						</div>
-					</div>
-					<!--.section-pop-left-->
-
-					<div class="section-pop-right">
-						<div class="wrap-timetable-head" style = "align-content: center;">
-							<h4 class="title">시간표</h4>
-							
-						</div>
-						<div class="wrap-timetable">
-							<p class="ready">영화관과 영화를 선택하면 시간표가 나옵니다.</p>
-						</div>
-					</div>
-					<!--.section-pop-left-->
-
-					<div class="section-pop-bottom">
-						<div class="wrap-rsv-select">
-							<a href="#" class="btn-rsv-next">다음</a>
-						</div>
-					</div>
-				</div>
-
-				<!--/ Contents End -->
-			</div>
-			<!-- /Contents Area -->
-		</div>
-		<!-- E Contaniner -->
-
-		<!-- S 예매하기 및 TOP Fixed 버튼 -->
-		<div class="fixedBtn_wrap">
-
-			<a href="#none" class="btn_gotoTop"><img
-				src="https://img.cgv.co.kr/R2014/images/common/btn/gotoTop.png"
-				alt="최상단으로 이동" /></a>
-		</div>
-		<!-- E 예매하기 및 TOP Fixed 버튼 -->
-
-		<!-- S footer_area -->
-		<jsp:include page="footer.jsp"></jsp:include>
-		<!-- E footer_area -->
-	</div>
 
 	<script type="text/javascript">
 		$(function() {
