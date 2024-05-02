@@ -161,28 +161,7 @@
 $(function(){
 
 	
-	
-	
-	
-	
-<%-- 	$(document).ready(function() {
 
-/* 		alert("페이지 로딩되었음"); */
-		
-		<%
-		String id="";
-		
-		if (session.getAttribute("id") != null) {%>
-		window.location.href = "index.jsp";
-
-		<%}%>
-
-		
-	    $("#txtUserId").focus();
-	});
-	 --%>
-	
-	
 	
 	
 	
@@ -261,6 +240,8 @@ $(function(){
 
 
 <!-- 실컨텐츠 시작 -->
+
+
 	<!-- S Header -->
 	<jsp:include page="header.jsp"></jsp:include>
 	<!-- E Header -->
@@ -269,17 +250,35 @@ $(function(){
 
 
 <!-- S 로그인 세션 확인  -->
+<!-- prevPage에 값이 있다면 이전페이지 저장 -->
+<!-- 저장되어있지 않다면 기본값 index.html로 저장 -->
 <script type="text/javascript">
 <%
-String id="";
+String prevPage ="";
+String id = (String)session.getAttribute("id");
 
-if (session.getAttribute("id") != null) {%>
-window.location.href = "index.jsp";
+
+log("로그인페이지에서 header : " + request.getHeader("Referer"));
+
+if (request.getParameter("prevPage")==null){
+	prevPage="index.html";
+}else{
+	prevPage=request.getParameter("prevPage");
+}
+
+
+log("로그인중인 id ; " + id);
+log("이전페이지 ; " + prevPage);
+
+if (id != null) {%>
+
+var prevPage = "<%= prevPage %>";
+
+window.location.href = prevPage;
 
 <%}%>
 
 
-$("#txtUserId").focus();
 </script>
 <!-- E 로그인 세션 확인  -->
 
@@ -302,6 +301,7 @@ $("#txtUserId").focus();
 
               
                 <button type="submit" id="submit" title="로그인"><span>로그인</span></button>
+                <input type="hidden" id="prevPage" name="prevPage" value=<%= prevPage %> >
                 <div class="login-option">
                      
                     <a style="cursor:pointer;" onclick="alert('아이디 찾기 클릭')"  target="_blank">아이디 찾기</a>
@@ -313,7 +313,6 @@ $("#txtUserId").focus();
         </div>
     </div>    
     <div class="sect-loginguide">
-
     </div>
 
 	

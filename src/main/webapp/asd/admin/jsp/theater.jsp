@@ -45,6 +45,12 @@
 }
 
 .empty-container {
+    display: flex;
+    justify-content: flex-end; /* 우측 정렬 */
+    height: 200px; /* 원하는 높이 설정 */
+}
+
+.viewSeat {
 	display: flex;
 	justify-content: center;
 	height: 200px; /* 원하는 높이 설정 */
@@ -106,7 +112,12 @@
 	display: flex;
 	justify-content: space-between; /* 좌우 정렬 */
 }
+
+
+
+
 </style>
+
 <script type="text/javascript">
 	$(function() {
 		// 좌석을 클릭할 때 색 변경
@@ -171,29 +182,28 @@
 							<div class="screen">SCREEN</div>
 						</div>
 
-						<div class="empty-container"
-						
-							style="border: 1px solid black; padding: 10px;">
-							<div style="margin-top: 10px;">
-								<span>총좌석 : 20석</span><br>
-								<div style="display: flex; align-items: center;">
-									<div
-										style="width: 20px; height: 20px; background-color: red; border: 1px solid black; margin-right: 5px;"></div>
-									<span style="font-size: 16px;">선택좌석</span>
-								</div>
-								<div style="display: flex; align-items: center;">
-									<div
-										style="width: 20px; height: 20px; background-color: white; border: 1px solid black; margin-right: 5px;"></div>
-									<span style="font-size: 16px;">선택가능 : 20석</span>
-								</div>
-								<div
-									style="display: flex; align-items: center; margin-top: 5px;">
-									<div
-										style="width: 20px; height: 20px; background-color: gray; border: 1px solid black; margin-right: 5px;"></div>
-									<span style="font-size: 16px;">선택불가능 : 0석</span>
-								</div>
-							</div>
-						</div>
+
+
+
+<div class="empty-container" style="justify-content: flex-end;">
+    <div class="viewSeat" style="border: 1px solid black; padding: 10px;">
+        <div style="margin-top: 10px;">
+            <span>총좌석 : 20석</span><br>
+            <div style="display: flex; align-items: center;">
+                <div style="width: 20px; height: 20px; background-color: red; border: 1px solid black; margin-right: 5px;"></div>
+                <span style="font-size: 16px;">선택좌석</span>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <div style="width: 20px; height: 20px; background-color: white; border: 1px solid black; margin-right: 5px;"></div>
+                <span style="font-size: 16px;">선택가능 : 20석</span>
+            </div>
+            <div style="display: flex; align-items: center; margin-top: 5px;">
+                <div style="width: 20px; height: 20px; background-color: gray; border: 1px solid black; margin-right: 5px;"></div>
+                <span style="font-size: 16px;">선택불가능 : 0석</span>
+            </div>
+        </div>
+    </div>
+</div>
 
 						<div class="seat-container">
 							<!-- 첫 번째 줄 좌석 -->

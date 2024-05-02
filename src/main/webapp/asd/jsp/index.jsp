@@ -1,5 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info=""%>
+<%@page import="java.util.Date"%>
+<%@page import="java.time.ZoneId"%>
+<%@page import="java.time.ZonedDateTime"%>
+<%@page import="java.time.Instant"%>
+<%@page import="java.util.List"%>
+<%@page import="user.DAO.MovieDAO"%>
+<%@page import="VO.MovieVO"%>
+<%@page import="java.time.temporal.ChronoUnit"%>
+<%@page import="java.time.LocalDate"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +30,7 @@
 <link rel="shortcut icon"
 	href="https://img.cgv.co.kr/theater_img/favicon.ico"
 	type="image/x-icon" />
-<title id="ctl00_headerTitle">명화 그 이상의 감동. CGV</title>
+<title id="ctl00_headerTitle">명화 그 이상의 감동. 띵화관</title>
 
 <link rel="shortcut icon" type="image/x-icon"
 	href="https://img.cgv.co.kr/R2014/images/favicon.ico" />
@@ -262,10 +272,22 @@
 
 
 			<!-- S > 무비차트 | 상영예정작
-  - Description:
+  			- Description:
             - 검색 값 있는 경우 영역 미노출
             - 관람제한 (12.png, 15.png, 19.png, all.png, notyet.png)
- -->
+			 -->
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  
@@ -283,6 +305,89 @@
 
 					<div class="swiper movieChart_list" id="movieChart_list">
 						<div class="swiper-wrapper">
+						
+						
+						
+						
+						
+<%
+ 
+ 
+ MovieDAO mDAO = MovieDAO.getInstance();
+ List<MovieVO> mVO = mDAO.selectMovieList();
+ 
+for (MovieVO tempMovie : mVO) {
+	String code = tempMovie.getMovieCode();
+    String posterPath = tempMovie.getMoviePosterPath();
+    String title = tempMovie.getMovieTitle();
+    String rating = tempMovie.getMovieRating(); // All, 12, 15, 18
+    
+/*      // 영화 개봉일에서 오늘 날짜를 뺀 값을 계산하여 dDay 변수에 할당
+     Date movieReleaseDate = tempMovie.getReleaseDate();
+    LocalDate today = LocalDate.now();
+    
+    // Date를 LocalDate로 변환
+   Instant instant = movieReleaseDate.toInstant();
+    ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
+    LocalDate releaseLocalDate = zonedDateTime.toLocalDate();  */
+    
+    
+
+    
+    
+    
+    int dDay = 3;//ChronoUnit.DAYS.between(today, releaseLocalDate); 
+    
+
+
+%>
+<div class="swiper-slide swiper-slide-movie">
+    <div class="img_wrap" data-scale="false">
+        <img src="<%= posterPath %>" alt="<%= code %>">
+        <div class="movieAgeLimit_wrap">
+            <!-- 영상물 등급 노출 변경 -->
+            <i class="cgvIcon etc age<%= rating %>"><%= rating %></i>
+            <!-- 개봉일 - 오늘 -->
+            <% if (dDay > 0) { %>
+                <i class='cgvIcon etc ageDay' data-before-text='D - <%= dDay %>'>DDay</i>
+            <% } %>
+        </div>
+        <div class="movieChart_btn_wrap">
+            <a href= "movieDetail.jsp?midx=<%= code %>"                
+                onclick="gaEventLog('PC_메인', '무비차트_영화상세', '<%= title %>');"
+                class="btn_movieChart_detail">상세보기</a>
+            <a href="<%-- <%=  ticketURL %> --%>#"
+                onclick="gaEventLog('PC_메인', '무비차트_예매하기', '<%= title %>')"
+                class='btn_movieChart_ticketing'>예매하기</a>
+        </div>
+    </div>
+    <div class="movie_info_wrap">
+        <strong class="movieName"><%= title %></strong>
+    </div>
+</div>
+
+<%
+}
+%>	
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
 
 							<div class="swiper-slide swiper-slide-movie">
 								<div class="img_wrap" data-scale="false">
@@ -311,7 +416,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">웅찬도시4</strong> <span>예매율 68.6%</span>
+									<strong class="movieName">웅찬도시4</strong>
 								</div>
 							</div>
 
@@ -344,7 +449,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">웅찬팬더4</strong> <span>예매율 9.0%</span>
+									<strong class="movieName">웅찬팬더4</strong>
 								</div>
 							</div>
 
@@ -376,8 +481,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">웅찬│어거스트 디 투어 ‘디-데이’ 더 무비</strong> <span>예매율
-										4.7%</span>
+									<strong class="movieName">웅찬│어거스트 디 투어 ‘디-데이’ 더 무비</strong>
 								</div>
 							</div>
 
@@ -410,7 +514,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">웅찬-파트2</strong> <span>예매율 3.4%</span>
+									<strong class="movieName">웅찬-파트2</strong>
 								</div>
 							</div>
 
@@ -443,7 +547,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">파묘</strong> <span>예매율 2.4%</span>
+									<strong class="movieName">파묘</strong>
 								</div>
 							</div>
 
@@ -476,8 +580,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">고스트버스터즈: 오싹한 뉴욕</strong> <span>예매율
-										1.5%</span>
+									<strong class="movieName">고스트버스터즈: 오싹한 뉴욕</strong>
 								</div>
 							</div>
 
@@ -507,8 +610,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">남은 인생 10년</strong> <span>예매율
-										1.3%</span>
+									<strong class="movieName">남은 인생 10년</strong>
 								</div>
 							</div>
 
@@ -538,8 +640,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">극장판 스파이 패밀리 코드-화이트</strong> <span>예매율
-										0.9%</span>
+									<strong class="movieName">극장판 스파이 패밀리 코드-화이트</strong>
 								</div>
 							</div>
 
@@ -569,7 +670,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">댓글부대</strong> <span>예매율 0.7%</span>
+									<strong class="movieName">댓글부대</strong>
 								</div>
 							</div>
 
@@ -599,8 +700,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">기동전사 건담 시드 프리덤</strong> <span>
-										<span>예매율 0.7%</span>
+									<strong class="movieName">기동전사 건담 시드 프리덤</strong> 
 								</div>
 							</div>
 
@@ -630,8 +730,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">오멘-저주의 시작</strong> <span>예매율
-										0.6%</span>
+									<strong class="movieName">오멘-저주의 시작</strong>
 								</div>
 							</div>
 
@@ -663,8 +762,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">성우 남도형 에세이-인생은 파랑 출간 기념회&생일
-										팬미팅</strong> <span>예매율 0.4%</span>
+									<strong class="movieName">성우 남도형 에세이-인생은 파랑 출간 기념회&생일 팬미팅</strong>
 								</div>
 							</div>
 
@@ -694,7 +792,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">캐롤</strong> <span>예매율 0.3%</span>
+									<strong class="movieName">캐롤</strong>
 								</div>
 							</div>
 
@@ -725,7 +823,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">챌린저스</strong> <span>예매율 0.3%</span>
+									<strong class="movieName">챌린저스</strong>
 								</div>
 							</div>
 
@@ -755,8 +853,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">땅에 쓰는 시</strong> <span>예매율
-										0.2%</span>
+									<strong class="movieName">땅에 쓰는 시</strong> 
 								</div>
 							</div>
 
@@ -786,8 +883,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">유미의 세포들 더 무비</strong> <span>예매율
-										0.2%</span>
+									<strong class="movieName">유미의 세포들 더 무비</strong>
 								</div>
 							</div>
 
@@ -817,7 +913,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">듄</strong> <span>예매율 0.2%</span>
+									<strong class="movieName">듄</strong> 
 								</div>
 							</div>
 
@@ -848,8 +944,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">쇼잉 업(MCFF)</strong> <span>예매율
-										0.2%</span>
+									<strong class="movieName">쇼잉 업(MCFF)</strong> 
 								</div>
 							</div>
 
@@ -879,8 +974,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">고질라 X 콩-뉴 엠파이어</strong> <span>예매율
-										0.2%</span>
+									<strong class="movieName">고질라 X 콩-뉴 엠파이어</strong> 
 								</div>
 							</div>
 
@@ -910,8 +1004,7 @@
 									</div>
 								</div>
 								<div class="movie_info_wrap">
-									<strong class="movieName">에스파: 월드 투어 인 시네마</strong> <span>예매율
-										0.2%</span>
+									<strong class="movieName">에스파: 월드 투어 인 시네마</strong> 
 								</div>
 							</div>
 
@@ -1021,29 +1114,7 @@
 
 </script>
 
-			<script type="text/javascript">
-				//<![CDATA[
-				//CGV 공지 팝업 주석처리
-				//function getCookie(name) {
-				//    var nameOfCookie = name + "=";
-				//    var x = 0;
-				//    while (x <= document.cookie.length) {
-				//        var y = (x + nameOfCookie.length);
-				//        if (document.cookie.substring(x, y) == nameOfCookie) {
-				//            if ((endOfCookie = document.cookie.indexOf(";", y)) == -1)
-				//                endOfCookie = document.cookie.length;
-				//            return unescape(document.cookie.substring(y, endOfCookie));
-				//        }
-				//        x = document.cookie.indexOf(" ", x) + 1;
-				//        if (x == 0)
-				//            break;
-				//    }
-				//    return "";
-				//}    
-				//if (getCookie("cgv_notice") != "done") {
-				//    var spcwin = window.open('/popup/1411_personal_popup_1107_v2.html', 'cgv_notice', "height=414,width=280,menubar=no,scrollbars=no,resizeable=no,toolbar=no,left=355,top=100")
-				//    spcwin.focus();        
-				//}       
+			<script type="text/javascript"> 
 
 				//oms 
 				if ("http://www.cgv.co.kr/culture-event/event/detailViewUnited.aspx?seq=36641&menu=006" == ""
@@ -1216,12 +1287,10 @@
 				src="https://img.cgv.co.kr/R2014/images/common/btn/gotoTop.png"
 				alt="최상단으로 이동" /></a>
 		</div>
-
 		<!-- E 예매하기 및 TOP Fixed 버튼 -->
 
 	
 		<!-- S footer_area -->
-		
 	<jsp:include page="footer.jsp"></jsp:include>
 		<!-- E footer_area -->
 		

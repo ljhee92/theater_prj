@@ -1,7 +1,6 @@
-<%@page import="java.io.Console"%>
+
 <%@page import="java.sql.SQLException"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.Catch"%>
-<%@page import="javax.swing.JOptionPane"%>
 <%@page import="user.VO.UserVO"%>
 <%@page import="user.DAO.LoginDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -45,37 +44,40 @@
         String id = request.getParameter("txtUserId");
         String pw = request.getParameter("txtPassword");
 
+        String prevPage = request.getParameter("prevPage");
+
         try {
 
             LoginDAO lDAO = LoginDAO.getInstance();
             UserVO uVO = UserVO.builder().userId(id).userPassword(pw).build();
             UserVO result = lDAO.Login(uVO);
             String checkTempFlag = result.getUserTemporaryFlag() + "";
+            
+        	 
+            if (result != null) { // result가 null이 아니라면 로그인성공
+            	
+            	
+        
+        session.setAttribute("id", result.getUserId());// 세션 설정
+ 
 
-            if (result != null) {
-        %>
-
-
-        <%
-        if (result.getUserTemporaryFlag() == 'N') {// 비밀번호변경flag가 Y일 경우 알람창 출력
+         if (result.getUserTemporaryFlag() == 'Y') {// 비밀번호변경flag가 Y일 경우 알람창 출력
         %>
         <script type="text/javascript">
             alert("임시비밀번호로 로그인하셨습니다. \n마이페이지에서 비밀번호를 변경해주세요.");
-        </script>
-        <%} %>
-        <!-- 로그인 성공 메시지 출력 -->
-        <script type="text/javascript">
-            alert("로그인 성공!");
-        </script>
-        <% 
-        // 세션 설정
-        session.setAttribute("id", result.getUserId());
-        // 페이지 이동
-        response.sendRedirect("index.html");
-        %>
 
-        <%
-        }
+        </script>
+        <%}//endif%> 
+        
+            <script type="text/javascript">
+
+            var prevPage = "<%= prevPage %>";
+            var userName = "<%= result.getUserName()%>";
+            alert(userName+"님 띵화관에 오신것을 환영합니다 ^o^");
+            location.href=prevPage;
+        </script>
+        
+       <% }
 
         
 

@@ -40,7 +40,7 @@ public class LoginDAO {
 			con = dbcon.getConnection(id, pass);
 
 			// 3. SQL 쿼리 준비
-			String selectQuery = "SELECT USER_ID, USER_PASSWORD, USER_TEMPORARY_FLAG FROM USERS WHERE USER_ID = ? AND USER_PASSWORD = ?";
+			String selectQuery = "SELECT USER_ID, USER_NAME, USER_TEMPORARY_FLAG FROM USERS WHERE USER_ID = ? AND USER_PASSWORD = ?";
 			pstmt = con.prepareStatement(selectQuery);
 
 			// 4. SQL 쿼리에 파라미터 설정
@@ -57,7 +57,7 @@ public class LoginDAO {
 			if (rs.next()) {
 				resultVO = UserVO.builder()
                         .userId(rs.getString("USER_ID"))
-                        .userPassword(rs.getString("USER_PASSWORD"))
+                        .userName(rs.getString("USER_NAME"))
                         .userTemporaryFlag(rs.getString("USER_TEMPORARY_FLAG").charAt(0))
                         .build();
 
