@@ -113,22 +113,6 @@
 	src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
 <!-- 예매 CSS, JS -->
 
-<style type="text/css">
-.kcpTransDiv {
-	filter: alpha(opacity = 10);
-	-khtml-opacity: 0.1;
-	-moz-opacity: 0.1;
-	opacity: 0.1;
-	top: 0px;
-	left: 0;
-	background-color: #000000;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	z-index: 10000;
-}
-</style>
-
 <!-- 로그인/로그아웃 script 시작 -->
 <!-- <script type="text/javascript">
     $(function () {
@@ -216,7 +200,7 @@
 		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
 	</div>
 
-	<div id="cgvwrap">
+	<div id="wrap">
 		<!-- S Header -->
 		<jsp:include page="header.jsp"></jsp:include>
 		<!-- E Header -->
@@ -885,14 +869,8 @@
 
 					<div class="section-pop-bottom">
 						<div class="wrap-rsv-select">
-							<a href="#" class="btn-rsv-cancel2">이전</a> <a href="#"
-								class="btn-rsv-next2">다음</a>
-						</div>
-					</div>
-
-					<div class="section-pop-bottom">
-						<div class="wrap-rsv-select">
-							<a href="#" class="btn-rsv-next">다음</a>
+							<a href="#" class="btn-rsv-cancel2">이전</a>
+							<a href="#" class="btn-rsv-next2">다음</a>
 						</div>
 					</div>
 
@@ -972,16 +950,17 @@
 
                     event.preventDefault();
                     return false; */
-                location.href = "ticket.jsp"
+                location.href = "ticket.jsp";
                 });
 
                 $("a.close-modal", "div.seatChoice").click(function () {
             if (confirm("모든 선택정보가 사라집니다. 계속하시겠습니까?") == false) {
                 return false;
             }
-                    $.desktop.seatchoicepop.clearSeatmap(function () {
+                    /* $.desktop.seatchoicepop.clearSeatmap(function () {
                         $.modal.close();
-            });
+            }); */
+            location.href = "ticket.jsp";
             return false;
         });
 
@@ -990,7 +969,7 @@
                 return false;
             }
 
-                    $.desktop.seatchoicepop.clearSeatmap(function () {
+                    /* $.desktop.seatchoicepop.clearSeatmap(function () {
                         $.desktop.reserve.openPrev(
                             {
                 playDate: $.desktop.reserveData.playDate,
@@ -1001,7 +980,8 @@
                         );
             });
 
-                    event.preventDefault();
+                    event.preventDefault(); */
+                    location.href = "ticket.jsp";
             return false;
         });
 

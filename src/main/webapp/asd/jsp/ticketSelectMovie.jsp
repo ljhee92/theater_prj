@@ -11,8 +11,6 @@
 <meta http-equiv="imagetoolbar" content="no" />
 <meta name="viewport" content="width=1024" />
 
-
-
 <meta id="ctl00_og_image" property="og:image"
 	content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png">
 </meta>
@@ -113,22 +111,6 @@
 	src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
 <!-- 예매 CSS, JS -->
 
-<style type="text/css">
-.kcpTransDiv {
-	filter: alpha(opacity = 10);
-	-khtml-opacity: 0.1;
-	-moz-opacity: 0.1;
-	opacity: 0.1;
-	top: 0px;
-	left: 0;
-	background-color: #000000;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	z-index: 10000;
-}
-</style>
-
 <!-- 로그인/로그아웃 script 시작 -->
 <!-- <script type="text/javascript">
     $(function () {
@@ -215,7 +197,7 @@
 		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
 	</div>
 
-	<div id="cgvwrap">
+	<div id="wrap">
 		<!-- S Header -->
 		<jsp:include page="header.jsp"></jsp:include>
 		<!-- E Header -->
