@@ -1,6 +1,10 @@
+<%@page import="java.util.List"%>
+<%@page import="admin.BoardVO"%>
+<%@page import="admin.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    info = "명화관 관리자 공지사항 글쓰기" %>
+    info = "명화관 관리자 공지사항 상세보기" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +30,7 @@
 <!-- include summernote-ko-KR -->
 <script src="../js/summernote/lang/summernote-ko-KR.js"></script>
 <style type = "text/css">
-	
+
 </style>
 <script type = "text/javascript">
 	$(document).ready(function() {
@@ -44,6 +48,20 @@
 	    }); // summernote
 	    
 	    $("#btnCancel").click(function(){
+			location.href = "notice.jsp";
+		}); // click
+		
+		$("#btnDelete").click(function(){
+			if(!confirm("정말 삭제하시겠습니까?")){
+				return;
+			} // end if
+			
+			alert("삭제완료");
+			location.href = "notice.jsp";
+		}); // click
+
+		$("#btnEdit").click(function(){
+			alert("수정완료!");
 			location.href = "notice.jsp";
 		}); // click
 	}); // ready
@@ -68,43 +86,60 @@
 	                <!-- Page Heading -->
 	                <div class="d-sm-flex align-items-center mb-4" style = "display: flex;">
 	                    <h1 class="h3 mb-0 text-gray-800">공지사항관리&nbsp;</h1>
-	                    <h5 class="h5 mb-0 text-gray-800"> - 글쓰기</h5>
+	                    <h5 class="h5 mb-0 text-gray-800"> - 상세보기</h5>
 	                </div>
+	                
+	                <%
+	                request.setCharacterEncoding("UTF-8");
+	                int boardNumber = Integer.parseInt(request.getParameter("num"));
+	                int rowBoardNumber = Integer.parseInt(request.getParameter("rnum"));
+	                
+	                BoardDAO bDAO = BoardDAO.getInstance();
+	                
+	             	// 카테고리명 얻기
+                	List<BoardVO> categories = bDAO.selectNoticeCategory();
+                	pageContext.setAttribute("categories", categories);
+	                
+	                BoardVO selectedBVO = bDAO.selectOneBoard(boardNumber);
+	                pageContext.setAttribute("selectedBVO", selectedBVO);
+	                %>
 	                
 	                <div style = "height: 610px;">
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">번호</label>
-	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "92" readonly = "readonly">
+	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "<%= rowBoardNumber %>" readonly = "readonly">
 	                		<label style = "width: 10%; height: 30px; text-align: center; ">작성일</label>
-	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;	" value = "2024.04.29" readonly = "readonly">
+	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "${ selectedBVO.boardDate }" readonly = "readonly">
 	                	</div>
 	                	
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">제목</label>
-	                		<input type = "text" style = "width: 54%; height: 30px;" placeholder = "제목을 입력하세요.">
+	                		<input type = "text" style = "width: 22%; height: 30px;" value = "${ selectedBVO.boardTitle }">
+	                		<label style = "width: 10%; height: 30px; text-align: center;">조회수</label>
+	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "${ selectedBVO.boardViews }" readonly = "readonly">
 	                	</div>
 
 	                	<div style = "display: flex; height: 60px;">
 	                		<label style = "width: 10%; height: 60px; text-align: center;">카테고리명</label>
 	                		<select class = "form-control form-control-user" style = "width: 15%; height: 40px;">
 		                		<option value = "N/A">구분 선택</option>
-		                		<option value = "1">행사/이벤트</option>
-		                		<option value = "2">극장</option>
-		                		<option value = "3">시스템점검</option>
-		                		<option value = "4">기타</option>
+		                		<c:forEach var="bVO" items="${ categories }" varStatus="i">
+	                			<option value="${ bVO.categoryNumber }" <c:if test="${ selectedBVO.categoryNumber eq bVO.categoryNumber }">selected</c:if>><c:out value="${ bVO.categoryName }"/></option>
+		                		</c:forEach>
 	                		</select>
 	                	</div>
 	                	
 	                	<div style = "display: flex; height: 400px;">
 	                		<label style = "width: 10%; text-align: center;">내용</label>
 			            	<form method="post">
-								<textarea id="summernote" name="textarea"></textarea>
+								<textarea id="summernote" name="textarea"><c:out value="${ selectedBVO.boardContent }"/></textarea>
 							</form>
 						</div>
 	                </div>
 	                
 	                <div style = "display: flex; justify-content: center; width: 1200px;">
-	                	<input type="button" class="btn btn-primary btn-user" style="width: 120px; margin-right: 20px;" value="작성완료" id = "btnSuccess">
+	                	<input type="button" class="btn btn-primary btn-user" style="width: 120px; margin-right: 20px;" value="수정" id = "btnEdit">
+	                	<input type="button" class="btn btn-danger btn-user" style="width: 120px; margin-right: 20px;" value="삭제" id = "btnDelete">
 	                	<input type="button" class="btn btn-secondary btn-user" style="width: 120px;" value="취소" id = "btnCancel">
 	                </div>
 
