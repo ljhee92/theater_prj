@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" info="로그인 후 결제 페이지(무통장입금)"%>
+	pageEncoding="UTF-8" info="로그인 후 결제 페이지(신용카드)"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,10 +11,11 @@
 <meta http-equiv="imagetoolbar" content="no" />
 <meta name="viewport" content="width=1024" />
 
-<title id="ctl00_headerTitle">예매 | 명화 그 이상의 감동. CGV</title>
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+<title id="ctl00_headerTitle">예매 | 명화 그 이상의 감동. 띵화관</title>
 
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/webfont.css" />
-<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/reset.css" />
+<link rel="stylesheet" media="all" type="text/css" href="../css/reset.css" />
 <link rel="stylesheet" media="all" type="text/css" href="../css/layout.css" />
 <link rel="stylesheet" media="all" type="text/css" href="../css/module.css" />
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/content.css" />
@@ -145,10 +146,6 @@
 </head>
 <body class="">
 
-	<div class="skipnaiv">
-		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
-	</div>
-
 	<div id="wrap">
 		<!-- S Header -->
 		<jsp:include page="header.jsp"></jsp:include>
@@ -227,25 +224,78 @@
 				                            <li><input type="radio" name="point" id="radio_m10" value="MOBX"><label for="radio_m10" style="width:185px;height: 36px;">휴대폰</label></li>
 				                            <li><input type="radio" name="point" id="radio_m11" value="PACA"><label for="radio_m11" style="width:185px;height: 36px;">카카오페이</label></li>
 				                            <li><input type="radio" name="point" id="radio_m13" value="NAVER"><label for="radio_m13" style="width:185px;height: 36px;">네이버페이</label></li> -->
-				                    	<input type="radio" name = "pay" class="pay_method" value="bank" checked = "checked"> 무통장입금
-				                    	<input type="radio" name = "pay" class="pay_method" value="card" style = "margin-left: 10px;"> 신용카드 
+				                    	<input type="radio" name = "pay" class="pay_method" value="bank"> 무통장입금
+				                    	<input type="radio" name = "pay" class="pay_method" value="card" checked = "checked" style = "margin-left: 10px;"> 신용카드 
 				                    </ul>
 				
 				                </div><!--.tab-content-->
 				                
 				            </li>
 				        </ul>
-				        <div class="title-kind" style="margin-left: 40px;">은행선택</div>
+				        <div class="title-kind" style="margin-left: 40px;">카드선택</div>
+       				    <div id="hubCard">
+				        <form name="card_form">
+				            <select name="card" style="margin-left: 40px;">
+				                <option value="cardBC">BC카드</option>
+				                <option value="cardSH">신한카드</option>
+				                <option value="cardHD">현대카드</option>
+				            </select>
+				
+				           <!--  <input type="hidden" name="site_name" value="CINEQ">
+				            <input type="hidden" name="req_tx" value="pay">
+			                <input type="hidden" name="site_cd" value="A92EM">
+				            
+				            KCP 관련 셋팅
+				            <input type="hidden" name="encoding_trans" value="UTF-8">
+				            <input type="hidden" name="pay_method" value="100000000000">
+				            <input type="hidden" name="ordr_idxx" value=""> settleId
+				            <input type="hidden" name="good_name" value="챌린저스"> 이름
+				            <input type="hidden" name="good_mny" value="">가격
+				            <input type="hidden" name="buyr_name" value="CINEQ Customer">
+				            <input type="hidden" name="buyr_mail" value="wngml4453@hanmail.net">
+				            <input type="hidden" name="buyr_tel1" value="">
+				            <input type="hidden" name="buyr_tel2" value="01039299258">
+				            <input type="hidden" name="quotaopt" value="12">
+				
+				            <input type="hidden" name="currency" value="WON">
+				            <input type="hidden" name="module_type" value="01">
+				            <input type="hidden" name="res_cd" value="">
+				            <input type="hidden" name="res_msg" value="">
+				            <input type="hidden" name="enc_info" value="">
+				            <input type="hidden" name="enc_data" value="">
+				            <input type="hidden" name="ret_pay_method" value="">
+				            <input type="hidden" name="tran_cd" value="">
+				            <input type="hidden" name="use_pay_method" value="">
+				            <input type="hidden" name="ordr_chk" value=""> -->
+				        </form>
+				    	</div>
+				
+						<div class="title-kind" style="margin-left: 40px;">카드 번호</div>
 			        	<div>
-				        	<form name = "bank_form">
-					        <select name = "bank" style="margin-left: 40px;">
-					        	<option value = "bankKB">KB국민은행</option>
-					        	<option value = "bankSH">신한은행</option>
-					        	<option value = "bankNH">NH농협은행</option>
-					        </select>
+				        	<form name = "card_form">
+					        <input type="text" style="margin-left: 40px; margin-right: 20px; outline: none;" size="4" maxlength="4"> -
+					        <input type="text" style="margin-left: 20px; margin-right: 20px; outline: none;" size="4" maxlength="4"> -
+					        <input type="text" style="margin-left: 20px; margin-right: 20px; outline: none;" size="4" maxlength="4"> -
+					        <input type="text" style="margin-left: 20px; outline: none;" size="4" maxlength="4">
 				        	</form>
 			        	</div>
-				
+			        	
+			        	<div class="title-kind" style="margin-left: 40px;">유효 기간</div>
+			        	<div>
+				        	<form name = "period_form">
+					        <input type="text" style="margin-left: 40px; margin-right: 20px; outline: none;" size="4" maxlength="2">월
+					        <input type="text" style="margin-left: 20px; margin-right: 20px; outline: none;" size="4" maxlength="2">년
+					        <label style="margin-left: 20px;">예) 2015년 9월 -> 09월 15년</label>
+				        	</form>
+			        	</div>
+			        	
+			        	<div class="title-kind" style="margin-left: 40px;">비밀번호</div>
+			        	<div>
+				        	<form name = "pass_form">
+					        <input type="password" style="margin-left: 40px; margin-right: 20px; outline: none;" size="4" maxlength="2">**
+				        	</form>
+			        	</div>
+			        	
 				    </div>
 				    <!--.section-pop-payment-->
 				
