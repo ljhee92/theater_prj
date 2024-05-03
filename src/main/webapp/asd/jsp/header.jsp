@@ -260,8 +260,8 @@
 				<div class="contents">
 					<h1>
 						<a href="/" tabindex="-1"><img
-							src="https://img.cgv.co.kr/R2014/images/common/logo/logoWhite.png"
-							alt="CGV" /></a>
+							src="../logo.png"
+							alt="띵화관" /></a>
 					</h1>
 					<ul class="nav_menu">
 						<li>

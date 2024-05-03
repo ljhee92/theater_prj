@@ -285,7 +285,7 @@
 								<a class="active" id="btnMovie">무비차트</a>
 							</h3>
 						</div>
-						<a href="/movies/?lt=1&ft=0" id="btn_allView_Movie"
+						<a href="movieChart.jsp" id="btn_allView_Movie"
 							class="btn_allView">전체보기</a>
 					</div>
 
