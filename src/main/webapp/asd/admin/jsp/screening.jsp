@@ -21,63 +21,129 @@
 <!--jQuery CDN 시작-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <!--jQuery CDN 끝-->
+<!-- 쓰던 SCRIpt -->
+
 <script>
-				        // 페이지 로드 시 년, 월, 일 값 설정
-				        $(document).ready(function() {
-				            var now = new Date();
-				            var year = now.getFullYear();
-				            var month = now.getMonth() + 1;
-				            var day = now.getDate();
-				
-				            // 년도 선택 드롭다운 설정
-				            var yearDropdown = document.getElementById("yearDropdown");
-				            for (var i = year - 2; i <= year + 2; i++) {
-				                var option = document.createElement("option");
-				                option.text = i;
-				                option.value = i;
-				                if (i === year) {
-				                    option.selected = true;
-				                }
-				                yearDropdown.add(option);
-				            }
-				
-				            // 월 선택 드롭다운 설정
-				            var monthDropdown = document.getElementById("monthDropdown");
-				            for (var j = 1; j <= 12; j++) {
-				                var option = document.createElement("option");
-				                option.text = j;
-				                option.value = j;
-				                if (j === month) {
-				                    option.selected = true;
-				                }
-				                monthDropdown.add(option);
-				            }
-				
-				            // 일 선택 드롭다운 설정 (31일까지)
-				            function updateDays() {
-				                var selectedYear = parseInt(yearDropdown.value);
-				                var selectedMonth = parseInt(monthDropdown.value);
-				                var lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
-				
-				                var dayDropdown = document.getElementById("dayDropdown");
-				                dayDropdown.innerHTML = ""; // 기존 옵션 제거
-				
-				                for (var k = 1; k <= lastDay; k++) {
-				                    var option = document.createElement("option");
-				                    option.text = k;
-				                    option.value = k;
-				                    if (k === day) {
-				                        option.selected = true;
-				                    }
-				                    dayDropdown.add(option);
-				                }
-				            }
-				
-				            updateDays(); // 초기화
-				            yearDropdown.addEventListener("change", updateDays);
-				            monthDropdown.addEventListener("change", updateDays);
-				        });
-				    </script>
+    $(document).ready(function() {
+    	// 페이지 로드 시 년, 월, 일 값 설정
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = (now.getMonth() + 1).toString().padStart(2, '0');
+        var day = now.getDate().toString().padStart(2, '0');
+
+        // 년도 선택 드롭다운 설정
+        var yearDropdown = document.getElementById("yearDropdown");
+        for (var i = year - 2; i <= year + 2; i++) {
+            var option = document.createElement("option");
+            option.text = i;
+            option.value = i;
+            if (i === year) {
+                option.selected = true;
+            }
+            yearDropdown.add(option);
+        }
+
+        // 월 선택 드롭다운 설정
+        var monthDropdown = document.getElementById("monthDropdown");
+        for (var j = 1; j <= 12; j++) {
+            var option = document.createElement("option");
+            option.text = j;
+            option.value = j.toString().padStart(2, '0');
+            if (j === parseInt(month)) {
+                option.selected = true;
+            }
+            monthDropdown.add(option);
+        }
+
+        // 일 선택 드롭다운 설정 (31일까지)
+        function updateDays() {
+            var selectedYear = parseInt(yearDropdown.value);
+            var selectedMonth = parseInt(monthDropdown.value);
+            var lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
+
+            var dayDropdown = document.getElementById("dayDropdown");
+            dayDropdown.innerHTML = "";
+
+            for (var k = 1; k <= lastDay; k++) {
+                var option = document.createElement("option");
+                option.text = k.toString().padStart(2, '0');
+                option.value = k.toString().padStart(2, '0');
+                if (k === parseInt(day)) {
+                    option.selected = true;
+                }
+                dayDropdown.add(option);
+            }
+        }
+
+        updateDays(); // 초기화
+        yearDropdown.addEventListener("change", updateDays);
+        monthDropdown.addEventListener("change", updateDays);
+
+        // 검색 버튼 클릭 이벤트 핸들러
+        $("#searchButton").click(function() {
+            var param = {
+            		theater: $("#theaterDropdown").val(),
+            		screeningRoom: $("#screeningRoomDropdown").val(),
+	                year: $("#yearDropdown").val(),
+	                month: $("#monthDropdown").val(),
+	                day: $("#dayDropdown").val()
+            };
+            alert(JSON.stringify(param));
+
+            $.ajax({
+                url: "screening_service.jsp",
+                type: "get",
+                data: param,
+                dataType: "JSON",
+                success: function(jsonArr) {
+                    // 검색 결과를 테이블에 반영
+                    updateTable(jsonArr);
+                },
+                error: function(xhr) {
+                    alert(xhr.statusText);
+                }
+            });
+        });
+        
+        $("#contentBoard").on("click", "tr", clickTable);
+        
+         
+        $("#registerButton").click(function() {
+            $("#registerForm").show();
+            $("#table-content").hide();
+        });
+        
+        $("#toBack").click(function() {
+            $("#registerForm").hide();
+            $("#table-content").show();
+        });
+
+
+     
+        function clickTable(){
+        	alert("클릭되면 나오는 함수 clickTable()")
+        }
+           
+        function updateTable(jsonArr) {
+        	// id="content"를 삭제하고
+            $("#contentBoard").empty();
+          //jsonArr를 반복시키고, jsonObject을  parsing 해서
+            jsonArr.forEach(function(screening) {
+            	var resultNum=0;
+                var newRow = "<tr onclick='clickTable()>" +
+                	"<td>" + ++resultNum + "</td>" +
+                    "<td>" + screening.theaterName + "</td>" +
+                    "<td>" + screening.theaterNumber + "</td>" +
+                    "<td>" + screening.movieName + "</td>" +
+                    "<td>" + screening.screeningDate + "</td>" +
+                    "<td>" + screening.screeningRound + "</td>" +
+                    "</tr>";
+                 // id="content"에 붙인다.
+                $("#contentBoard").append(newRow);
+            });
+        }
+    });
+</script>
 <!-- Custom fonts for this template-->
 <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -99,7 +165,8 @@
 				    <div class="d-sm-flex align-items-center justify-content-between mb-4">
 				        <h1 class="h3 mb-0 text-gray-800">상영관리</h1>
 				    </div>
-				    <div class="table-responsive">
+				    <!-- 상영관리 밑 컨텐츠 -->
+				    <div id="table-content" class="table-responsive">
 				    <!-- 검색 폼 -->
                     <form id="searchForm" method="post" action="screening_service.jsp">
                         <!-- 지점 드롭다운 메뉴 -->
@@ -122,7 +189,7 @@
                         <select id="monthDropdown" name="month"></select> 월
                         <select id="dayDropdown" name="day"></select> 일
 
-                        <button type="submit" id="searchButton" class="btn btn-primary">검색</button>
+                        <button type="button" id="searchButton" class="btn btn-primary">검색</button>
                     </form>
 					
 				    <button id="registerButton" class="btn btn-info float-right">등록</button>
@@ -137,7 +204,7 @@
 						            <th>상영시작시간</th>
 						        </tr>
 						    </thead>
-						    <tbody>
+						    <tbody id="contentBoard">
 						        <% 
 						        try {
 						        	ScreeningDAO1 screeningDAO = ScreeningDAO1.getInstance();
@@ -145,7 +212,7 @@
 						            int num = 1;
 						            for (ScreeningVO screening : screeningList) {
 						        %>
-						        <tr>
+						        <tr onClick='clickTable()'>
 								    <td><%= num++ %></td>
 								    <td><%= screening.getTheaterName() %></td>
 								    <td><%= screening.getTheaterNumber() %></td>
@@ -161,6 +228,11 @@
 						        %>
 						    </tbody>
 						</table>
+				    </div>
+				    <!-- 상영관리 밑 컨텐츠 -->
+				    <div id="registerForm" style="display:none;">
+				    <%@ include file = "registerForm.jsp" %>
+				    <button id="toBack" class="btn btn-info">뒤로</button>
 				    </div>
 				</div>
                 <!-- /.container-fluid -->
