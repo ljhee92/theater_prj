@@ -72,21 +72,21 @@
 	                </div>
 	                
 	                <div style = "height: 610px;">
-	                	<div style = "display: inline-block; height: 50px;">
-	                		<label style = "width: 150px; height: 30px; text-align: center;">번호</label>
-	                		<input type = "text" style = "width: 370px; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "92" readonly = "readonly">
-	                		<label style = "width: 150px; height: 30px; text-align: center; ">작성일</label>
-	                		<input type = "text" style = "width: 370px; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;	" value = "2024.04.29" readonly = "readonly">
+	                	<div style = "display: flex; height: 50px;">
+	                		<label style = "width: 10%; height: 30px; text-align: center;">번호</label>
+	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "92" readonly = "readonly">
+	                		<label style = "width: 10%; height: 30px; text-align: center; ">작성일</label>
+	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;	" value = "2024.04.29" readonly = "readonly">
 	                	</div>
 	                	
-	                	<div style = "display: inline-block; height: 50px;">
-	                		<label style = "width: 150px; height: 30px; text-align: center;">제목</label>
-	                		<input type = "text" style = "width: 900px; height: 30px;" placeholder = "제목을 입력하세요.">
+	                	<div style = "display: flex; height: 50px;">
+	                		<label style = "width: 10%; height: 30px; text-align: center;">제목</label>
+	                		<input type = "text" style = "width: 54%; height: 30px;" placeholder = "제목을 입력하세요.">
 	                	</div>
 
 	                	<div style = "display: flex; height: 60px;">
-	                		<label style = "width: 150px; height: 60px; text-align: center;">카테고리명</label>
-	                		<select class = "form-control form-control-user" style = "width: 150px; height: 40px;">
+	                		<label style = "width: 10%; height: 60px; text-align: center;">카테고리명</label>
+	                		<select class = "form-control form-control-user" style = "width: 15%; height: 40px;">
 		                		<option value = "N/A">구분 선택</option>
 		                		<option value = "1">행사/이벤트</option>
 		                		<option value = "2">극장</option>
@@ -96,7 +96,7 @@
 	                	</div>
 	                	
 	                	<div style = "display: flex; height: 400px;">
-	                		<label style = "width: 150px; text-align: center;">내용</label>
+	                		<label style = "width: 10%; text-align: center;">내용</label>
 			            	<form method="post">
 								<textarea id="summernote" name="textarea"></textarea>
 							</form>

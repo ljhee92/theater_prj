@@ -11,10 +11,11 @@
 <meta http-equiv="imagetoolbar" content="no" />
 <meta name="viewport" content="width=1024" />
 
-<title id="ctl00_headerTitle">예매 | 명화 그 이상의 감동. CGV</title>
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+<title id="ctl00_headerTitle">예매 | 명화 그 이상의 감동. 띵화관</title>
 
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/webfont.css" />
-<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/reset.css" />
+<!-- <link rel="stylesheet" media="all" type="text/css" href="../css/reset.css" /> -->
 <link rel="stylesheet" media="all" type="text/css" href="../css/layout.css" />
 <link rel="stylesheet" media="all" type="text/css" href="../css/module.css" />
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/content.css" />
@@ -143,10 +144,6 @@
 <!-- 로그인/로그아웃 script 종료 -->
 </head>
 <body class="">
-
-	<div class="skipnaiv">
-		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
-	</div>
 
 	<div id="wrap">
 		<!-- S Header -->
