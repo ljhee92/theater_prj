@@ -102,14 +102,14 @@
 	                
 	                <div style="display: flex; justify-content: space-between;">
 						<span style="display: flex; align-items: flex-end; margin: auto;">
-							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px;" value="1">
-							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px;" value="2">
-							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px;" value="3">
-							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px;" value="4">
-							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px;" value=">">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px; margin-bottom: 10px;" value="1">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px; margin-bottom: 10px;" value="2">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px; margin-bottom: 10px;" value="3">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px; margin-bottom: 10px;" value="4">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-bottom: 10px;" value=">">
 						</span>
 						<span style="align-self: flex-end;">
-							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 120px;" value="글쓰기" id = "btnWrite">
+							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 120px; margin-bottom: 10px;" value="글쓰기" id = "btnWrite">
 						</span>
 					</div>
 	                
