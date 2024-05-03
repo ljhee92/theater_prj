@@ -26,4 +26,5 @@ public class MovieVO {
 	private String moviePosterPath;
 	private String movieScreeningStatus;
 	private String movieInputDate;
+	private String movieScore;
 }
