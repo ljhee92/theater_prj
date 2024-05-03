@@ -1,6 +1,12 @@
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.util.List"%>
+<%@page import="admin.BoardDAO"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    info = "명화관 관리자 공지사항 상세보기" %>
+    info = "명화관 관리자 공지사항 글쓰기" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +32,7 @@
 <!-- include summernote-ko-KR -->
 <script src="../js/summernote/lang/summernote-ko-KR.js"></script>
 <style type = "text/css">
-
+	
 </style>
 <script type = "text/javascript">
 	$(document).ready(function() {
@@ -44,20 +50,6 @@
 	    }); // summernote
 	    
 	    $("#btnCancel").click(function(){
-			location.href = "notice.jsp";
-		}); // click
-		
-		$("#btnDelete").click(function(){
-			if(!confirm("정말 삭제하시겠습니까?")){
-				return;
-			} // end if
-			
-			alert("삭제완료");
-			location.href = "notice.jsp";
-		}); // click
-
-		$("#btnEdit").click(function(){
-			alert("수정완료!");
 			location.href = "notice.jsp";
 		}); // click
 	}); // ready
@@ -82,32 +74,46 @@
 	                <!-- Page Heading -->
 	                <div class="d-sm-flex align-items-center mb-4" style = "display: flex;">
 	                    <h1 class="h3 mb-0 text-gray-800">공지사항관리&nbsp;</h1>
-	                    <h5 class="h5 mb-0 text-gray-800"> - 상세보기</h5>
+	                    <h5 class="h5 mb-0 text-gray-800"> - 글쓰기</h5>
 	                </div>
+	                
+	                <%
+	                request.setCharacterEncoding("UTF-8");
+	                // 작성일 : 현재 날짜로 설정
+	                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	                String today = sdf.format(new Date());
+	                
+	                try {
+	            	BoardDAO bDAO = BoardDAO.getInstance();
+
+	            	// 카테고리명 얻기
+                	List<BoardVO> categories = bDAO.selectNoticeCategory();
+                	pageContext.setAttribute("categories", categories);
+                	
+                	// 게시판 중 가장 마지막 번호 얻기
+                	int maxBoardNumber = bDAO.selectMaxBoardNumber();
+	                %>
 	                
 	                <div style = "height: 610px;">
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">번호</label>
-	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "92" readonly = "readonly">
+	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "<%= maxBoardNumber %>" readonly = "readonly">
 	                		<label style = "width: 10%; height: 30px; text-align: center; ">작성일</label>
-	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;	" value = "2024.04.29" readonly = "readonly">
+	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "<%= today %>" readonly = "readonly">
 	                	</div>
 	                	
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">제목</label>
-	                		<input type = "text" style = "width: 22%; height: 30px;" value = "가져온 제목">
-	                		<label style = "width: 10%; height: 30px; text-align: center;">조회수</label>
-	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "1230" readonly = "readonly">
+	                		<input type = "text" style = "width: 54%; height: 30px;" placeholder = "제목을 입력하세요.">
 	                	</div>
 
 	                	<div style = "display: flex; height: 60px;">
 	                		<label style = "width: 10%; height: 60px; text-align: center;">카테고리명</label>
 	                		<select class = "form-control form-control-user" style = "width: 15%; height: 40px;">
 		                		<option value = "N/A">구분 선택</option>
-		                		<option value = "1" selected = "selected">행사/이벤트</option>
-		                		<option value = "2">극장</option>
-		                		<option value = "3">시스템점검</option>
-		                		<option value = "4">기타</option>
+		                		<c:forEach var="bVO" items="${ categories }" varStatus="i">
+	                			<option value = "${ bVO.categoryNumber }"><c:out value="${ bVO.categoryName }"/></option>
+		                		</c:forEach>
 	                		</select>
 	                	</div>
 	                	
@@ -120,11 +126,17 @@
 	                </div>
 	                
 	                <div style = "display: flex; justify-content: center; width: 1200px;">
-	                	<input type="button" class="btn btn-primary btn-user" style="width: 120px; margin-right: 20px;" value="수정" id = "btnEdit">
-	                	<input type="button" class="btn btn-danger btn-user" style="width: 120px; margin-right: 20px;" value="삭제" id = "btnDelete">
+	                	<input type="button" class="btn btn-primary btn-user" style="width: 120px; margin-right: 20px;" value="작성완료" id = "btnSuccess">
 	                	<input type="button" class="btn btn-secondary btn-user" style="width: 120px;" value="취소" id = "btnCancel">
 	                </div>
-
+					
+					<%
+	                } catch (SQLException e) {
+	                	out.println("오류가 발생했습니다. 잠시 후 다시 시도해주시기 바랍니다.");
+	                	e.printStackTrace();
+	                } // catch
+	                %>
+	                
 				</div>
                 <!-- /.container-fluid -->
 
