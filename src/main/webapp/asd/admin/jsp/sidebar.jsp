@@ -24,6 +24,11 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>대시보드</span></a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="http://localhost/thingTheater_prj/asd/admin/jsp/movie.jsp">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>영화관리</span></a>
+            </li>
             
             <!-- Nav Item - 상영관리 -->
             <li class="nav-item">
