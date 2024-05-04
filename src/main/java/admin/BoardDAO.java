@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import oracle.jdbc.proxy.annotation.Pre;
 import util.DbConnection;
 
 public class BoardDAO {
@@ -42,7 +43,6 @@ public class BoardDAO {
 			con = dbCon.getConnection(id, pass);
 			
 			StringBuilder selectTotalCnt = new StringBuilder();
-			
 			selectTotalCnt.append("select count(*) cnt ")
 			.append("from board b ")
 			.append("inner join category c ")
@@ -82,7 +82,6 @@ public class BoardDAO {
 			con = dbCon.getConnection(id, pass);
 			
 			StringBuilder selectCategory = new StringBuilder();
-			
 			selectCategory.append("select category_name, category_number ")
 			.append("from category ")
 			.append("where category_type_flag = 'N' ")
@@ -125,7 +124,6 @@ public class BoardDAO {
 			con = dbCon.getConnection(id, pass);
 			
 			StringBuilder selectBoard = new StringBuilder();
-			
 			selectBoard.append("select board_number, board_title, board_content, board_input_date, board_views, admin_id, category_name, rnum ")
 			.append("from( ")
 			.append("	select b.board_number, b.board_title, b.board_content, b.board_input_date, b.board_views, b.admin_id, c.category_name, ")
@@ -226,6 +224,7 @@ public class BoardDAO {
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				bVO = BoardVO.builder()
+					.boardNumber(boardNumber)
 					.boardTitle(rs.getString("board_title"))
 					.boardContent(rs.getString("board_content"))
 					.boardDate(rs.getDate("board_input_date"))
@@ -240,4 +239,131 @@ public class BoardDAO {
 		} // end finally
 		return bVO;
 	} // selectOneBoard
+	
+	/**
+	 * 공지사항 게시물 추가
+	 * @param bVO
+	 * @throws SQLException
+	 */
+	public void insertNotice(BoardVO bVO) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder insertNotice = new StringBuilder();
+			insertNotice.append("insert into board ")
+			.append("(board_number, board_title, board_content, admin_id, category_number) ")
+			.append("values(?, ?, ?, ?, ?)");
+			
+			pstmt = con.prepareStatement(insertNotice.toString());
+			
+			pstmt.setInt(1, bVO.getBoardNumber());
+			pstmt.setString(2, bVO.getBoardTitle());
+			pstmt.setString(3, bVO.getBoardContent());
+			pstmt.setString(4, bVO.getAdminId());
+			pstmt.setInt(5, bVO.getCategoryNumber());
+			
+			pstmt.executeUpdate();
+		} finally {
+			dbCon.dbClose(null, pstmt, con);
+		} // end finally
+	} // insertBoard
+	
+	/**
+	 * 게시물 클릭 시 조회수 +1
+	 * @param boardView
+	 * @throws SQLException
+	 */
+	public void updateBoardView(BoardVO bVO) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			String updateBoardView = "update board set board_views = ? where board_number = ?";
+			
+			pstmt = con.prepareStatement(updateBoardView);
+			
+			pstmt.setInt(1, bVO.getBoardViews());
+			pstmt.setInt(2, bVO.getBoardNumber());
+			
+			pstmt.executeUpdate();
+		} finally {
+			dbCon.dbClose(null, pstmt, con);
+		} // end finally
+	} // insertBoardView
+	
+	/**
+	 * 게시물 삭제
+	 * @param boardNumber
+	 * @throws SQLException
+	 */
+	public void deleteBoard(int boardNumber) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			String deleteBoard = "delete from board where board_number = ?";
+			
+			pstmt = con.prepareStatement(deleteBoard);
+			
+			pstmt.setInt(1, boardNumber);
+			
+			pstmt.executeUpdate();
+		} finally {
+			dbCon.dbClose(null, pstmt, con);
+		} // end finally
+	} // deleteBoard
+	
+	/**
+	 * 게시물 수정
+	 * @param bVO
+	 * @throws SQLException
+	 */
+	public void updateBoard(BoardVO bVO) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder updateBoard = new StringBuilder();
+			updateBoard.append("update board ")
+			.append("set board_title = ?, board_content = ?, admin_id = ?, category_number = ? ")
+			.append("where board_number = ? ");
+			
+			pstmt = con.prepareStatement(updateBoard.toString());
+			
+			pstmt.setString(1, bVO.getBoardTitle());
+			pstmt.setString(2, bVO.getBoardContent());
+			pstmt.setString(3, bVO.getAdminId());
+			pstmt.setInt(4, bVO.getCategoryNumber());
+			pstmt.setInt(5, bVO.getBoardNumber());
+			
+			pstmt.executeUpdate();
+		} finally {
+			dbCon.dbClose(null, pstmt, con);
+		} // end finally
+	} // updateBoard
 } // class
