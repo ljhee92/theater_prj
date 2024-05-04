@@ -5,6 +5,13 @@
     pageEncoding="UTF-8"
     info = "명화관 관리자 공지사항 상세보기" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%
+	// 세션에 저장된 아이디가 없다면 login.jsp 페이지로 이동시키기
+	if(session.getAttribute("id") == null) {
+		response.sendRedirect("login.jsp");
+		return;
+	} // end if
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,43 +36,6 @@
 <script src="../js/summernote/summernote-lite.js"></script>
 <!-- include summernote-ko-KR -->
 <script src="../js/summernote/lang/summernote-ko-KR.js"></script>
-<style type = "text/css">
-
-</style>
-<script type = "text/javascript">
-	$(document).ready(function() {
-	    $('#summernote').summernote({
-	        lang: 'ko-KR',
-	        width: 900,
-	        height: 350,
-	        focus: true,
-	        popover: {
-	            table: [
-	                ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
-	                ['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
-	            ]
-	        }
-	    }); // summernote
-	    
-	    $("#btnCancel").click(function(){
-			location.href = "notice.jsp";
-		}); // click
-		
-		$("#btnDelete").click(function(){
-			if(!confirm("정말 삭제하시겠습니까?")){
-				return;
-			} // end if
-			
-			alert("삭제완료");
-			location.href = "notice.jsp";
-		}); // click
-
-		$("#btnEdit").click(function(){
-			alert("수정완료!");
-			location.href = "notice.jsp";
-		}); // click
-	}); // ready
-</script>
 </head>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -101,27 +71,34 @@
                 	pageContext.setAttribute("categories", categories);
 	                
 	                BoardVO selectedBVO = bDAO.selectOneBoard(boardNumber);
+	                
+	                // 조회수 +1
+	                selectedBVO.setBoardViews(selectedBVO.getBoardViews()+1);
+	                bDAO.updateBoardView(selectedBVO);
+	                
 	                pageContext.setAttribute("selectedBVO", selectedBVO);
 	                %>
 	                
+	                <form name="frm" action="noticeViewProcess.jsp" method="get">
 	                <div style = "height: 610px;">
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">번호</label>
 	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "<%= rowBoardNumber %>" readonly = "readonly">
+	                		<input type = "hidden" name = "num" value = "${ selectedBVO.boardNumber }">
 	                		<label style = "width: 10%; height: 30px; text-align: center; ">작성일</label>
 	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "${ selectedBVO.boardDate }" readonly = "readonly">
 	                	</div>
 	                	
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">제목</label>
-	                		<input type = "text" style = "width: 22%; height: 30px;" value = "${ selectedBVO.boardTitle }">
+	                		<input type = "text" name = "title" style = "width: 22%; height: 30px;" value = "${ selectedBVO.boardTitle }">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">조회수</label>
-	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "${ selectedBVO.boardViews }" readonly = "readonly">
+	                		<input type = "text" name = "views" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "${ selectedBVO.boardViews }" readonly = "readonly">
 	                	</div>
 
 	                	<div style = "display: flex; height: 60px;">
 	                		<label style = "width: 10%; height: 60px; text-align: center;">카테고리명</label>
-	                		<select class = "form-control form-control-user" style = "width: 15%; height: 40px;">
+	                		<select class = "form-control form-control-user" name = "category" style = "width: 15%; height: 40px;">
 		                		<option value = "N/A">구분 선택</option>
 		                		<c:forEach var="bVO" items="${ categories }" varStatus="i">
 	                			<option value="${ bVO.categoryNumber }" <c:if test="${ selectedBVO.categoryNumber eq bVO.categoryNumber }">selected</c:if>><c:out value="${ bVO.categoryName }"/></option>
@@ -131,11 +108,10 @@
 	                	
 	                	<div style = "display: flex; height: 400px;">
 	                		<label style = "width: 10%; text-align: center;">내용</label>
-			            	<form method="post">
 								<textarea id="summernote" name="textarea"><c:out value="${ selectedBVO.boardContent }"/></textarea>
-							</form>
 						</div>
 	                </div>
+	                </form>
 	                
 	                <div style = "display: flex; justify-content: center; width: 1200px;">
 	                	<input type="button" class="btn btn-primary btn-user" style="width: 120px; margin-right: 20px;" value="수정" id = "btnEdit">
@@ -154,7 +130,47 @@
         </div>
         <!-- End of Content Wrapper -->
 
+    <!-- noticeView page css, script -->
+	<style type = "text/css">
+	
+	</style>
+	<script type = "text/javascript">
+		$(document).ready(function() {
+		    $('#summernote').summernote({
+		        lang: 'ko-KR',
+		        width: 900,
+		        height: 350,
+		        focus: true,
+		        popover: {
+		            table: [
+		                ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+		                ['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
+		            ]
+		        }
+		    }); // summernote
+		    
+		    $("#btnCancel").click(function(){
+				location.href = "notice.jsp";
+			}); // click
+			
+			$("#btnDelete").click(function(){
+				if(!confirm("정말 삭제하시겠습니까?")){
+					return;
+				} // end if
+				location.href = "noticeViewProcess.jsp?num="+${ selectedBVO.boardNumber }+"&flag=d";
+				alert("삭제완료");
+			}); // click
+	
+			$("#btnEdit").click(function(){
+				$("[name='frm']").submit();
+				alert("수정완료!");
+			}); // click
+		}); // ready
+	</script>
+	<!-- noticeView page css, script -->
+	
     </div>
     <!-- End of Page Wrapper -->
+    
 </body>
 </html>

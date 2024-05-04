@@ -6,6 +6,13 @@
     pageEncoding="UTF-8"
     info = "명화관 관리자 공지사항" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%
+	// 세션에 저장된 아이디가 없다면 login.jsp 페이지로 이동시키기
+	if(session.getAttribute("id") == null) {
+		response.sendRedirect("login.jsp");
+		return;
+	} // end if
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,22 +32,6 @@
     rel="stylesheet">
 <!-- Custom styles for this template-->
 <link href="../css/sb-admin-2.css" rel="stylesheet">
-<style type = "text/css">
-	table{
-		margin: auto;
-		margin-top: 150px;
-	}
-	th, td{
-		text-align: center;
-	}
-</style>
-<script type = "text/javascript">
-	$(function() {
-		$("#btnWrite").click(function(){
-			location.href = "noticeWrite.jsp";
-		}); // click
-	}); // ready
-</script>
 </head>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -175,6 +166,26 @@
         </div>
         <!-- End of Content Wrapper -->
 
+    <!-- notice page css, script -->
+	<style type = "text/css">
+		table{
+			margin: auto;
+			margin-top: 150px;
+		}
+		th, td{
+			text-align: center;
+		}
+	</style>
+	
+	<script type = "text/javascript">
+		$(function() {
+			$("#btnWrite").click(function(){
+				location.href = "noticeWrite.jsp";
+			}); // click
+		}); // ready
+	</script>
+	<!-- notice page css, script -->
+    
     </div>
     <!-- End of Page Wrapper -->
     
