@@ -1,3 +1,4 @@
+<%@page import="admin.BoardVO"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.util.List"%>
 <%@page import="admin.BoardDAO"%>
@@ -7,6 +8,13 @@
     pageEncoding="UTF-8"
     info = "명화관 관리자 공지사항 글쓰기" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%
+	// 세션에 저장된 아이디가 없다면 login.jsp 페이지로 이동시키기
+	if(session.getAttribute("id") == null) {
+		response.sendRedirect("login.jsp");
+		return;
+	} // end if
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,29 +39,6 @@
 <script src="../js/summernote/summernote-lite.js"></script>
 <!-- include summernote-ko-KR -->
 <script src="../js/summernote/lang/summernote-ko-KR.js"></script>
-<style type = "text/css">
-	
-</style>
-<script type = "text/javascript">
-	$(document).ready(function() {
-	    $('#summernote').summernote({
-	        lang: 'ko-KR',
-	        width: 900,
-	        height: 350,
-	        focus: true,
-	        popover: {
-	            table: [
-	                ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
-	                ['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
-	            ]
-	        }
-	    }); // summernote
-	    
-	    $("#btnCancel").click(function(){
-			location.href = "notice.jsp";
-		}); // click
-	}); // ready
-</script>
 </head>
 <body id="page-top">
     <!-- Page Wrapper -->
@@ -90,26 +75,27 @@
                 	List<BoardVO> categories = bDAO.selectNoticeCategory();
                 	pageContext.setAttribute("categories", categories);
                 	
-                	// 게시판 중 가장 마지막 번호 얻기
-                	int maxBoardNumber = bDAO.selectMaxBoardNumber();
+                	// 게시판 중 가장 마지막 번호 얻고 그 다음 번호 지정
+                	int newBoardNumber = bDAO.selectMaxBoardNumber()+1;
 	                %>
 	                
+	                <form name="frm" action="noticeWriteProcess.jsp" method="post">
 	                <div style = "height: 610px;">
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">번호</label>
-	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "<%= maxBoardNumber %>" readonly = "readonly">
+	                		<input type = "text" name = "number" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "<%= newBoardNumber %>" readonly = "readonly">
 	                		<label style = "width: 10%; height: 30px; text-align: center; ">작성일</label>
 	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "<%= today %>" readonly = "readonly">
 	                	</div>
 	                	
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">제목</label>
-	                		<input type = "text" style = "width: 54%; height: 30px;" placeholder = "제목을 입력하세요.">
+	                		<input type = "text" id = "title" name = "title" class = "necessary" style = "width: 54%; height: 30px;" placeholder = "제목을 입력하세요.">
 	                	</div>
 
 	                	<div style = "display: flex; height: 60px;">
 	                		<label style = "width: 10%; height: 60px; text-align: center;">카테고리명</label>
-	                		<select class = "form-control form-control-user" style = "width: 15%; height: 40px;">
+	                		<select class = "form-control form-control-user" id = "category" name = "category" style = "width: 15%; height: 40px;">
 		                		<option value = "N/A">구분 선택</option>
 		                		<c:forEach var="bVO" items="${ categories }" varStatus="i">
 	                			<option value = "${ bVO.categoryNumber }"><c:out value="${ bVO.categoryName }"/></option>
@@ -119,14 +105,15 @@
 	                	
 	                	<div style = "display: flex; height: 400px;">
 	                		<label style = "width: 10%; text-align: center;">내용</label>
-			            	<form method="post">
-								<textarea id="summernote" name="textarea"></textarea>
-							</form>
+			            	
+								<textarea id="summernote" name="textarea" class = "necessary"></textarea>
+							
 						</div>
 	                </div>
+	                </form>
 	                
 	                <div style = "display: flex; justify-content: center; width: 1200px;">
-	                	<input type="button" class="btn btn-primary btn-user" style="width: 120px; margin-right: 20px;" value="작성완료" id = "btnSuccess">
+	                	<input type="button" class="btn btn-primary btn-user" style="width: 120px; margin-right: 20px;" value="작성완료" id="btnSubmit">
 	                	<input type="button" class="btn btn-secondary btn-user" style="width: 120px;" value="취소" id = "btnCancel">
 	                </div>
 					
@@ -147,8 +134,66 @@
 
         </div>
         <!-- End of Content Wrapper -->
+        
+    <!-- noticeWrite page css, script -->
+	<style type = "text/css">
+		
+	</style>
+	<script type = "text/javascript">
+		$(document).ready(function() {
+			$("#title").focus();
+			
+		    $('#summernote').summernote({
+		        lang: 'ko-KR',
+		        width: 900,
+		        height: 350,
+		        popover: {
+		            table: [
+		                ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+		                ['delete', ['deleteRow', 'deleteCol', 'deleteTable']],
+		            ]
+		        }
+		    }); // summernote
+		    
+		    $("#btnSubmit").click(function(){
+				chkNull();
+				alert("글쓰기 성공");
+		    }); // click
+		    
+		    $("#btnCancel").click(function(){
+				location.href = "notice.jsp";
+			}); // click
+		}); // ready
+		
+		function chkNull() {
+			let flagInputAll = true;
+			let arrNecessary = $(".necessary");
+			let arrLabel = ['제목', '내용'];
+			
+			$.each(arrNecessary, function(index, value) {
+				if($(value).val() == "") {
+					alert(arrLabel[index] + '은 필수 입력사항입니다.');
+					$(value).focus();
+					flagInputAll = false;
+					return false;
+				} // end if
+			}); // each
+			
+			if(flagInputAll && $("#category").val()=='N/A') {
+				alert('카테고리를 선택해주세요.');
+				flagInputAll = false;
+			}; // end if
+			
+			if(flagInputAll) {
+				$("[name='frm']").submit();
+			}; // end if
+		} // chkNull
+	</script>
+    <!-- noticeWrite page css, script -->
 
     </div>
     <!-- End of Page Wrapper -->
+    
+	
 </body>
 </html>
