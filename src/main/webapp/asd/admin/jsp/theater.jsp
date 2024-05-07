@@ -1,3 +1,6 @@
+<%@page import="admin.DAO.TheaterDAO"%>
+<%@page import="VO.TheaterVO"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info="명화관 관리자 영화관리"%>
 <!DOCTYPE html>
@@ -21,6 +24,7 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <!--jQuery CDN 끝-->
+
 <!-- Custom fonts for this template-->
 <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
 	type="text/css">
@@ -45,9 +49,9 @@
 }
 
 .empty-container {
-    display: flex;
-    justify-content: flex-end; /* 우측 정렬 */
-    height: 200px; /* 원하는 높이 설정 */
+	display: flex;
+	justify-content: flex-end; /* 우측 정렬 */
+	height: 200px; /* 원하는 높이 설정 */
 }
 
 .viewSeat {
@@ -92,7 +96,13 @@
 }
 
 .selected {
-	background-color: red; /* 선택된 좌석의 배경색을 빨간색으로 설정 */
+	background-color: red !important; /* 선택된 좌석의 배경색을 빨간색으로 설정 */
+	color: white !important;
+}
+
+.unavailable {
+	background-color: gray; /* 예약 불가능한 좌석을 회색으로 설정 */
+	color: white; /* 텍스트 색상을 흰색으로 설정 */
 }
 
 #section1 {
@@ -113,24 +123,285 @@
 	justify-content: space-between; /* 좌우 정렬 */
 }
 
+#theaterName {
+	width: 100px; /* 원하는 너비 설정 */
+}
 
-
-
+#theaterNum {
+	width: 100px; /* 원하는 너비 설정 */
+}
 </style>
 
 <script type="text/javascript">
-	$(function() {
-		// 좌석을 클릭할 때 색 변경
-		$('.seat').click(function() {
-			// 이전에 선택된 좌석의 색을 원래 색으로 되돌리기
-			$('.selected').removeClass('selected');
-			// 클릭된 좌석의 색 변경
-			$(this).toggleClass('selected');
+	$(document).ready(function() {
+		// 영화관 선택 시 이벤트 핸들러 등록
+		$("select[name='theaterName']").change(searchTheaterNum);
+
+		// 버튼 클릭 시 좌석 저장 함수 호출
+		$('#saveButton').off('click').on('click', function() {
+			checkSeat(); // 버튼을 클릭할 때마다 좌석 저장 함수 호출
 		});
-	}); // ready
+
+	});
+
+	function searchTheaterNum() {
+		var request = new XMLHttpRequest(); // request 변수를 선언
+
+		request
+				.open(
+						"Post",
+						"http://localhost/thingTheater_prj/TheaterNumSearchServlet?theaterName="
+								+ encodeURIComponent(document
+										.querySelector("select[name='theaterName']").value),
+						true);
+		request.setRequestHeader("Content-Type",
+				"application/x-www-form-urlencoded; charset=UTF-8");
+		request.onreadystatechange = function() {
+			if (request.readyState == 4 && request.status == 200) {
+				// 응답을 받으면 searchProcess 함수 호출하여 처리
+				searchTheater(request);
+			}
+		};
+		request.send(null);
+
+	}
+
+	function searchTheater(request) {
+		var theaterNum = document.getElementById("theaterNum");
+		theaterNum.innerHTML = ""; // 이전 옵션 제거
+
+		// 서버에서 받은 JSON 데이터 파싱
+		var object = JSON.parse(request.responseText);
+		var result = object.result;
+
+		// 각 Theater 객체의 theaterNumber를 기반으로 옵션을 생성하여 추가
+		for (var i = 0; i < result.length; i++) {
+			var theaterNumber = result[i].value;
+
+			// 새로운 옵션 생성
+			var option = document.createElement("option");
+			option.value = theaterNumber;
+			option.text = theaterNumber;
+
+			// 옵션을 <select> 요소에 추가
+			theaterNum.appendChild(option);
+		}
+	}
+
+	function searchTheaterSeat() {
+		// 선택된 영화관과 상영관 정보 가져오기
+		var selectedTheater = document
+				.querySelector("select[name='theaterName']").value;
+
+		var selectedTheaterNum = document
+				.querySelector("select[name='theaterNum']").value;
+
+		document.getElementById("name").value = document
+				.querySelector("select[name='theaterName']").value;
+		document.getElementById("number").value = document
+				.querySelector("select[name='theaterNum']").value;
+
+		// 선택된 영화관과 상영관 정보를 표시할 요소 선택
+		var selectedTheaterElement = document
+				.getElementById('selectedTheather');
+
+		// 선택된 영화관과 상영관 정보 표시
+		selectedTheaterElement.innerText = selectedTheater + ' '
+				+ selectedTheaterNum + " 관리중";
+
+		var request = new XMLHttpRequest(); // request 변수를 선언
+		// alert(document.querySelector("select[name='theaterName'] ").value);
+
+		request
+				.open(
+						"Post",
+						"http://localhost/thingTheater_prj/TheaterSeatsSearchServlet",true);
+		request.setRequestHeader("Content-Type",
+				"application/x-www-form-urlencoded; charset=UTF-8");
+		request.onreadystatechange = function() {
+			if (request.readyState == 4 && request.status == 200) {
+				// 응답을 받으면 searchProcess 함수 호출하여 처리
+				searchSeat(request);
+			}
+		};
+		request.send("theaterName=" + encodeURIComponent(document.querySelector("select[name='theaterName']").value)
+			+ "&theaterNum="+ encodeURIComponent(document.querySelector("select[name='theaterNum']").value));
+
+	}
+
+	function searchSeat(request) {
+		// 좌석을 생성할 부모 요소를 가져옵니다.
+		var seatContainer = document.querySelector(".seat-container");
+
+		// 이전에 생성된 좌석을 모두 제거합니다.
+		seatContainer.innerHTML = "";
+
+		// JSON 데이터를 받아와서 좌석 생성
+		var object = JSON.parse(request.responseText);
+
+		var result = object.result;
+
+		//console.log(result);
+
+		var seatContainer = document.querySelector(".seat-container");
+
+		// 첫 번째 줄 좌석 생성
+		for (var i = 0; i <= 9; i++) {
+
+			var seat = document.createElement("div");
+			seat.className = "seat";
+			seat.style.left = i * 60 + "px";
+			seat.style.textAlign = "center";
+			seat.innerText = "A" + (i + 1);
+
+			if (result[i].ReservationStatus === "N") {
+				seat.classList.add("unavailable");
+			} else {
+				seat.classList.add("available");
+			}
+
+			seatContainer.appendChild(seat);
+		}
+
+		// 두 번째 줄 좌석 생성
+		for (var i = 10; i <= 19; i++) {
+			var seat = document.createElement("div");
+			seat.className = "seat second-row";
+			seat.style.left = (i - 10) * 60 + "px";
+			seat.style.textAlign = "center";
+			seat.innerText = "B" + (i - 9);
+
+			if (result[i].ReservationStatus === "N") {
+				seat.classList.add("unavailable");
+			} else {
+				seat.classList.add("available");
+
+			}
+			seatContainer.appendChild(seat);
+		}
+
+		// 좌석을 클릭할 때 색 변경 이벤트 핸들러 등록
+		$('.seat').off('click').on('click', function() {
+
+			$(this).toggleClass('selected');
+			$('.seat').not(this).removeClass('selected');
+
+		});
+
+		checkSeat();
+
+	}
+
+	function countSeatsByStatus(status) {
+		return $('.seat.' + status).length; // 해당 상태 클래스가 적용된 좌석의 개수 반환
+	}
+
+	function checkSeat() {
+		var totalSeatCount = countSeatsByStatus('seat'); // 사용 가능한 좌석 개수
+		var availableSeatCount = countSeatsByStatus('available'); // 사용 가능한 좌석 개수
+		var unavailableSeatCount = countSeatsByStatus('unavailable'); // 사용 불가능한 좌석 개수
+
+		// 선택 가능한 좌석 수와 선택 불가능한 좌석 수를 HTML에 적용
+		$('#totalSeat').text('총좌석 : ' + totalSeatCount + '석');
+		$('#availableSeat').text('선택가능 : ' + availableSeatCount + '석');
+		$('#unavailableSeat').text('선택불가능 : ' + unavailableSeatCount + '석');
+
+	}
+
+	function saveSeat() {//좌석상태 저장메서드
+
+		// 선택된 좌석의 개수 확인
+		var selectedSeats = $('.seat.selected');
+		var theaterName = document.getElementById("name").value
+		var theaterNumber = document.getElementById("number").value
+		var setSeatStatus = document.querySelector("select[name='status']").value
+		var selectedSeatStatus = '';
+
+		// 선택된 좌석이 없는 경우 알림창 띄우기
+		if (selectedSeats.length === 0) {
+			alert('좌석을 선택해주세요.');
+		} else {
+			// 선택된 좌석이 있는 경우
+			var seatInfo = '';
+			// 선택된 좌석의 정보를 문자열에 추가
+			selectedSeats.each(function(index) {
+				seatInfo = $(this).text();
+				// 선택된 좌석의 상태를 확인하여 selectedSeatStatus 변수에 할당
+				if ($(this).hasClass('unavailable')) {
+					selectedSeatStatus = "N";
+				} else if ($(this).hasClass('available')) {
+					selectedSeatStatus = "Y";
+				}
+			});
+			// 선택된 좌석 정보를 알림창으로 출력
+			alert('영화관명 : ' + theaterName + '\n' + '영화관 : ' + theaterNumber
+					+ '\n' + '선택된 좌석 : ' + seatInfo + '\n' + '선택된 좌석의 상태 : '
+					+ selectedSeatStatus + '\n' + '바꿀 좌석 상태 : ' + setSeatStatus);
+
+			// 선택된 좌석의 상태와 적용할 좌석 상태가 동일한지 확인
+			if (selectedSeatStatus === setSeatStatus) {
+				alert("적용되어있는 좌석의 상태와 적용할 좌석 상태가 동일합니다.");
+				return;
+			}
+
+			
+			var request = new XMLHttpRequest(); // request 변수를 선언
+
+			request
+					.open(
+							"POST",
+							"http://localhost/thingTheater_prj/UpdateSeatStatusServlet",
+							true);
+			request.setRequestHeader("Content-Type",
+					"application/x-www-form-urlencoded; charset=UTF-8");
+
+			// 에러 핸들링
+			request.onerror = function() {
+				alert("요청을 보낼 때 오류가 발생했습니다.");
+			};
+
+			request.onreadystatechange = function() {
+				if (request.readyState == 4) {
+					if (request.status == 200) {
+						// 응답을 받으면 처리
+						alert("성공적으로 상태가 변경되었습니다.");
+						searchTheaterSeat();
+					} else {
+						alert("문제가 발생했습니다.");
+					}
+				}
+			};
+
+			// POST 요청의 파라미터를 설정하여 보냄
+			request.send("theaterName=" + encodeURIComponent(theaterName)
+					+ "&theaterNumber=" + encodeURIComponent(theaterNumber)
+					+ "&seatInfo=" + encodeURIComponent(seatInfo)
+					+ "&setSeatStatus=" + encodeURIComponent(setSeatStatus));
+
+			//checkSeat();
+
+		}
+
+	}//saveSeat
 </script>
 </head>
 <body id="page-top">
+
+	<%
+	TheaterDAO tDAO = TheaterDAO.getInstance(); //DAO호출
+
+	List<TheaterVO> tVONameList = tDAO.selectTheaterName();//상영관지점명이 담긴 리스트 
+
+	String theaterName = tVONameList.get(0).getTheaterName();//첫번째옵션의 상영관지점명
+
+	List<TheaterVO> tVONumList = tDAO.selectTheaterNum(theaterName); //첫번째옵션의 상영관지점명에 대한 상영관 리스트
+	%>
+
+
+
+
+
+
 	<!-- Page Wrapper -->
 	<div id="wrapper">
 		<%@ include file="sidebar.jsp"%>
@@ -148,31 +419,42 @@
 					</div>
 				</div>
 				<!-- /.container-fluid -->
-				<form action="">
+				<form>
 					<div class="row">
 						<div class="section" id="section1">
-							<select name="theater">
-								<option value="강남점">강남점</option>
-								<option value="역삼점">역삼점</option>
-							</select> <select name="theaterNum">
-								<option value="1관">1관</option>
-								<option value="2관">2관</option>
-								<option value="3관">3관</option>
+							<select name="theaterName" id="theaterName">
+								<%
+								for (TheaterVO theater : tVONameList) {
+								%>
+								<option value="<%=theater.getTheaterName()%>"><%=theater.getTheaterName()%></option>
+								<%
+								}
+								%>
+							</select> <select name="theaterNum" id="theaterNum">
+								<%
+								for (TheaterVO theater : tVONumList) {
+								%>
+								<option value="<%=theater.getTheaterNumber()%>"><%=theater.getTheaterNumber()%></option>
+								<%
+								}
+								%>
 							</select>
 
 
 							<button type="button" name="search"
-								class="btn btn-secondary btn-sm">검색</button>
+								class="btn btn-secondary btn-sm" onclick="searchTheaterSeat()">검색</button>
+
+							<div class="selectedTheather" id='selectedTheather'></div>
 						</div>
 
 
 						<div class="section" id="section2">
-							<select name="option" style="width: 90px">
-								<option value=0>선택가능</option>
-								<option value=1>선택불가</option>
+							<select name="status" style="width: 90px">
+								<option value="Y">선택가능</option>
+								<option value="N">선택불가</option>
 							</select>
 							<button type="button" name="setOption"
-								class="btn btn-secondary btn-sm">저장</button>
+								class="btn btn-secondary btn-sm" onclick="saveSeat()">저장</button>
 						</div>
 					</div>
 
@@ -185,48 +467,51 @@
 
 
 
-<div class="empty-container" style="justify-content: flex-end;">
-    <div class="viewSeat" style="border: 1px solid black; padding: 10px;">
-        <div style="margin-top: 10px;">
-            <span>총좌석 : 20석</span><br>
-            <div style="display: flex; align-items: center;">
-                <div style="width: 20px; height: 20px; background-color: red; border: 1px solid black; margin-right: 5px;"></div>
-                <span style="font-size: 16px;">선택좌석</span>
-            </div>
-            <div style="display: flex; align-items: center;">
-                <div style="width: 20px; height: 20px; background-color: white; border: 1px solid black; margin-right: 5px;"></div>
-                <span style="font-size: 16px;">선택가능 : 20석</span>
-            </div>
-            <div style="display: flex; align-items: center; margin-top: 5px;">
-                <div style="width: 20px; height: 20px; background-color: gray; border: 1px solid black; margin-right: 5px;"></div>
-                <span style="font-size: 16px;">선택불가능 : 0석</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-						<div class="seat-container">
-							<!-- 첫 번째 줄 좌석 -->
-							<%
-							for (int i = 1; i <= 10; i++) {
-							%>
-							<div class="seat"
-								style="left: <%=(i - 1) * 60%>px; text-align: center;">
-								A<%=i%></div>
-							<%
-							}
-							%>
-							<!-- 두 번째 줄 좌석 -->
-							<%
-							for (int i = 11; i <= 20; i++) {
-							%>
-							<div class="seat second-row"
-								style="left: <%=(i - 11) * 60%>px; text-align: center;">
-								B<%=i - 10%></div>
-							<%
-							}
-							%>
+						<div class="empty-container" style="justify-content: flex-end;">
+							<div class="viewSeat"
+								style="border: 1px solid black; padding: 10px;">
+								<div style="margin-top: 10px;">
+									<span id="totalSeat">총좌석 : 석</span><br>
+									<div style="display: flex; align-items: center;">
+										<div
+											style="width: 20px; height: 20px; background-color: red; border: 1px solid black; margin-right: 5px;"></div>
+										<span style="font-size: 16px;">선택좌석</span>
+									</div>
+									<div style="display: flex; align-items: center;">
+										<div
+											style="width: 20px; height: 20px; background-color: white; border: 1px solid black; margin-right: 5px;"></div>
+										<span id="availableSeat" style="font-size: 16px;">선택가능
+											: 석</span>
+									</div>
+									<div
+										style="display: flex; align-items: center; margin-top: 5px;">
+										<div
+											style="width: 20px; height: 20px; background-color: gray; border: 1px solid black; margin-right: 5px;"></div>
+										<span id="unavailableSeat" style="font-size: 16px;">선택불가능
+											: 석</span>
+									</div>
+								</div>
+							</div>
 						</div>
+
+
+
+
+
+						<div class="seat-container"></div>
+
+
+
+
+						<input type="hidden" id="name" value="" /> <input type="hidden"
+							id="number" value="" />
+
+
+
+
+
+
+
 					</div>
 				</form>
 			</div>

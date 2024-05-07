@@ -264,8 +264,7 @@
 			<!-- Contents Start -->
 
 
-			<input type="hidden" id="isOpenUserEmailYNPopup"
-				name="isOpenUserEmailYNPopup" value="False" />
+
 
 
 
@@ -327,7 +326,7 @@ for (MovieVO tempMovie : mVO) {
 <div class="swiper-slide swiper-slide-movie">
     <div class="img_wrap" data-scale="false">
 
-        <img src="../images/movie/<%= posterPath %>" alt="<%= code %>">
+        <img src="../images/movie/<%= posterPath %>" alt="<%= title %>">
         <div class="movieAgeLimit_wrap">
             <!-- 영상물 등급 노출 변경 -->
             <i class="cgvIcon etc age<%= rating %>"><%= rating %></i>
@@ -340,7 +339,7 @@ for (MovieVO tempMovie : mVO) {
             <a href= "movieDetail.jsp?midx=<%= code %>"                
                 onclick="gaEventLog('PC_메인', '무비차트_영화상세', '<%= title %>');"
                 class="btn_movieChart_detail">상세보기</a>
-            <a href="<%-- <%=  ticketURL %> --%>#"
+            <a href="ticket.jsp"
                 onclick="gaEventLog('PC_메인', '무비차트_예매하기', '<%= title %>')"
                 class='btn_movieChart_ticketing'>예매하기</a>
         </div>
@@ -355,468 +354,6 @@ for (MovieVO tempMovie : mVO) {
 %>	
 						
 						
-						
-						
-						
-						
-						
-						
-						
-		    	
-						
-						
-						
-						
-						
-						
-						
-						
-						
-
-
-
-
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88126/88126_320.jpg"
-										alt="남은 인생 10년" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc age12">12</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/12.png" alt="12세"> -->
-										<!-- -->
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88126"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '남은 인생 10년');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036007&MOVIE_CD_GROUP=20036007"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','남은 인생 10년')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">남은 인생 10년</strong>
-								</div>
-							</div>
-
-
-
-
-
-
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88080/88080_320.jpg"
-										alt="극장판 스파이 패밀리 코드-화이트" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc age12">12</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/12.png" alt="12세"> -->
-										<!-- -->
-									</div>
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88080"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '극장판 스파이 패밀리 코드-화이트');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20035871&MOVIE_CD_GROUP=20035871"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','극장판 스파이 패밀리 코드-화이트')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">극장판 스파이 패밀리 코드-화이트</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88077/88077_320.jpg"
-										alt="댓글부대" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc age15">15</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/15.png" alt="15세"> -->
-										<!-- -->
-									</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88077"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '댓글부대');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20035991&MOVIE_CD_GROUP=20035868"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','댓글부대')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">댓글부대</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88086/88086_320.jpg"
-										alt="기동전사 건담 시드 프리덤" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc age12">12</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/12.png" alt="12세"> -->
-										<!-- -->
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88086"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '기동전사 건담 시드 프리덤');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20035904&MOVIE_CD_GROUP=20035904"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','기동전사 건담 시드 프리덤')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">기동전사 건담 시드 프리덤</strong> 
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88043/88043_320.jpg"
-										alt="오멘-저주의 시작" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc age15">15</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/15.png" alt="15세"> -->
-										<!-- -->
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88043"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '오멘-저주의 시작');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20035783&MOVIE_CD_GROUP=20035783"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','오멘-저주의 시작')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">오멘-저주의 시작</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88203/88203_320.jpg"
-										alt="성우 남도형 에세이-인생은 파랑 출간 기념회&생일 팬미팅"
-										onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc ageAll">All</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/All.png" alt="All세"> -->
-										<!-- <div class='dDay_wrap'><span>1</span></div>-->
-										<i class='cgvIcon etc ageDay' data-before-text='D - 1'>D
-											Day</i>
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88203"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '성우 남도형 에세이-인생은 파랑 출간 기념회&생일 팬미팅');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036330&MOVIE_CD_GROUP=20036330"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','성우 남도형 에세이-인생은 파랑 출간 기념회&생일 팬미팅')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">성우 남도형 에세이-인생은 파랑 출간 기념회&생일 팬미팅</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000078/78723/78723_320.jpg"
-										alt="캐롤" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc age18">18</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/18.png" alt="18세"> -->
-										<!-- -->
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=78723"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '캐롤');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036310&MOVIE_CD_GROUP=20009174"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','캐롤')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">캐롤</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88179/88179_320.jpg"
-										alt="챌린저스" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc age15">15</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/15.png" alt="15세"> -->
-										<!-- <div class='dDay_wrap'><span>5</span></div>-->
-										<i class='cgvIcon etc ageDay' data-before-text='D - 5'>D
-											Day</i>
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88179"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '챌린저스');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036262&MOVIE_CD_GROUP=20036262"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','챌린저스')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">챌린저스</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88132/88132_320.jpg"
-										alt="땅에 쓰는 시" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc ageAll">All</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/All.png" alt="All세"> -->
-										<!-- -->
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88132"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '땅에 쓰는 시');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036031&MOVIE_CD_GROUP=20036031"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','땅에 쓰는 시')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">땅에 쓰는 시</strong> 
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88092/88092_320.jpg"
-										alt="유미의 세포들 더 무비" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc ageAll">All</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/All.png" alt="All세"> -->
-										<!-- -->
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88092"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '유미의 세포들 더 무비');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036103&MOVIE_CD_GROUP=20035911"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','유미의 세포들 더 무비')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">유미의 세포들 더 무비</strong>
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000084/84945/84945_320.jpg"
-										alt="듄" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc age12">12</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/12.png" alt="12세"> -->
-										<!-- -->
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=84945"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '듄');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036355&MOVIE_CD_GROUP=20027588"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','듄')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">듄</strong> 
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88189/88189_320.jpg"
-										alt="쇼잉 업(MCFF)" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc age12">12</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/12.png" alt="12세"> -->
-										<!-- <div class='dDay_wrap'><span>7</span></div>-->
-										<i class='cgvIcon etc ageDay' data-before-text='D - 7'>D
-											Day</i>
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88189"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '쇼잉 업(MCFF)');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036280&MOVIE_CD_GROUP=20036280"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','쇼잉 업(MCFF)')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">쇼잉 업(MCFF)</strong> 
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88135/88135_320.jpg"
-										alt="고질라 X 콩-뉴 엠파이어" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc age12">12</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/12.png" alt="12세"> -->
-										<!-- -->
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88135"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '고질라 X 콩-뉴 엠파이어');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036044&MOVIE_CD_GROUP=20036044"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','고질라 X 콩-뉴 엠파이어')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">고질라 X 콩-뉴 엠파이어</strong> 
-								</div>
-							</div>
-
-							<div class="swiper-slide swiper-slide-movie">
-								<div class="img_wrap" data-scale="false">
-									<img
-										src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88124/88124_320.jpg"
-										alt="에스파: 월드 투어 인 시네마" onerror="errorImage(this)">
-									<div class="movieAgeLimit_wrap">
-										<!-- 영상물 등급 노출 변경 2022.08.24 -->
-										<i class="cgvIcon etc ageAll">All</i>
-										<!-- <img src="https://img.cgv.co.kr/R2014/images/common/flag/age/All.png" alt="All세"> -->
-										<!-- -->
-
-
-									</div>
-
-									<div class="movieChart_btn_wrap">
-										<a href="/movies/detail-view/?midx=88124"
-											onclick="gaEventLog('PC_메인', '무비차트_영화상세', '에스파: 월드 투어 인 시네마');"
-											class="btn_movieChart_detail">상세보기</a> <a
-											href="/ticket/?MOVIE_CD=20036000&MOVIE_CD_GROUP=20036000"
-											onclick="gaEventLog('PC_메인', '무비차트_예매하기','에스파: 월드 투어 인 시네마')"
-											class='btn_movieChart_ticketing'>예매하기</a>
-
-
-									</div>
-								</div>
-								<div class="movie_info_wrap">
-									<strong class="movieName">에스파: 월드 투어 인 시네마</strong> 
-								</div>
-							</div>
-
 
 						</div>
 
@@ -829,6 +366,12 @@ for (MovieVO tempMovie : mVO) {
 				</div>
 			</div>
 			<!-- E > 무비차트 | 상영예정작 -->
+			
+			
+			
+			
+			
+			
 			<!-- S > EVENT -->
 			<div id="ctl00_PlaceHolderContent_event_wrap" class="event_wrap">
 				<div class="contents">
@@ -841,6 +384,10 @@ for (MovieVO tempMovie : mVO) {
 				</div>
 			</div>
 			<!-- E > EVENT -->
+
+
+
+
 
 
 			<!-- S > 공지사항 & 고객센터 -->
