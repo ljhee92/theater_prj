@@ -29,7 +29,8 @@ public class MovieChartDAO {
 	//--------Singleton end-----------
 	
 	/**
-	 * movieChart.jsp.jsp페이지에서 보여줄 무비 리스트
+	 * 계시물 상단 카테고리 구분 메서드
+	 * 자주찾는 질문 / 공지사항으로 나눔
 	 * 
 	 * @param mVO
 	 * @return
