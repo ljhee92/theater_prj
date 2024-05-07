@@ -11,106 +11,56 @@
 <meta http-equiv="imagetoolbar" content="no" />
 <meta name="viewport" content="width=1024" />
 
-
-
-<meta id="ctl00_og_image" property="og:image"
-	content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png">
-</meta>
-<link rel="alternate" href="http://m.cgv.co.kr" />
 <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-<title id="ctl00_headerTitle">예매 | 명화 그 이상의 감동. CGV</title>
+<title id="ctl00_headerTitle">예매 | 명화 그 이상의 감동. 띵화관</title>
 
-<link rel="shortcut icon" type="image/x-icon"
-	href="https://img.cgv.co.kr/R2014/images/favicon.ico" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/webfont.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/reset.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="../css/layout.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="../css/module.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/content.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/common.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/webfont.css" />
+<link rel="stylesheet" media="all" type="text/css" href="../css/reset.css" />
+<link rel="stylesheet" media="all" type="text/css" href="../css/layout.css" />
+<link rel="stylesheet" media="all" type="text/css" href="../css/module.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/content.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/common.css" />
 
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/eggupdate.css" />
-<link rel="stylesheet" media="print" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/print.css" />
-<link rel="stylesheet" type="text/css"
-	href="https://img.cgv.co.kr/R2014/js/jquery.ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
-<link rel="stylesheet"
-	href="http://img.cgv.co.kr/CGV_RIA/Ticket/Common/css/2024/0325/FORM_TYPE/reservation_tnb.css">
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/eggupdate.css" />
+<link rel="stylesheet" media="print" type="text/css" href="https://img.cgv.co.kr/R2014/css/print.css" />
+<link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/R2014/js/jquery.ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
+<link rel="stylesheet" href="http://img.cgv.co.kr/CGV_RIA/Ticket/Common/css/2024/0325/FORM_TYPE/reservation_tnb.css">
 
 <script type="text/javascript" src="/common/js/extraTheaters.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.tmpl.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.validate.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.paging.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.ui/jquery-ui-1.10.4.custom.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.utils.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/app.utils.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.utils.pageing.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/app.init.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.tmpl.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.validate.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.paging.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.ui/jquery-ui-1.10.4.custom.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.utils.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.utils.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.utils.pageing.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.init.js"></script>
 
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.dotdotdot.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/silverlight_link.js"></script>
+<script src="https://img.cgv.co.kr/R2014/js/slick/slick.js" type="text/javascript" charset="utf-8"></script>
 
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.dotdotdot.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/silverlight_link.js"></script>
-<script src="https://img.cgv.co.kr/R2014/js/slick/slick.js"
-	type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/phototicket/phototicket.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/slick.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/slick-theme-custom.css" />
 
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/phototicket/phototicket.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/slick.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/slick-theme-custom.css" />
-
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/icheck/login.timer.js"></script>
-<script src="https://img.cgv.co.kr/R2014/js/icheck/icheck.min.js"
-	type="text/javascript" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css"
-	href="https://img.cgv.co.kr/R2014/js/icheck/iCheck.css" />
-
-
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/icheck/login.timer.js"></script>
+<script src="https://img.cgv.co.kr/R2014/js/icheck/icheck.min.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/R2014/js/icheck/iCheck.css" />
 
 <!-- 홈페이지 CSS 일원화로 인한 반영 20220721 -->
-<link rel="stylesheet" type="text/css"
-	href="https://img.cgv.co.kr/resource_pc/css/cgv.min.css" />
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/resource_pc/js/cgvUi.js"></script>
+<link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/resource_pc/css/cgv.min.css" />
+<script type="text/javascript" src="https://img.cgv.co.kr/resource_pc/js/cgvUi.js"></script>
 
 <!-- 각페이지 Header Start-->
-
-
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/swiper.min.js"></script>
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/swiper-bundle.min.css" />
-
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/swiper.min.js"></script>
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/swiper-bundle.min.css" />
 
 <!-- 예매 CSS, JS -->
-<link
-	href="https://www.cineq.co.kr/bundles/css?v=oiZxrFB4-kROndwe9FLU4L2IiIJAaPO8AdRMkkO1wbE1"
-	rel="stylesheet">
-<script
-	src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
+<link href="https://www.cineq.co.kr/bundles/css?v=oiZxrFB4-kROndwe9FLU4L2IiIJAaPO8AdRMkkO1wbE1" rel="stylesheet">
+<script src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
 <!-- 예매 CSS, JS -->
 
 <!-- 로그인/로그아웃 script 시작 -->
@@ -195,10 +145,6 @@
 
 </head>
 <body class="">
-
-	<div class="skipnaiv">
-		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
-	</div>
 
 	<div id="wrap">
 		<!-- S Header -->
@@ -327,18 +273,18 @@
 						<div class="title-kind" style="margin-left: 40px;">카드 번호</div>
 			        	<div>
 				        	<form name = "card_form">
-					        <input type="text" style="margin-left: 40px; margin-right: 20px; outline: none;" size="4"> -
-					        <input type="text" style="margin-left: 20px; margin-right: 20px; outline: none;" size="4"> -
-					        <input type="text" style="margin-left: 20px; margin-right: 20px; outline: none;" size="4"> -
-					        <input type="text" style="margin-left: 20px; outline: none;" size="4">
+					        <input type="text" style="margin-left: 40px; margin-right: 20px; outline: none;" size="4" maxlength="4"> -
+					        <input type="text" style="margin-left: 20px; margin-right: 20px; outline: none;" size="4" maxlength="4"> -
+					        <input type="text" style="margin-left: 20px; margin-right: 20px; outline: none;" size="4" maxlength="4"> -
+					        <input type="text" style="margin-left: 20px; outline: none;" size="4" maxlength="4">
 				        	</form>
 			        	</div>
 			        	
 			        	<div class="title-kind" style="margin-left: 40px;">유효 기간</div>
 			        	<div>
 				        	<form name = "period_form">
-					        <input type="text" style="margin-left: 40px; margin-right: 20px; outline: none;" size="4">월
-					        <input type="text" style="margin-left: 20px; margin-right: 20px; outline: none;" size="4">년
+					        <input type="text" style="margin-left: 40px; margin-right: 20px; outline: none;" size="4" maxlength="2">월
+					        <input type="text" style="margin-left: 20px; margin-right: 20px; outline: none;" size="4" maxlength="2">년
 					        <label style="margin-left: 20px;">예) 2015년 9월 -> 09월 15년</label>
 				        	</form>
 			        	</div>
@@ -346,7 +292,7 @@
 			        	<div class="title-kind" style="margin-left: 40px;">비밀번호</div>
 			        	<div>
 				        	<form name = "pass_form">
-					        <input type="password" style="margin-left: 40px; margin-right: 20px; outline: none;" size="4">**
+					        <input type="password" style="margin-left: 40px; margin-right: 20px; outline: none;" size="4" maxlength="2">**
 				        	</form>
 			        	</div>
 			        	
