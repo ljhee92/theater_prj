@@ -5,13 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <body>
  
-<h1>영화 등록</h1>
+<h1>상영 등록</h1>
 <hr/>
 <form id="addNewMovieForm">
-	영화명 : <input type="text" id="movieTitle" name="movieTitle" /><br/>
-	평점 : <input type="text" id="rate" name="rate" /><br/>
-	상영시간 : <input type="text" id="runningTime" name="runningTime"/> <br/>
-	개봉일 : <input type="date" id="openDate" name="openDate" /><br/>
+	지점 : <select id ="directors" name="directors" multiple="multiple">
+		<c:forEach items="${ directorList }" var="director">
+			<option value="${ director.directorId }">${ director.directorName }</option>
+		</c:forEach>
+	상영관 : <input type="text" id="rate" name="rate" /><br/>
+	영화명 : <input type="text" id="runningTime" name="runningTime"/> <br/>
+	상영시작시간 : <input type="date" id="openDate" name="openDate" /><br/>
 	상영등급 : 
 	
 	<c:forEach items="${ gradeList }" var="grade">
