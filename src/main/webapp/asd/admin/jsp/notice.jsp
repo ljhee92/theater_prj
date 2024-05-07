@@ -126,9 +126,9 @@
 		                <tbody>
 		                	<c:forEach var="bVO" items="${ boards }" varStatus="i">
 		                	<tr>
-	                		<td><c:out value="${ bVO.rnum }"/></td>
+	                		<td><c:out value="${ bVO.boardNumber }"/></td>
 	                		<td><c:out value="${ bVO.categoryName }"/></td>
-	                		<td><a href="noticeView.jsp?num=${ bVO.boardNumber }&rnum=${ bVO.rnum }"><c:out value="${ bVO.boardTitle }"/></a></td>
+	                		<td><a href="noticeDetail.jsp?num=${ bVO.boardNumber }&rnum=${ bVO.rnum }"><c:out value="${ bVO.boardTitle }"/></a></td>
 	                		<td><c:out value="${ bVO.boardDate }"/></td>
 	                		<td><c:out value="${ bVO.boardViews }"/></td>
 	                		</tr>

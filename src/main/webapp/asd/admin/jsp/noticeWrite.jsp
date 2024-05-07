@@ -157,7 +157,6 @@
 		    
 		    $("#btnSubmit").click(function(){
 				chkNull();
-				alert("글쓰기 성공");
 		    }); // click
 		    
 		    $("#btnCancel").click(function(){
@@ -173,7 +172,13 @@
 			$.each(arrNecessary, function(index, value) {
 				if($(value).val() == "") {
 					alert(arrLabel[index] + '은 필수 입력사항입니다.');
-					$(value).focus();
+					if(index == "제목") {
+						$(value).focus();
+					} else {
+						$(value).summernote({
+							focus: true
+						});
+					} // end else
 					flagInputAll = false;
 					return false;
 				} // end if
@@ -182,10 +187,12 @@
 			if(flagInputAll && $("#category").val()=='N/A') {
 				alert('카테고리를 선택해주세요.');
 				flagInputAll = false;
+				return;
 			}; // end if
 			
 			if(flagInputAll) {
 				$("[name='frm']").submit();
+				alert("글쓰기 성공");
 			}; // end if
 		} // chkNull
 	</script>
