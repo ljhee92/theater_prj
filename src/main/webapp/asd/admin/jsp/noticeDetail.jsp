@@ -62,7 +62,6 @@
 	                <%
 	                request.setCharacterEncoding("UTF-8");
 	                int boardNumber = Integer.parseInt(request.getParameter("num"));
-	                int rowBoardNumber = Integer.parseInt(request.getParameter("rnum"));
 	                
 	                BoardDAO bDAO = BoardDAO.getInstance();
 	                
@@ -79,11 +78,11 @@
 	                pageContext.setAttribute("selectedBVO", selectedBVO);
 	                %>
 	                
-	                <form name="frm" action="noticeViewProcess.jsp" method="get">
+	                <form name="frm" action="noticeDetailProcess.jsp" method="get">
 	                <div style = "height: 610px;">
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">번호</label>
-	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "<%= rowBoardNumber %>" readonly = "readonly">
+	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "<%= boardNumber %>" readonly = "readonly">
 	                		<input type = "hidden" name = "num" value = "${ selectedBVO.boardNumber }">
 	                		<label style = "width: 10%; height: 30px; text-align: center; ">작성일</label>
 	                		<input type = "text" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "${ selectedBVO.boardDate }" readonly = "readonly">
@@ -91,7 +90,7 @@
 	                	
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">제목</label>
-	                		<input type = "text" name = "title" style = "width: 22%; height: 30px;" value = "${ selectedBVO.boardTitle }">
+	                		<input type = "text" name = "title" class = "necessary" style = "width: 22%; height: 30px;" value = "${ selectedBVO.boardTitle }">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">조회수</label>
 	                		<input type = "text" name = "views" style = "width: 22%; height: 30px; background-color: #E0E0E0; border: 1px solid #6e707e; border-radius: 3px;" value = "${ selectedBVO.boardViews }" readonly = "readonly">
 	                	</div>
@@ -108,7 +107,7 @@
 	                	
 	                	<div style = "display: flex; height: 400px;">
 	                		<label style = "width: 10%; text-align: center;">내용</label>
-								<textarea id="summernote" name="textarea"><c:out value="${ selectedBVO.boardContent }"/></textarea>
+								<textarea id="summernote" name="textarea" class = "necessary"><c:out value="${ selectedBVO.boardContent }"/></textarea>
 						</div>
 	                </div>
 	                </form>
@@ -130,7 +129,7 @@
         </div>
         <!-- End of Content Wrapper -->
 
-    <!-- noticeView page css, script -->
+    <!-- noticeDetail page css, script -->
 	<style type = "text/css">
 	
 	</style>
@@ -157,17 +156,42 @@
 				if(!confirm("정말 삭제하시겠습니까?")){
 					return;
 				} // end if
-				location.href = "noticeViewProcess.jsp?num="+${ selectedBVO.boardNumber }+"&flag=d";
+				location.href = "noticeDetailProcess.jsp?num="+${ selectedBVO.boardNumber }+"&flag=d";
 				alert("삭제완료");
 			}); // click
 	
 			$("#btnEdit").click(function(){
-				$("[name='frm']").submit();
-				alert("수정완료!");
+				chkNull();
 			}); // click
+			
+			function chkNull() {
+				let flagInputAll = true;
+				let arrNecessary = $(".necessary");
+				let arrLabel = ['제목', '내용'];
+				
+				$.each(arrNecessary, function(index, value) {
+					if($(value).val() == "") {
+						alert(arrLabel[index] + '은 필수 입력사항입니다.');
+						$(value).focus();
+						flagInputAll = false;
+						return false;
+					} // end if
+				}); // each
+				
+				if(flagInputAll && $("#category").val()=='N/A') {
+					alert('카테고리를 선택해주세요.');
+					flagInputAll = false;
+					return;
+				}; // end if
+				
+				if(flagInputAll) {
+					$("[name='frm']").submit();
+					alert("글쓰기 성공");
+				}; // end if
+			} // chkNull
 		}); // ready
 	</script>
-	<!-- noticeView page css, script -->
+	<!-- noticeDetail page css, script -->
 	
     </div>
     <!-- End of Page Wrapper -->

@@ -30,7 +30,6 @@
 	<%
 	request.setCharacterEncoding("UTF-8");
 	%>
-	
 	<jsp:useBean id="bVO" class="admin.BoardVO" scope="page"/>
 	<jsp:setProperty property="*" name="bVO"/>
 	
@@ -49,7 +48,7 @@
 	%>
 	</c:catch>
 	<c:if test="${ not empty e }">
-		죄송합니다. 잠시 후 다시 시도해주시기 바랍니다.
+		alert("죄송합니다. 잠시 후 다시 시도해주시기 바랍니다.");
 		<%
 		response.sendRedirect("notice.jsp");
 		%>
