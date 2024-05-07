@@ -139,7 +139,6 @@
 		        lang: 'ko-KR',
 		        width: 900,
 		        height: 350,
-		        focus: true,
 		        popover: {
 		            table: [
 		                ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
@@ -149,7 +148,7 @@
 		    }); // summernote
 		    
 		    $("#btnCancel").click(function(){
-				location.href = "notice.jsp";
+				location.href = "notice.jsp?currentPage=${ param.currentPage }";
 			}); // click
 			
 			$("#btnDelete").click(function(){
@@ -158,9 +157,13 @@
 				} // end if
 				location.href = "noticeDetailProcess.jsp?num="+${ selectedBVO.boardNumber }+"&flag=d";
 				alert("삭제완료");
+				location.href="notice.jsp?currentPage=${ param.currentPage }";
 			}); // click
 	
 			$("#btnEdit").click(function(){
+				if(!confirm("글을 수정하시겠습니까?")){
+					return;
+				} // end if
 				chkNull();
 			}); // click
 			
@@ -172,7 +175,13 @@
 				$.each(arrNecessary, function(index, value) {
 					if($(value).val() == "") {
 						alert(arrLabel[index] + '은 필수 입력사항입니다.');
-						$(value).focus();
+						if(index == "제목") {
+							$(value).focus();
+						} else {
+							$(value).summernote({
+								focus: true
+							});
+						} // end else
 						flagInputAll = false;
 						return false;
 					} // end if
@@ -186,7 +195,8 @@
 				
 				if(flagInputAll) {
 					$("[name='frm']").submit();
-					alert("글쓰기 성공");
+					alert("글수정 성공");
+					location.href="notice.jsp?currentPage=${ param.currentPage }";
 				}; // end if
 			} // chkNull
 		}); // ready
