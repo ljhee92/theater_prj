@@ -1,4 +1,6 @@
 
+<%@page import="VO.MovieVO"%>
+<%@page import="user.DAO.MovieDetailDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info=""%>
 <!DOCTYPE html>
@@ -40,129 +42,57 @@
 
 <!-- 무비상세 css -->
 <link rel="stylesheet" type="text/css" href="../css/movieDetail.css">
-
-
-<meta id="ctl00_og_image" property="og:image"
-	content="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88104/88104_185.jpg"></meta>
+<meta id="ctl00_og_image" property="og:image" content="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88104/88104_185.jpg"></meta>
 <link rel="alternate" href="http://m.cgv.co.kr" />
-<link rel="shortcut icon"
-	href="https://img.cgv.co.kr/theater_img/favicon.ico"
-	type="image/x-icon" />
-<title id="ctl00_headerTitle">[범죄도시4]&lt;영화상세 &lt; 영화 | 영화 그 이상의
-	감동. CGV</title>
-<link rel="shortcut icon" type="image/x-icon"
-	href="https://img.cgv.co.kr/R2014/images/favicon.ico" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/webfont.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/reset.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/layout.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/module.css?20211209" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/content.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/common.css" />
-
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/eggupdate.css" />
-<link rel="stylesheet" media="print" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/print.css" />
-<link rel="stylesheet" type="text/css"
-	href="https://img.cgv.co.kr/R2014/js/jquery.ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="https://img.cgv.co.kr/R2014/images/favicon.ico" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/webfont.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/reset.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/layout.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/module.css?20211209" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/content.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/common.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/eggupdate.css" />
+<link rel="stylesheet" media="print" type="text/css" href="https://img.cgv.co.kr/R2014/css/print.css" />
+<link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/R2014/js/jquery.ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript" src="/common/js/extraTheaters.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.tmpl.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.validate.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.paging.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.ui/jquery-ui-1.10.4.custom.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.utils.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/app.utils.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.utils.pageing.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/app.init.js"></script>
-
-<!--[if lte IE 9]><script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.placeholder.js"></script><![endif]-->
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.dotdotdot.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/silverlight_link.js"></script>
-<script src="https://img.cgv.co.kr/R2014/js/slick/slick.js"
-	type="text/javascript" charset="utf-8"></script>
-
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/phototicket/phototicket.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/slick.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/slick-theme-custom.css" />
-
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/icheck/login.timer.js"></script>
-<script src="https://img.cgv.co.kr/R2014/js/icheck/icheck.min.js"
-	type="text/javascript" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css"
-	href="https://img.cgv.co.kr/R2014/js/icheck/iCheck.css" />
-
-<!-- 2020.05.07 감정지수/프리에그 프로젝트 추가 -->
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/preegg.css" />
-
-<!-- 2023.03.27 홈페이지 스토어 영역 內 배너 영역 미노출의 件 -->
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/giftstore/giftstore.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/giftstore/commonstore.js"></script>
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/giftstore/giftstore.css" />
-
-<!-- 홈페이지 CSS 일원화로 인한 반영 20220721 -->
-<link rel="stylesheet" type="text/css"
-	href="https://img.cgv.co.kr/resource_pc/css/cgv.min.css" />
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/resource_pc/js/cgvUi.js"></script>
-
-<!-- 각페이지 Header Start-->
-
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="https://img.cgv.co.kr/R2014/js/excanvas.min.js"></script><![endif]-->
-<link
-	href="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jquery.jqplot.min.css"
-	rel="stylesheet" type="text/css" />
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jquery.jqplot.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jqplot.barRenderer.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jqplot.pieRenderer.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jqplot.donutRenderer.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jqplot.categoryAxisRenderer.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jqplot.pointLabels.min.js"></script>
-
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/Chart.custom.js"></script>
-<!-- 평점 개편 스파이더 차트 js 로딩 추가. mwpark_RR2015 -->
-
-<!-- 2020.05.07 영화 상세 차트 js 로딩 추가 -->
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/amcharts.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/radar.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.tmpl.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.validate.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.paging.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.ui/jquery-ui-1.10.4.custom.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.utils.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.utils.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.utils.pageing.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.init.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.placeholder.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.dotdotdot.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/silverlight_link.js"></script>
+<script src="https://img.cgv.co.kr/R2014/js/slick/slick.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/phototicket/phototicket.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/slick.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/slick-theme-custom.css" />
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/icheck/login.timer.js"></script>
+<script src="https://img.cgv.co.kr/R2014/js/icheck/icheck.min.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/R2014/js/icheck/iCheck.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/preegg.css" />
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/giftstore/giftstore.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/giftstore/commonstore.js"></script>
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/giftstore/giftstore.css" />
+<link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/resource_pc/css/cgv.min.css" />
+<script type="text/javascript" src="https://img.cgv.co.kr/resource_pc/js/cgvUi.js"></script>
+<link href="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jquery.jqplot.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jqplot.barRenderer.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jqplot.pieRenderer.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jqplot.donutRenderer.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jqplot.categoryAxisRenderer.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.jqplot/jqplot.pointLabels.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/Chart.custom.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/amcharts.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/radar.js"></script>
 
 <style>
 /* 별점 아이콘 스타일링 */
@@ -219,111 +149,7 @@
 }
 </style>
 
-<!--/각페이지 Header End-->
-<script type="text/javascript">
-        //<![CDATA[
-        _TRK_CP = "/영화/영화상세";
 
-        app.config('staticDomain', 'https://img.cgv.co.kr/R2014/')
-            .config('imageDomain', 'https://img.cgv.co.kr')
-            .config('isLogin', 'False');
-
-        
-        // AD FLOAT
-        // 암호화 할 문자열과 키값(상수값)을 매개변수로 받는다.
-        function EncryptAD(str, key) {
-            output = new String;
-            Temp = new Array();
-            TextSize = str.length;
-            for (i = 0; i < TextSize; i++) {
-                // key 값을 원하는 대로 연산을 한다
-                output += String.fromCharCode(str.charCodeAt(i) + parseInt(key) + 123 + i);
-            }
-            return output;
-        }
-        // 복호화
-        // 암호화 된 문자열과 키값(상수값)을 매개변수로 받는다.
-        function DecryptAD(str, key) {
-            output = new String;
-            Temp = new Array();
-            TextSize = str.length;
-            for (i = 0; i < TextSize; i++) {
-                // 암호화시 사용한 연산과 같아야 한다.
-                output += String.fromCharCode(str.charCodeAt(i) - (parseInt(key) + 123 + i));
-            }
-
-            return output;
-        }
-
-        function getCookieVal(offset) {
-            var endstr = document.cookie.indexOf(";", offset);
-            if (endstr == -1) endstr = document.cookie.length;
-            return unescape(document.cookie.substring(offset, endstr));
-        }
-        function GetCookieAd(name) {
-            var arg = name + "=";
-            var alen = arg.length;
-            var clen = document.cookie.length;
-            var i = 0;
-            while (i < clen) { //while open
-                var j = i + alen;
-                if (document.cookie.substring(i, j) == arg)
-                    return getCookieVal(j);
-                i = document.cookie.indexOf(" ", i) + 1;
-                if (i == 0) break;
-            } //while close
-            return null;
-        }
-        function setCookieAD(name, value, expiredays) {
-            var todayDate = new Date();
-            todayDate.setTime(todayDate.getTime() + (expiredays * 24 * 60 * 60 * 1000));
-            document.cookie = name + "=" + escape(value) + "; expires=" + todayDate.toGMTString() + "; path=/; domain=cgv.co.kr";
-        }
-        function CloseAD() {
-            var AdUrl = window.location.href;
-            var ArrAdUrl = AdUrl.split("/");
-
-            var CurCookieName = 'CgvPopAd-' + ArrAdUrl[3];
-            var CurCookieUrl = GetCookieAd(CurCookieName);
-            var CookieUrl = ArrAdUrl[3];
-
-            CookieUrl = EncryptAD(CookieUrl, "15442280");
-            setCookieAD(CurCookieName, CookieUrl, '1');
-            $(document).find('#ad_float1').hide();
-        }
-        function OpenAD() {
-            var AdUrl = window.location.href;
-            var ArrAdUrl = AdUrl.split("/");
-            var CookieUrl = ArrAdUrl[3];
-            var CurCookieName = 'CgvPopAd-' + ArrAdUrl[3];
-            var CurCookieUrl = GetCookieAd(CurCookieName);
-
-            if (CurCookieUrl == null) {
-                CurCookieUrl = "";
-            }
-            else {
-                CurCookieUrl = DecryptAD(CurCookieUrl, "15442280");
-            }
-
-            if (CurCookieUrl.indexOf(CookieUrl) != -1) {
-                $(document).find('#ad_float1').hide();
-            }
-
-            //section.cgv.co.kr 매거진 체크
-            var magazineckurl = GetCookieAd("CgvPopAd-magazine");
-            if (magazineckurl != null) {
-                var magazineck = DecryptAD(magazineckurl, "15442280");
-                if (magazineck != null && magazineck == "magazine") {
-                    //값이있는경우 표시하지않음
-                    $(document).find('#ad_float1').hide();
-                }
-            }
-        }
-
-        
-
-        //]]>
-    </script>
 <script type="text/javascript">
     $(function() {
 
@@ -335,6 +161,7 @@
 </head>
 <body class="">
 
+
 	<div class="skipnaiv">
 		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
 	</div>
@@ -343,6 +170,42 @@
 		<jsp:include page="header.jsp" />
 		<!--header end-->
 
+
+<%
+//받은 영화코드 파라미터 저장
+String movieCode = request.getParameter("midx");
+MovieDetailDAO mdDAO = MovieDetailDAO.getInstance();
+MovieVO mVO = mdDAO.selectMovieDetail(movieCode);
+
+String title = mVO.getMovieTitle();
+String releaseDate = mVO.getMovieReleaseDate();
+String genre = mVO.getMovieGenre();
+String rating = mVO.getMovieRating();
+String director = mVO.getMovieDirector();
+String distributor = mVO.getMovieDistributor();
+String runningTime = mVO.getMovieRunningTime();
+String mainActor = mVO.getMovieMainActor();
+String subActor = mVO.getMovieSubActor();
+String description = mVO.getMovieDescription();
+String posterPath = mVO.getMoviePosterPath();
+String screeningStatus = mVO.getMovieScreeningStatus();
+String inputDate = mVO.getMovieInputDate();
+String statusClass = null;
+//관람 등급 설정
+rating = rating.equals("All") ? "전체 관람가" : rating + "이상 관람가";
+
+
+//상영 상태 설정
+if(screeningStatus.equals("Y")){
+	screeningStatus = "현재상영중";
+    statusClass = "round lightblue";
+
+}else{
+	screeningStatus = "미상영작";
+    statusClass = "round red";
+
+}
+%>
 		<!-- Contaniner -->
 		<div id="contaniner" class="">
 			<!-- 벽돌 배경이미지 사용 시 class="bg-bricks" 적용 / 배경이미지가 없을 경우 class 삭제  -->
@@ -354,26 +217,21 @@
 
 					<div class="sect-base-movie">
 						<h3>
-							<strong>범죄도시4</strong>기본정보
+							<strong><%= title %></strong>기본정보
 						</h3>
 						<div class="box-image">
 							<a
 								href="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88104/88104_1000.jpg"
 								title="포스터 크게 보기 새창" target="_blank"> <span
-								class="thumb-image"> <img
-									src="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88104/88104_320.jpg"
-									alt="범죄도시4 포스터 새창" onerror="errorImage(this)" /> <span
-									class="ico-posterdetail">포스터 크게 보기</span> <!-- 영상물 등급 노출 변경 2022.08.24 -->
-									<i class="cgvIcon etc age15">15</i> <!--<span class="ico-grade 15"> 15</span> -->
+								class="thumb-image"> <img src="../images/movie/<%=posterPath%>">
+									<span class="ico-posterdetail">포스터 크게 보기</span> <!-- 영상물 등급 노출 변경 2022.08.24 -->
+									<i class="cgvIcon etc age<%=rating%>"><%=rating %></i> <!--<span class="ico-grade 15"> 15</span> -->
 							</span>
 							</a>
 						</div>
 						<div class="box-contents">
 							<div class="title">
-								<strong>범죄도시4</strong> <em class="round lightblue"><span>현재상영중</span></em>
-
-
-								<p>THE ROUNDUP : PUNISHMENT</p>
+								<strong><%= title %></strong> <em class="<%=statusClass %>"><span><%=screeningStatus %></span></em>
 							</div>
 							<div class="score">
 								<strong class="percent">예매율&nbsp;<span>93.5%</span></strong>
@@ -383,35 +241,26 @@
 							<!-- 떨어지는 얘 이전 요소에 class=on을 넣는다 -->
 							<div class="spec">
 								<dl>
-									<dt>감독 :&nbsp;</dt>
-									<dd>
+									<dt>
+										감독 :
+										<%=director %></dt>
+									<dt>
+										/ 주연배우 :
+										<%=mainActor%>
+										/ 조연배우 :
+										<%=subActor%>
+									</dt>
+									<br />
 
 
-										<a href="/movies/persons/?pidx=60923">허명행</a>
-
-									</dd>
-
+									<dt>
+										장르 :
+										<%=genre%></dt>
 									<dd></dd>
-
-									<dt>&nbsp;/ 배우 :&nbsp;</dt>
-									<dd class="on">
-
-
-										<a href="/movies/persons/?pidx=113763">마동석</a> ,&nbsp; <a
-											href="/movies/persons/?pidx=105796">김무열</a> ,&nbsp; <a
-											href="/movies/persons/?pidx=114774">이동휘</a> ,&nbsp; <a
-											href="/movies/persons/?pidx=53952">박지환</a>
-
-									</dd>
-
-									<dt>장르 :&nbsp;액션,&nbsp;범죄</dt>
-									<dd></dd>
-									<dt>&nbsp;/ 기본 정보 :&nbsp;</dt>
-									<!-- 2023.04.27 영화상세 등급 표기 수정-->
-									<!--<dd class="on">15,&nbsp;109분,&nbsp;한국</dd>-->
-									<dd class="on">15세이상관람가,&nbsp;109분,&nbsp;한국</dd>
-									<dt>개봉 :&nbsp;</dt>
-									<dd class="on">2024.04.24</dd>
+									<dt>/ 기본 정보 :</dt>
+									<dd class="on"><%=rating%>,<%=runningTime%></dd>
+									<dt>개봉 :</dt>
+									<dd class="on"><%=releaseDate%></dd>
 
 
 
@@ -427,19 +276,6 @@
 
 						</div>
 					</div>
-					<!-- .sect-base -->
-
-
-
-
-					<script type="text/javascript">
-    _TRK_PNC = "88104";
-    _TRK_PNC_NM = "범죄도시4";
-    _TRK_PNG = "영화";
-    _TRK_PI = "PDV";
-    _TRK_CP = "/영화/영화상세/{0}/범죄도시4";
-</script>
-
 
 					<div class="cols-content" id="menu">
 						<div class="col-detail">
@@ -454,17 +290,14 @@
 									href="/movies/detail-view/show-times.aspx?midx=88104#menu">상영시간표</a></li>
 							</ul>
 							<div class="sect-story-movie">
-								신종 마약 사건 3년 뒤,<br /> 괴물형사 &lsquo;마석도&rsquo;(마동석)와 서울 광수대는 배달앱을
-								이용한 마약 판매 사건을 수사하던 중<br /> 수배 중인 앱 개발자가 필리핀에서 사망한 사건이<br />
-								대규모 온라인 불법 도박 조직과 연관되어 있음을 알아낸다.<br /> <br /> 필리핀에 거점을 두고 납치,
-								감금, 폭행, 살인 등으로<br /> 대한민국 온라인 불법 도박 시장을 장악한<br /> 특수부대 용병 출신의
-								빌런 &lsquo;백창기&rsquo;(김무열)와<br /> 한국에서 더 큰 판을 짜고 있는 IT업계 천재 CEO
-								&lsquo;장동철&rsquo;(이동휘).<br /> <br /> &lsquo;마석도&rsquo;는 더 커진
-								판을 잡기 위해<br /> &lsquo;장이수&rsquo;(박지환)에게 뜻밖의 협력을 제안하고<br />
-								광역수사대는 물론,<br /> 사이버수사대까지 합류해 범죄를 소탕하기 시작하는데&hellip;<br /> <br />
-								<strong>나쁜 놈 잡는데 국경도 영역도 제한 없다!<br /> 업그레이드 소탕 작전!
-									거침없이 싹 쓸어버린다!
-								</strong>
+								<%
+							    String[] descriptionLines = description.split("[!?\"\\.]");
+								for (String line : descriptionLines) {
+								%>
+								<%=line.trim()%>.<br>
+								<%
+								}
+								%>
 							</div>
 
 
