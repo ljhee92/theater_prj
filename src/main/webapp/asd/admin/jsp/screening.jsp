@@ -98,6 +98,7 @@
                 success: function(jsonArr) {
                     // 검색 결과를 테이블에 반영
                     updateTable(jsonArr);
+                    alert(JSON.stringify(jsonArr));
                 },
                 error: function(xhr) {
                     alert(xhr.statusText);
@@ -125,23 +126,25 @@
         }
            
         function updateTable(jsonArr) {
-        	// id="content"를 삭제하고
+            // id="content"를 삭제하고
             $("#contentBoard").empty();
-          //jsonArr를 반복시키고, jsonObject을  parsing 해서
+            var resultNum = 0; // 결과 번호를 초기화합니다.
+            // jsonArr를 반복하고, jsonObject을 parsing하여
             jsonArr.forEach(function(screening) {
-            	var resultNum=0;
-                var newRow = "<tr onclick='clickTable()>" +
-                	"<td>" + ++resultNum + "</td>" +
+                resultNum++; // 각 행마다 번호를 증가시킵니다.
+                var newRow = "<tr onclick='clickTable()'>" +
+                    "<td>" + resultNum + "</td>" + // 결과 번호를 표시합니다.
                     "<td>" + screening.theaterName + "</td>" +
                     "<td>" + screening.theaterNumber + "</td>" +
                     "<td>" + screening.movieName + "</td>" +
                     "<td>" + screening.screeningDate + "</td>" +
                     "<td>" + screening.screeningRound + "</td>" +
                     "</tr>";
-                 // id="content"에 붙인다.
+                // id="content"에 붙입니다.
                 $("#contentBoard").append(newRow);
             });
         }
+
     });
 </script>
 <!-- Custom fonts for this template-->

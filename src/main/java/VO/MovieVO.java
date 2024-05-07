@@ -3,7 +3,6 @@ package VO;
 
 import lombok.Builder;
 import lombok.Getter;
-
 import lombok.Setter;
 import lombok.ToString;
 
@@ -27,4 +26,5 @@ public class MovieVO {
 	private String movieScreeningStatus;
 	private String movieInputDate;
 	private String movieScore;
+
 }

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" info="로그인 후 예매 확인 페이지"%>
+	pageEncoding="UTF-8" info="가상계좌 안내"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,10 +11,11 @@
 <meta http-equiv="imagetoolbar" content="no" />
 <meta name="viewport" content="width=1024" />
 
-<title id="ctl00_headerTitle">예매 | 명화 그 이상의 감동. CGV</title>
+<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+<title id="ctl00_headerTitle">예매 | 명화 그 이상의 감동. 띵화관</title>
 
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/webfont.css" />
-<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/reset.css" />
+<link rel="stylesheet" media="all" type="text/css" href="../css/reset.css" />
 <link rel="stylesheet" media="all" type="text/css" href="../css/layout.css" />
 <link rel="stylesheet" media="all" type="text/css" href="../css/module.css" />
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/content.css" />
@@ -62,6 +63,10 @@
 <link rel="stylesheet" href="http://img.cgv.co.kr/CGV_RIA/Ticket/Common/css/2024/0325/FORM_TYPE/reservation_popup.css">
 <script src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
 <!-- 예매 CSS, JS -->
+
+<style type = "text/css">
+
+</style>
 
 <!-- 로그인/로그아웃 script 시작 -->
 <!-- <script type="text/javascript">
@@ -274,127 +279,38 @@
 		
 		<!-- 예매 확인 팝업 시작 -->
 		<div class="ft_layer_popup popup_reservation_check " style="display: block;">
-		    <div class="hd">
-		        <div class="title_area">
-		            <h4>예매내역 확인</h4>
-		        </div>
-		    </div><!-- //hd -->
-		    
 		    <div class="bd">
-		        <div class="article reservation_info">
-		        	
-		            <h5>예매정보<span class="desc">결제하시기 전 예매내역을 다시 한번 확인해 주세요.</span></h5>
-					
-		            <div class="content">
-		                <div class="poster"><img src="http://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88179/88179_185.JPG" alt="" style="visibility: visible;"></div>
-		                <table>
-		                    <caption>예매정보</caption>
-		                    <thead></thead>
-		                    <tbody>
-		                        <tr class="movie_name">
-		                            <th scope="row">영화명</th>
-		                            <td>챌린저스(루카 구아다니노 감독전)</td>
-		                        </tr>
-		                        <tr class="theater">
-		                            <th scope="row">극장</th>
-		                            <td>CGV 압구정</td>
-		                        </tr>
-		                        <tr class="screen">
-		                            <th scope="row">상영관</th>
-		                            <td>ART2관 신관 B2층(Laser)</td>
-		                        </tr>
-		                        <tr class="movie_date">
-		                            <th scope="row">일시</th>
-		                            <td>2024년 5월 5일(일) 19:45~22:06</td>
-		                        </tr>
-		                        <tr class="people">
-		                            <th scope="row">인원</th>
-		                            <td>일반 1명</td>
-		                        </tr>
-		                        <tr class="seat">
-		                            <th scope="row">좌석</th>
-		                            <td>F9</td>
-		                        </tr>
-		                    </tbody>
-		                </table>
-		            </div>
-		        </div>
-		        <div class="article payment_info">
-		        	
-		            <h5>결제정보<span class="desc">결제하기 버튼을 클릭하시면 결제가 완료됩니다.</span></h5>
-					
-		            <table>
-		                <caption>결제정보</caption>
-		                <thead></thead>
-		                <tbody>
-		                    <tr class="payment_price">
-		                        <th scope="row">결제금액</th>
-		                        <td><span class="price">15,000</span>원</td>
-		                    </tr>
-		                    <tr class="payment_method">
-		                        <th scope="row">결제수단</th>
-		                        <td><div id="payMethods" style="overflow:auto;height:170px"><div class="row"><span class="title">신용카드</span>
-		                        <span class="content"><span class="price">15,000</span><span class="won">원</span></span></div></div></td>
-		                    </tr>
-		                </tbody>
-		            </table>
-		        </div>
 		        <div class="article desc" style="border-bottom: none; background: none;">
-		        	
-		            <ul>
-		                <li style="display: list-item;">인터넷 예매는 온라인상으로 영화상영 시간 20분 전 까지 취소 가능하며 20분 이후에는 현장에서 취소를 하셔야 합니다.</li>
-		                <li style="display: list-item;">현장 취소를 하는 경우 상영시간 이전까지만 가능하며 영화 상영 시작 시간 이후 취소/환불/결제수단 변경은 불가합니다.</li>
-		                <li style="display: list-item;">입장 지연에 따른 관람 불편을 최소화하기 위해 본 영화는 10분 후 상영이 시작됩니다.</li>
-		            </ul>
-					
-		            <a class="refundNotice" href="http://www.cgv.co.kr/support/faq/detail-view.aspx?idx=749&amp;type=239&amp;page=1&amp;searchtext=&amp;pb=Y" target="_blank">
-		                &gt; 예약취소 및 환불규정 안내
-		           </a>
+		            <ol>
+		                <li style="display: list-item;">감사합니다. 무통장입금 안내로 주문이 완료되었습니다.</li>
+		                <li style="display: list-item;">아래 지정된 계좌번호로 입금기한 내에 반드시 입금하셔야 합니다.</li>
+		            </ol>
 		        </div>
-		        <div class="agreement" style="border-top: 1px solid rgb(204, 204, 204); padding-top: 15px; background: rgb(238, 238, 238); height: 80px; 
-		        	text-align: left; border-bottom: 1px solid rgb(204, 204, 204); padding-bottom: 15px; margin: 0px 0px 28px;">
-		        <div id="paymentAgreement" style="float: left; width: 47%; height: 100%; padding-left: 3%; border-right: 1px solid rgb(204, 204, 204);">
-			        <span class="inputModel" style="display: block; width: 410px; min-height: 15px; margin: 0px 0px 10px;">
-				        <input class="inputModel_input" type="checkbox" style="display: inline-block; vertical-align: top; margin-top: 1px;" id="agreementAll">
-					        <label class="inputModel_label" style="width: 93%; display: inline-block; margin-left: 10px; font-weight: bold;" for="agreementAll">
-					        결제대행서비스 약관에 모두 동의</label>
-			        </span>
-			        <span class="inputModel" style="display: block; width: 99%; min-height: 15px; margin-bottom: 5px; margin-left: 10px;" id="agreeMent0">
-			        	<input class="inputModel_input agreeMentChk" type="checkbox" style="display: inline-block; vertical-align: top; margin-top: 1px;" id="agreeMent0val">
-			        	<label class="inputModel_label" style="width: 325px; display: inline-block; margin-left: 10px;" for="agreeMent0val">전자금융거래 이용약관</label>
-			        	<button class="detailView" style="background: none; text-decoration: underline; font-size: 1em; color: rgb(32, 124, 202); padding: 0px; height: 16px; vertical-align: top;">전문확인</button>
-		        	</span>
-		        	<span class="inputModel" style="display: block; width: 99%; min-height: 15px; margin-bottom: 5px; margin-left: 10px;" id="agreeMent1">
-		        		<input class="inputModel_input agreeMentChk" type="checkbox" style="display: inline-block; vertical-align: top; margin-top: 1px;" id="agreeMent1val">
-		        		<label class="inputModel_label" style="width: 325px; display: inline-block; margin-left: 10px;" for="agreeMent1val">개인정보 수집 이용약관</label>
-		        		<button class="detailView" style="background: none; text-decoration: underline; font-size: 1em; color: rgb(32, 124, 202); padding: 0px; height: 16px; vertical-align: top;">전문확인</button>
-		        	</span>
-		        	<span class="inputModel" style="display: block; width: 99%; min-height: 15px; margin-bottom: 5px; margin-left: 10px;" id="agreeMent2">
-		        		<input class="inputModel_input agreeMentChk" type="checkbox" style="display: inline-block; vertical-align: top; margin-top: 1px;" id="agreeMent2val">
-		        		<label class="inputModel_label" style="width: 325px; display: inline-block; margin-left: 10px;" for="agreeMent2val">개인정보 제공 및 위탁 안내 약관</label>
-		        		<button class="detailView" style="background: none; text-decoration: underline; font-size: 1em; color: rgb(32, 124, 202); padding: 0px; height: 16px; vertical-align: top;">전문확인</button>
-		        	</span>
-	        	</div>
-	        	<div id="paymentInfoConfirm" style="float: left; width: 45%; height: 100%;">
-	        		<span class="inputModel" style="display: none; width: 400px; min-height: 15px; margin: 0px 0px 7px 20px;">
-			        	<input class="inputModel_input" type="checkbox" style="display: inline-block; vertical-align: top; margin-top: 1px;" id="resvNoshowfirm">
-			        	<label class="inputModel_label" style="width: 93%; display: inline-block; margin-left: 10px; font-weight: bold;" for="resvNoshowfirm">취소 기한을 확인하였으며, 이에 동의합니다.</label>
-		        	</span>
-		        	<span class="inputModel" style="display: none; width: 400px; min-height: 15px; margin: 0px 0px 7px 20px;">
-		        		<input class="inputModel_input" type="checkbox" style="display: inline-block; vertical-align: top; margin-top: 1px;" id="resvPKGfirm">
-		        		<label class="inputModel_label" style="width: 93%; display: inline-block; margin-left: 10px; font-weight: bold;" for="resvPKGfirm">본 영화는 동시상영 영화로 부분환불이 불가한 영화입니다.</label>
-		        	</span>
-		        	<span class="inputModel" style="display: block; width: 420px; min-height: 15px; margin: 0px 0px 0px 20px; clear: both;">
-			        	<input class="inputModel_input" type="checkbox" style="display: inline-block; vertical-align: top; margin-top: 1px;" id="resvConfirm">
-			        	<label class="inputModel_label" style="width: 93%; display: inline-block; margin-left: 10px; font-weight: bold;" for="resvConfirm">상기 결제 내역을 모두 확인 했습니다</label>
-		        	</span>
-	        	</div>
-	        	</div>
+		        
+		        <div class="article desc" style="border-bottom: none; background: none;">
+		        	<table id="test_table" style="border-collapse: separate; border-spacing: 0 10px;">
+		        		<tr>
+			        		<th>은행명</th>
+			        		<td style="background: transparent;">KB국민은행</td>
+		        		</tr>
+		        		<tr>
+			        		<th>계좌번호</th>
+			        		<td style="background: transparent;">873801-01-3452123</td>
+		        		</tr>
+		        		<tr>
+			        		<th>예금주</th>
+			        		<td style="background: transparent;">(주)명화관</td>
+		        		</tr>
+		        		<tr>
+			        		<th>입금기한</th>
+			        		<td style="background: transparent;">2024-05-13</td>
+		        		</tr>
+		        	</table>
+		        </div>
 		    </div><!-- //bd -->
 		    
 		    <div class="ft">
-		        <a title="예매 결제하기" href="#" onclick="return false;" class="reservation"><span class="sreader"></span></a>
-		        <a title="예매 취소" href="#" onclick="return false;" class="cancel"><span class="sreader"></span></a>
+		        <input type="button" onclick="return false;" value="확인" style="display: inline-block; position: relative; background-color: #C62424; width:130px; height:45px; border: 0px; color: #fff; border-radius: 5px;"><span class="sreader"></span>
 		    </div><!-- //ft -->
 		
 		</div>

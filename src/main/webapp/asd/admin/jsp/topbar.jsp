@@ -79,7 +79,7 @@
                 </div>
                 <div class="modal-body">"Logout" 버튼을 누르면 로그아웃됩니다.</div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary" href="http://localhost/thingTheater_prj/asd/admin/jsp/login.jsp">Logout</a>
+                    <a class="btn btn-primary" href="http://localhost/theater_prj/asd/admin/jsp/login.jsp">Logout</a>
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

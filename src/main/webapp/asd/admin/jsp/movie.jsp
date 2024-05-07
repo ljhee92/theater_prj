@@ -1,3 +1,5 @@
+<%@page import="java.util.List"%>
+<%@page import="admin.ScreeningDAO1"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     info = "명화관 관리자 회원관리" %>
@@ -59,27 +61,9 @@
 						        </tr>
 						    </thead>
 						    <tbody>
-						        <% 
-						        try {
-						        	ScreeningDAO1 screeningDAO = ScreeningDAO1.getInstance();
-						            List<ScreeningVO> screeningList = screeningDAO.selectScreeningList();
-						            int num = 1;
-						            for (ScreeningVO screening : screeningList) {
-						        %>
 						        <tr>
-								    <td><%= num++ %></td>
-								    <td><%= screening.getTheaterName() %></td>
-								    <td><%= screening.getTheaterNumber() %></td>
-								    <td><%= screening.getMovieName() %></td>
-								    <td><%= screening.getScreeningDate() %></td>
-								    <td><%= screening.getScreeningRound() %></td>
-								</tr>
-						        <% 
-						            }
-						        } catch (SQLException e) {
-						            e.printStackTrace();
-						        }
-						        %>
+						        	<td>1번</td>
+						        </tr>
 						    </tbody>
 						</table>
 				</div>
