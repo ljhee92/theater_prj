@@ -133,8 +133,30 @@
 </style>
 <script type="text/javascript">
     $(function() {
-
+    	$('.c_tab.type_free li a').click(function(e){
+    		var category = $(this).attr('id');
+            loadPosts(category);
+    	}
+    	
+    	function loadPosts(category){
+    		$.ajax({
+    			 type: 'GET',
+                 url: 'getPosts.jsp',
+                 data: {
+                     category: category
+                 },
+                 success: function(response) {
+                     $('#posts').html(response);
+                     
+                 },
+                 error: function() {
+                     alert('게시물을 불러오는 도중 오류가 발생했습니다.');
+                 }
+    		});
+    	}
     }); // ready
+    
+    
 </script>
 <link rel="stylesheet" media="all" type="text/css"
 	href="http://img.cgv.co.kr/R2014/css/customer.css" />
@@ -195,10 +217,9 @@
 				sVO.setEndNum(endNum);
 				
 				List<BoardVO> list = bDAO.selectBoard(sVO, FAQS);
-				System.out.println( "------"+list.size());
 				pageContext.setAttribute("list", list);				
 				%>
-
+	
 		<!-- Contaniner -->
 		<div id="contaniner" class="">
 			<!-- 벽돌 배경이미지 사용 시 class="bg-bricks" 적용 / 배경이미지가 없을 경우 class 삭제  -->
@@ -265,7 +286,7 @@
 								<%
 								for(String category : faqsList){%>
 								<li class=''><a
-									href="/support/faq/default.aspx?type=101,239&searchtext="
+									href="#void"
 									style="font-size: 11px;"><%=category%></a></li>
 								<%
 								}
@@ -295,7 +316,7 @@
 								<tbody>
 									<c:forEach var="board" items="${list}">
 										<tr>
-											<td><c:out value="${board.rnum}" /></td>
+											<td><c:out value="${board.boardNumber}" /></td>
 											<td>${board.categoryName}</td>
 											<td id="title0" class="txt"><a
 												href="/support/faq/detail-view.aspx?idx=951&type=245&searchtext=&page=1">
