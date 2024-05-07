@@ -133,7 +133,8 @@ public class BoardDAO {
 			.append("	on c.category_number = b.category_number ")
 			.append("	where c.category_type_flag = 'N' ")
 			.append(") ")
-			.append("where rnum between ? and ? ");
+			.append("where rnum between ? and ? ")
+			.append("order by board_number desc");
 			
 			pstmt = con.prepareStatement(selectBoard.toString());
 			
