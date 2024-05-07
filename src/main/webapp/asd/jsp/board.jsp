@@ -131,33 +131,7 @@
 <!--jQuery CDN ��-->
 <style type="text/css">
 </style>
-<script type="text/javascript">
-    $(function() {
-    	$('.c_tab.type_free li a').click(function(e){
-    		var category = $(this).attr('id');
-            loadPosts(category);
-    	}
-    	
-    	function loadPosts(category){
-    		$.ajax({
-    			 type: 'GET',
-                 url: 'getPosts.jsp',
-                 data: {
-                     category: category
-                 },
-                 success: function(response) {
-                     $('#posts').html(response);
-                     
-                 },
-                 error: function() {
-                     alert('게시물을 불러오는 도중 오류가 발생했습니다.');
-                 }
-    		});
-    	}
-    }); // ready
-    
-    
-</script>
+
 <link rel="stylesheet" media="all" type="text/css"
 	href="http://img.cgv.co.kr/R2014/css/customer.css" />
 
@@ -217,7 +191,8 @@
 				sVO.setEndNum(endNum);
 				
 				List<BoardVO> list = bDAO.selectBoard(sVO, FAQS);
-				pageContext.setAttribute("list", list);				
+				pageContext.setAttribute("list", list);	
+				pageContext.setAttribute("FAQS", FAQS);
 				%>
 	
 		<!-- Contaniner -->
@@ -285,7 +260,7 @@
 									style="font-size: 11px;" title="선택된 탭메뉴">전체</a></li>
 								<%
 								for(String category : faqsList){%>
-								<li class=''><a
+								<li id="<%=category%>"><a
 									href="#void"
 									style="font-size: 11px;"><%=category%></a></li>
 								<%
@@ -332,7 +307,7 @@
 							<ul>
 								<%for(int i=1 ; i<=totalPage ; i++){%>
 								<li class="on"><a href="board.jsp?FAQS=<%=faqsNum%>&currentPage=<%=i%>"><%=i%></a></li>
-								<%} %>
+								<%}%>
 							</ul>
 							<button class="btn-paging end" type="button"
 								onclick="location='/support/news/default.aspx?page=5&amp;type=&amp;searchtext=&amp;searchfield=0'">끝</button>
@@ -362,4 +337,50 @@
 	</div>
 </body>
 </body>
+
+<script type="text/javascript">
+$(function() {
+    $('.c_tab.type_free li a').click(function(e) {
+        e.preventDefault(); // 기본 동작 중단
+        var category = $(this).parent().attr('id'); // 선택된 카테고리 가져오기
+        var faqs = '<%= FAQS %>'; // FAQS 값을 JavaScript 변수에 할당
+        var startNum = '<%= sVO.getStartNum() %>'; // startNum을 Java 코드로부터 받아옴
+        var endNum = '<%= sVO.getEndNum() %>'; // endNum을 Java 코드로부터 받아옴
+        loadPosts(category); // 선택된 카테고리에 해당하는 게시글 로드
+    });
+
+    function loadPosts(category,faqs) {
+        $.ajax({
+            type: 'GET',
+            url: 'getBoard.jsp', // getBoard.jsp 파일의 경로
+            data: {
+                category: category
+                faqs: fqas
+                startNum: startNum
+                endNum: endNum
+            },
+            dataType: 'json',
+            success: function(response) {
+                // 서버에서 받은 JSON 데이터를 처리하여 화면에 출력
+                var html = '';
+                $.each(response, function(index, item) {
+                    html += '<tr>';
+                    html += '<td>' + item.boardNumber + '</td>';
+                    html += '<td>' + item.categoryName + '</td>';
+                    html += '<td><a href="/support/faq/detail-view.aspx?idx=951&type=245&searchtext=&page=1">' + item.boardTitle + '</a></td>';
+                    html += '<td>' + item.boardViews + '</td>';
+                    html += '</tr>';
+                });
+                $('.tbl_notice_list tbody').html(html);
+            },
+            error: function() {
+                alert('게시물을 불러오는 도중 오류가 발생했습니다.');
+            }
+        });
+    }
+});
+
+    
+    
+</script>
 </html>

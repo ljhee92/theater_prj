@@ -58,7 +58,6 @@ public class BoardDAO {
 			while (rs.next()) {
 				String category = rs.getString("category_name");
 				categoryList.add(category);
-				System.out.println(category);
 			}
 		} finally {
 			// 6. 리소스 해제
@@ -77,7 +76,7 @@ public class BoardDAO {
 	 * @return
 	 * @throws SQLException 
 	 */
-	public List<BoardVO> selectOneCategory(SearchVO sVO, String FAQS,String categoryName) throws SQLException{
+	public List<BoardVO> selectOneCategory(String startNum,String endNum, String FAQS,String categoryName) throws SQLException{
 		List<BoardVO> list = new ArrayList<BoardVO>();	
 
 		Connection con = null;
@@ -112,8 +111,8 @@ public class BoardDAO {
 			
 			pstmt = con.prepareStatement( sbQuery.toString());
 			pstmt.setString(1, FAQS );
-			pstmt.setInt(2, sVO.getStartNum());
-			pstmt.setInt(3, sVO.getEndNum());
+			pstmt.setString(2, startNum);
+			pstmt.setString(3, endNum);
 			pstmt.setString(4, categoryName);
 			//5. 바인드변수에 값 설정
 			//6. 쿼리문 수행 후 결과얻기
@@ -177,7 +176,6 @@ public class BoardDAO {
 				totalCnt = rs.getInt("cnt");
 			}//end if
 			
-			System.out.println(totalCnt);
 		}finally {
 			//7. 연결 끊기			
 			dbCon.dbClose(rs, pstmt, con);

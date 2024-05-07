@@ -79,10 +79,9 @@ public class MovieChartDAO {
                         .movieScore(rs.getString("AVG_REVIEW"))
                         .build();
 				
-				System.out.println(mVO.getMovieCode());
 				mVOList.add(mVO);
-
 			}
+			System.out.println("sdjflksdjsldfjskdofjoiejlsdkjflsjflo");
 		} finally {
 			// 6. 리소스 해제
 			dbcon.dbClose(rs, pstmt, con);
