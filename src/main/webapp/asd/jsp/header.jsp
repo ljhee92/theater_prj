@@ -260,8 +260,8 @@
 				<div class="contents">
 					<h1>
 						<a href="/" tabindex="-1"><img
-							src="https://img.cgv.co.kr/R2014/images/common/logo/logoWhite.png"
-							alt="CGV" /></a>
+							src="../logo.png"
+							alt="띵화관" /></a>
 					</h1>
 					<ul class="nav_menu">
 						<li>
@@ -381,17 +381,20 @@
 
 							</dl>
 						</li>
-
+						<%
+						String notice = "0";
+						String qa = "1";
+						%>
 						<li>
 							<h2 onclick="gaEventLog('PC_GNB','주메뉴_해택','')">
-								<a href="/discount/discountlist.aspx">공지사항</a>
+								<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=<%=notice%>">공지사항</a>
 							</h2>
 
 							<dl class="nav_overMenu">
 
 								<dt>
 									<h2>
-										<a href="/discount/discountlist.aspx" tabindex="-1">공지사항</a>
+										<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=<%=notice%>">공지사항</a>
 									</h2>
 								</dt>
 
@@ -400,15 +403,14 @@
 
 						<li>
 							<h2 onclick="gaEventLog('PC_GNB','주메뉴_해택','')">
-								<a href="/discount/discountlist.aspx">자주찾는 질문</a>
+								<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=<%=qa%>">자주찾는 질문</a>
 							</h2>
 
 							<dl class="nav_overMenu">
 
 								<dt>
 									<h2>
-										<a href="/discount/discountlist.aspx" tabindex="-1">자주찾는
-											질문</a>
+									<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=<%=qa%>">자주찾는질문</a>
 									</h2>
 								</dt>
 
@@ -419,4 +421,9 @@
 			</div>
 			<!-- 서브 메뉴 -->
 		</div>
-		
+		<script type="text/javascript">
+    function setFAQSValue(value) {
+        document.getElementById("FAQSInput").value = value;
+        document.getElementById("noticeForm").submit();
+    }
+</script>
