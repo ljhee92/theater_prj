@@ -150,7 +150,7 @@
 		request
 				.open(
 						"Post",
-						"http://localhost/thingTheater_prj/TheaterNumSearchServlet?theaterName="
+						"http://localhost/theater_prj/TheaterNumSearchServlet?theaterName="
 								+ encodeURIComponent(document
 										.querySelector("select[name='theaterName']").value),
 						true);
@@ -215,7 +215,7 @@
 		request
 				.open(
 						"Post",
-						"http://localhost/thingTheater_prj/TheaterSeatsSearchServlet",true);
+						"http://localhost/theater_prj/TheaterSeatsSearchServlet",true);
 		request.setRequestHeader("Content-Type",
 				"application/x-www-form-urlencoded; charset=UTF-8");
 		request.onreadystatechange = function() {
@@ -350,7 +350,7 @@
 			request
 					.open(
 							"POST",
-							"http://localhost/thingTheater_prj/UpdateSeatStatusServlet",
+							"http://localhost/theater_prj/UpdateSeatStatusServlet",
 							true);
 			request.setRequestHeader("Content-Type",
 					"application/x-www-form-urlencoded; charset=UTF-8");

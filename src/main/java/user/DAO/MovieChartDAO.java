@@ -79,7 +79,7 @@ public class MovieChartDAO {
                         .movieScore(rs.getString("AVG_REVIEW"))
                         .build();
 				
-				System.out.println(mVO.getMovieCode());
+				//System.out.println(mVO.getMovieCode());
 				mVOList.add(mVO);
 
 			}

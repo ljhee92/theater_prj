@@ -9,6 +9,7 @@ import java.util.List;
 
 import VO.SeatVO;
 import VO.TheaterVO;
+import admin.BoardVO;
 import util.DbConnection;
 
 
@@ -252,6 +253,10 @@ public class TheaterDAO {
 
 		return result;
 	}// updateSeatStatus
+	
+	
+
+	
 	
 	
 	
