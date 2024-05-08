@@ -141,37 +141,21 @@ public class ScreeningDAO1 {
 	
 
 	
-//	public List<ScreeningVO> selectTheater(ScreeningVO sVO){
-//		List<ScreeningVO> listProfVO = new ArrayList<ScreeningVO>();
-//		ScreeningVO pVO = null;
-//		DbConnection dbCon = DbConnection.getInstance();
-//		
-//		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
-//		
-//		try {
-//			String id = "son";
-//			String pass = "jimin";
-//			
-//			con = dbCon.getConnection(id, pass);
-//			
-//			String selectDeptProf = "select * from screening";
-//			pstmt = con.prepareStatement(selectDeptProf);
-//			pstmt.setInt(1, dept_code);
-//			
-//			rs = pstmt.executeQuery();
-//			
-//			while (rs.next()) {
-//				pVO = new ProfVO(rs.getInt("prof_number"), rs.getString("prof_name"));
-//				listProfVO.add(pVO);
-//			} // end while
-//		} finally {
-//			dbCon.dbClose(rs, pstmt, con);
-//		} // end finally
-//		
-//		return listProfVO;
-//	}
+	public List<String> selectTheaterAll() throws SQLException {
+	    List<String> listTheaterList = new ArrayList<String>();
+	    DbConnection dbCon = DbConnection.getInstance();
+
+	    try (Connection con = dbCon.getConnection("son", "jimin");
+	         PreparedStatement pstmt = con.prepareStatement("SELECT DISTINCT THEATER_NAME FROM THEATER");
+	         ResultSet rs = pstmt.executeQuery()) {
+
+	        while (rs.next()) {
+	            listTheaterList.add(rs.getString("THEATER_NAME"));
+	        }
+	    }
+
+	    return listTheaterList;
+	}
 	
 	
 }
