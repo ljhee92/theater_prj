@@ -211,10 +211,10 @@
 						    <tbody id="contentBoard">
 						        <%
 						        try {
-						        				        	ScreeningDAO1 screeningDAO = ScreeningDAO1.getInstance();
-						        				            List<ScreeningVO> screeningList = screeningDAO.selectScreeningList();
-						        				            int num = 1;
-						        				            for (ScreeningVO screening : screeningList) {
+	        				        	ScreeningDAO1 screeningDAO = ScreeningDAO1.getInstance();
+	        				            List<ScreeningVO> screeningList = screeningDAO.selectScreeningList();
+	        				            int num = 1;
+	        				            for (ScreeningVO screening : screeningList) {
 						        %>
 						        <tr onClick='clickTable()'>
 								    <td><%=num++%></td>
@@ -226,9 +226,9 @@
 								</tr>
 						        <%
 						        }
-						        				        } catch (SQLException e) {
-						        				            e.printStackTrace();
-						        				        }
+	        				        } catch (SQLException e) {
+	        				            e.printStackTrace();
+	        				        }
 						        %>
 						    </tbody>
 						</table>

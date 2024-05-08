@@ -11,14 +11,47 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script>
+$(function(){
+	$("#addNewMovie").click(function() {
+		var param = {
+	    		theaterName: $("#theaterName").val(),
+	    		screeningRoom: $("#screeningRoom").val(),
+	    		movieName: $("#movieName").val(),
+	    		openDate: $("#openDate").val().replaceAll("-",""),
+	    		screeningRound: $("#screeningRound").val()
+	    };
+	    
+	    alert(JSON.stringify(param));
+	
+	    $.ajax({
+	        url: "screening_register_service.jsp",
+	        type: "post",
+	        data: param,
+	        success: function(response) {
+	            alert("성공적으로 저장");
+	        },
+	        error: function(xhr, status, error) {
+	            alert("오류 발생: " + error);
+	        }
+	    });
+	});
+	
+})
+</script>
+
 <%
 List<String> theaterList = new ArrayList<String>();
-	List<String> movieList = new ArrayList<String>();
+	List<String> movieList = null;//new ArrayList<String>();
     ScreeningDAO1 screeningDAO = ScreeningDAO1.getInstance();
     AdminMovieDAO movieDAO = AdminMovieDAO.getInstance();
     try {
         theaterList = screeningDAO.selectTheaterAll();
+        movieList=movieDAO.movieNameList();
+        
         request.setAttribute("theaterList", theaterList);
+        request.setAttribute("movieList", movieList);
     } catch (SQLException e) {
         // 예외 처리
         e.printStackTrace();

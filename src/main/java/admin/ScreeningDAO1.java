@@ -157,5 +157,102 @@ public class ScreeningDAO1 {
 	    return listTheaterList;
 	}
 	
+	public void insertScreening(String theaterName, String screeningRoom, String movieName, String screeningDate, String screeningRound) throws SQLException {
+	    DbConnection dbCon = DbConnection.getInstance();
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+
+	    try {
+	        String id = "son";
+	        String pass = "jimin";
+	        con = dbCon.getConnection(id, pass);
+
+	        String insertQuery = "INSERT INTO screening (screening_code, theater_name, theater_number, movie_code, screening_date, screening_round, ticket_price) VALUES (?, ?, ?, ?, ?, ?, 10000)";
+	        pstmt = con.prepareStatement(insertQuery);
+
+	        // 상영 코드 생성
+	        String screeningCode = getScreeningCode();
+	        String movieCode = getMovieCode(movieName);
+
+	        pstmt.setString(1, screeningCode); // 상영 코드 설정
+	        pstmt.setString(2, theaterName);
+	        pstmt.setString(3, screeningRoom);
+	        pstmt.setString(4, movieCode);
+	        pstmt.setString(5, screeningDate);
+	        pstmt.setString(6, screeningRound);
+
+	        pstmt.executeUpdate();
+	    } finally {
+	        dbCon.dbClose(null, pstmt, con);
+	    }
+	}
+
+
+	private String getMovieCode(String movieName) throws SQLException {
+	    DbConnection dbCon = DbConnection.getInstance();
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String movieCode = null;
+
+	    try {
+	        String id = "son";
+	        String pass = "jimin";
+	        con = dbCon.getConnection(id, pass);
+
+	        String selectQuery = "SELECT movie_code FROM movie WHERE movie_title = ?";
+	        pstmt = con.prepareStatement(selectQuery);
+	        pstmt.setString(1, movieName);
+	        rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            movieCode = rs.getString("movie_code");
+	        }
+	        System.out.println("영화등록 코드 : " + movieCode);
+	    } finally {
+	        dbCon.dbClose(rs, pstmt, con);
+	    }
+
+	    return movieCode;
+	}
+	
+	private String getScreeningCode() throws SQLException {
+	    DbConnection dbCon = DbConnection.getInstance();
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+	    String screeningCode = null;
+
+	    try {
+	        String id = "son";
+	        String pass = "jimin";
+	        con = dbCon.getConnection(id, pass);
+
+	        // 가장 마지막으로 사용된 상영 코드 조회
+	        String selectQuery = "SELECT MAX(SCREENING_CODE) AS LAST_CODE FROM SCREENING";
+	        pstmt = con.prepareStatement(selectQuery);
+	        rs = pstmt.executeQuery();
+
+	        if (rs.next()) {
+	            // 가장 마지막으로 사용된 상영 코드를 가져옴
+	            String lastCode = rs.getString("LAST_CODE");
+	            // 마지막으로 사용된 상영 코드에서 숫자 부분만 추출하여 증가시킴
+	            int lastNumber = Integer.parseInt(lastCode.substring(3)) + 1;
+	            // 새로운 상영 코드 생성
+	            screeningCode = String.format("SCR%05d", lastNumber); // 예: SCR00035
+	        } else {
+	            // 데이터베이스에 상영 코드가 없는 경우
+	            // 새로운 상영 코드를 1부터 시작하도록 설정
+	            screeningCode = "SCR00001";
+	        }
+	    } finally {
+	        dbCon.dbClose(rs, pstmt, con);
+	    }
+
+	    return screeningCode;
+	}
+
+
+	
 	
 }
