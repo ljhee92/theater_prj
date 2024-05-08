@@ -107,11 +107,11 @@ public class ReservingDAO {
 	} // selectTheater
 	
 	/**
-	 * 해당 날짜에 상영중인 상영관이름 가져오기
+	 * 선택한 날짜에 선택한 상영관에서 상영 중인 영화명 가져오기
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<ReservingVO> selectTheater(String screeningDate) throws SQLException {
+	public List<ReservingVO> selectMovie(String screeningDate, String theaterName) throws SQLException {
 		List<ReservingVO> theaters = new ArrayList<ReservingVO>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -124,21 +124,23 @@ public class ReservingDAO {
 			
 			con = dbCon.getConnection(id, pass);
 			
-			StringBuilder selectTheater = new StringBuilder();
-			selectTheater.append("select distinct s.theater_name ")
-			.append("from screening s ")
-			.append("inner join movie m ")
+			StringBuilder selectMovie = new StringBuilder();
+			selectMovie.append("select distinct m.movie_title, m.movie_rating ")
+			.append("from movie m ")
+			.append("inner join screening s ")
 			.append("on s.movie_code = m.movie_code ")
-			.append("where m.movie_screening_status = 'Y' and s.screening_date = ? ");
+			.append("where m.movie_screening_status = 'Y' and s.screening_date = ? and s.theater_name = ? ");
 
-			pstmt = con.prepareStatement(selectTheater.toString());
+			pstmt = con.prepareStatement(selectMovie.toString());
 			pstmt.setString(1, screeningDate);
+			pstmt.setString(2, theaterName);
 			
 			rs = pstmt.executeQuery();
 			ReservingVO rsVO = null;
 			while(rs.next()) {
 				rsVO = ReservingVO.builder()
-						.theaterName(rs.getString("theater_name"))
+						.movieTitle(rs.getString("movie_title"))
+						.movieRating(rs.getString("movie_rating"))
 						.build();
 				theaters.add(rsVO);
 			} // end while

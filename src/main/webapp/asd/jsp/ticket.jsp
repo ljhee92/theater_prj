@@ -90,72 +90,89 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 		$(".selected").click(function(event) {
 		    // 클릭 이벤트를 기본 동작으로부터 중지합니다.
 		    event.preventDefault();
+		});
+		
+		$(".theater").click(function(event) {
+		    // 클릭 이벤트를 기본 동작으로부터 중지합니다.
+		    event.preventDefault();
 		    
-		    /* // 클릭한 a 태그의 href 속성값을 가져옵니다.
-		    var href = window.location.href;
-	
-		    // href 속성값에서 screeningDate 파라미터를 추출합니다.
-		    var url = new URL(href);
-		    var urlparams = url.searchParams;
-		    var screeningDate = urlparams.get('screeningDate'); */
-		    
-		    // 추출된 screeningDate를 사용하여 searchTheater 함수를 호출합니다.
-		    //searchTheater();
+		 	// 선택된 요소의 개수를 세어봅니다.
+		    var selectedCount = $(".theater.selected").length;
+
+		    // 선택된 요소가 하나 이상인 경우에만 선택이 가능합니다.
+		    if (selectedCount < 1 || $(this).hasClass("selected")) {
+		        $(this).toggleClass("selected");
+		        
+		    	// 변경된 쿼리 매개변수 값을 가져옵니다.
+		        var url = new URL(window.location.href);
+		        var params = url.searchParams;
+		        var screeningDate = params.get("screeningDate");
+		        var theaterName = $(this).text();
+		        //alert(theaterName);
+		        searchMovie(screeningDate, theaterName);
+		    }
 		});
 	}); // ready
 
-	/* 날짜를 클릭하면 상영관명 가져옴 */
-	function searchTheater(screeningDate) {
+	// 날짜를 클릭하고 상영관을 클릭하면 상영 중인 영화를 가져옴
+	function searchMovie(screeningDate, theaterName) {
+		//alert(screeningDate+","+theaterName);
 		var request = new XMLHttpRequest();
-		// 클릭한 a 태그의 href 속성값을 가져옵니다.
-	    var href = window.location.href;
-
-	    // href 속성값에서 screeningDate 파라미터를 추출합니다.
-	    var url = new URL(href);
-	    var urlparams = url.searchParams;
-	    var screeningDate = urlparams.get('screeningDate');
 	    
-		request.open("Post", "http://localhost/theater_prj/TheaterSearchServlet?screeningDate=" 
-				+ encodeURIComponent(screeningDate), true);
+		request.open("Post", "http://localhost/theater_prj/MovieSearchServlet?screeningDate=" 
+				+ encodeURIComponent(screeningDate)
+				+ "&theaterName=" + encodeURIComponent(theaterName), true);
 		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 		request.onreadystatechange = function() {
 			if (request.readyState == 4 && request.status == 200) {
 				// 응답을 받으면 searchProcess 함수 호출하여 처리
-				searchProcess(request);
+				searchMovieProcess(request);
 			} // end if
 		};
 		request.send(null);
-	} // searchTheater
+	} // searchMovie
 	
-	function searchProcess(request) {
-		var div = document.getElementById("theaterBox");
-		div.innerHTML = "";
-		
-		var href = window.location.href;
-			
-	    // href 속성값에서 screeningDate 파라미터를 추출합니다.
-	    var url = new URL(href);
-	    var urlparams = url.searchParams;
-	    var screeningDate = urlparams.get('screeningDate');
-	    //alert(screeningDate);
+	function searchMovieProcess(request) {
+		var ul = document.getElementById("movieList");
+		ul.innerHTML = "";
 		
 		// 서버에서 받은 JSON 데이터 파싱
 		var object = JSON.parse(request.responseText);
 		var result = object.result;
 		
-		// 각 Reserving 객체의 theaterName를 기반으로 옵션을 생성하여 추가
 		for(var i = 0; i < result.length; i++) {
-			var theaterName = result[i].value;
+			var movieTitle = result[i].movieTitle;
+			//console.log(movieTitle);
+			var movieRating = result[i].movieRating;
+			//console.log(movieRating);
+			
+			// 각 영화에 대한 li 요소 생성
+	        var li = document.createElement("li");
+	        
+	        // 체크박스 생성
+	        var checkbox = document.createElement("input");
+	        checkbox.type = "checkbox";
+	        checkbox.className = "p-movie-check";
+	        
+	        // 영화 평점 표시를 위한 레이블 생성
+	        var label = document.createElement("label");
 
-			// 새로운 a태그 생성
-			var aTag = document.createElement("a");
-			aTag.setAttribute("href", "ticket.jsp?screeningDate="+screeningDate+"&theaterName="+theaterName);
-			aTag.setAttribute("class", "theater");
-			aTag.setAttribute("style", "margin-left: 2px");
-			aTag.textContent = theaterName;
-
-			// a태그를 div에 추가
-			div.appendChild(aTag);
+	        var movieRatingSpan = document.createElement("span");
+	        movieRatingSpan.className = "rate-"+ movieRating.toLowerCase();
+	        movieRatingSpan.textContent = movieRating; // 평점 값 설정
+	        label.appendChild(movieRatingSpan);
+	        label.appendChild(document.createTextNode(movieTitle));
+	        
+	        var checkSpan = document.createElement("span");
+	        checkSpan.className = "check";
+	        
+	        // li 요소에 체크박스와 레이블 추가
+	        li.appendChild(checkbox);
+	        li.appendChild(label);
+	        li.appendChild(checkSpan);
+	        
+	        // li 요소를 ul에 추가
+	        ul.appendChild(li);
 		} // end for
 	} // searchProcess
 </script>
@@ -186,8 +203,6 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 		theaters = rsDAO.selectAllTheater();
 		pageContext.setAttribute("theaters", theaters);
 		
-		String screeningDate = request.getParameter("screeningDate");
-		pageContext.setAttribute("screeningDate", screeningDate);
 		%>
 
 		<!-- Contaniner -->
@@ -197,7 +212,7 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 				<!-- Contents Start -->
 
 				<!-- 예매 본문 -->
-				<div class="popup" data-theatercode="6001" data-moviecode=""
+				<div class="popup" data-theatercode="" data-moviecode=""
 					data-playdate="${ today }" data-screenplanid="" data-playnumber="">
 					<div class="section-pop-top">
 						<!--<h3 class="title">제목</h3>-->
@@ -250,7 +265,7 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 								%>
 									<li class="datelist">
 										<a href="ticket.jsp?screeningDate=<%= dataDate %>" data-date="<%= dataDate %>"
-										data-selectdate="<%= selectDate %>" class="<%= classString %>" <%=isDisabled%> onclick="searchTheater();">
+										data-selectdate="<%= selectDate %>" class="<%= classString %>" <%=isDisabled%>>
 										<span class="day"><%= dayOfWeek %></span><%= dayOfMonth %></a>
 									</li>
 								<% classStringBuilder.delete(0, classStringBuilder.length());
@@ -263,7 +278,7 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 							<h4 class="title">영화관</h4>
 							<div class="theater-box" id="theaterBox">
 							<c:forEach var="rsVO" items="${ theaters }" varStatus="i">
-								<a href="ticket.jsp?screeningDate=${ screeningDate }&theaterName=${ rsVO.theaterName }"
+								<a href="ticket.jsp?screeningDate=${ param.screeningDate }&theaterName=${ rsVO.theaterName }"
 								 	class="theater">${ rsVO.theaterName }</a>
 							</c:forEach>
 							</div>
@@ -275,33 +290,12 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 								<a href="#" class="" data-type="select">전체 선택</a>
 								<a href="#" class="" data-type="reload">전체 해제</a>
 							</div>
-							<ul class="list-movie-name" style="height: 278px;">
-								<li><input type="checkbox" id="pm_20228797"
-									name="movie_movieCode" value="20228797" class="p-movie-check"><label
-									for="pm_20228797"><span class="rate-15">15</span>범죄도시4</label><span
-									class="check"></span></li>
-								<li><input type="checkbox" id="pm_20236614"
-									name="movie_movieCode" value="20236614" class="p-movie-check"><label
-									for="pm_20236614"><span class="rate-all">0</span>쿵푸팬더4</label><span
-									class="check"></span></li>
-								<li><input type="checkbox" id="pm_20249318"
-									name="movie_movieCode" value="20249318" class="p-movie-check"><label
-									for="pm_20249318"><span class="rate-15">15</span>챌린저스</label><span
-									class="check"></span></li>
-								<li><input type="checkbox" id="pm_20248466"
-									name="movie_movieCode" value="20248466" class="p-movie-check"><label
-									for="pm_20248466"><span class="rate-12">12</span>고스트버스터즈:
-										오싹한 뉴욕</label><span class="check"></span></li>
-
-								<li><input type="checkbox" id="pm_20235613"
-									name="movie_movieCode" value="20235613" disabled=""
-									class="p-movie-check"><label for="pm_20235613"><span
-										class="rate-15">15</span>스턴트맨</label><span class="check"></span></li>
-								<li><input type="checkbox" id="pm_20249313"
-									name="movie_movieCode" value="20249313" disabled=""
-									class="p-movie-check"><label for="pm_20249313"><span
-										class="rate-all">0</span>포켓몬스터: 성도지방 이야기, ...</label><span
-									class="check"></span></li>
+							<ul class="list-movie-name" id="movieList" style="height: 390px;">
+								<!-- <li><input type="checkbox" id="pm_20228797"
+									name="movie_movieCode" value="20228797" class="p-movie-check">
+									<label for="pm_20228797"><span class="rate-15">15</span>범죄도시4</label>
+									<span class="check"></span>
+								</li> -->
 							</ul>
 						</div>
 					</div>
@@ -310,8 +304,8 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 					<div class="section-pop-right">
 						<div class="wrap-timetable-head" style = "align-content: center;">
 							<h4 class="title">시간표</h4>
-							
 						</div>
+						
 						<div class="wrap-timetable">
 							<p class="ready">영화관과 영화를 선택하면 시간표가 나옵니다.</p>
 						</div>
