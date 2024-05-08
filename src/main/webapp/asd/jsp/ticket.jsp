@@ -72,6 +72,18 @@
 <script src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
 <!-- 예매 CSS, JS -->
 
+<!-- S 로그인 세션 확인  -->
+<%
+// 세션에서 로그인 여부 확인
+String id = (String)session.getAttribute("id");
+if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디렉션
+%>
+    <script type="text/javascript">
+    window.location.href = "login.jsp?prevPage=ticket.jsp";
+    </script>  
+<%}%>
+<!-- E 로그인 세션 확인  -->
+
 <script type="text/javascript">
 	$(function() {
 		//a 태그 클릭 시 이벤트 핸들러 등록
