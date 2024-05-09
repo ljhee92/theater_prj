@@ -151,5 +151,57 @@ public class ReservingDAO {
 
 		return theaters;
 	} // selectTheater
+	
+	/**
+	 * 선택한 날짜의 영화관의 영화의 상영시간 가져오기
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<ReservingVO> selectMovieTime(String screeningDate, String theaterName, String movieCode) throws SQLException {
+		List<ReservingVO> theaters = new ArrayList<ReservingVO>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder selectMovieTime = new StringBuilder();
+			selectMovieTime.append("select m.movie_title, m.movie_rating, s.theater_number, s.screening_code, st.screening_time ")
+			.append("from screening s ")
+			.append("inner join screening_time st ")
+			.append("on s.screening_round = st.screening_round ")
+			.append("inner join movie m ")
+			.append("on s.movie_code = m.movie_code ")
+			.append("where s.movie_code = ? and s.screening_date = ? and s.theater_name = ? ")
+			.append("order by theater_number, screening_time ");
+
+			pstmt = con.prepareStatement(selectMovieTime.toString());
+			pstmt.setString(1, movieCode);
+			pstmt.setString(2, screeningDate);
+			pstmt.setString(3, theaterName);
+			
+			rs = pstmt.executeQuery();
+			ReservingVO rsVO = null;
+			while(rs.next()) {
+				rsVO = ReservingVO.builder()
+						.movieTitle(rs.getString("movie_title"))
+						.movieRating(rs.getString("movie_rating"))
+						.theaterNumber(rs.getString("theater_number"))
+						.screeningCode(rs.getString("screening_code"))
+						.screeningTime(rs.getString("screening_time"))
+						.build();
+				theaters.add(rsVO);
+			} // end while
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		} // end finally
+
+		return theaters;
+	} // selectTheater
 
 } // class

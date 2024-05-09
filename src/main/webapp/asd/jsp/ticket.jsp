@@ -78,53 +78,149 @@
 String id = (String)session.getAttribute("id");
 if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디렉션
 %>
-    <script type="text/javascript">
-    window.location.href = "login.jsp?prevPage=ticket.jsp";
-    </script>  
+<script type="text/javascript">
+window.location.href = "login.jsp?prevPage=ticket.jsp";
+</script>  
 <%}%>
 <!-- E 로그인 세션 확인  -->
 
 <script type="text/javascript">
 	$(function() {
+		$("div.section-pop-top", "div.popup").on("click", "a.btn-rsv-reset", function() {
+			if (confirm("모든 선택정보가 사라집니다. 계속하시겠습니까?") == false) {
+				return false;
+			}
+			location.href = "ticket.jsp"
+		});
+		
 		//a 태그 클릭 시 이벤트 핸들러 등록
 		$(".selected").click(function(event) {
 		    // 클릭 이벤트를 기본 동작으로부터 중지합니다.
 		    event.preventDefault();
 		});
 		
-		$(".theater").click(function(event) {
-			// 클릭 이벤트를 기본 동작으로부터 중지합니다.
+		$(".theater-box").on("click", ".theater", function(event) {
+			// a Tag 클릭 이벤트를 기본 동작으로부터 중지
 		    event.preventDefault();
-		    
-		 	// 선택된 요소의 개수를 세어봅니다.
-		    var selectedCount = $(".theater.selected").length;
+			
+			var clickedId = $(this).attr("id");
+			
+			if($("#"+clickedId).hasClass("selected")) {
+				$(".theater-box .theater.selected").removeClass("selected");
+				$("#movieList > li").remove();
+				$("#movieList > p").remove();
+				$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
+		    } else {
+				$(".theater-box .theater.selected").removeClass("selected");
+				$("#"+clickedId).addClass("selected");
+				
+				$(".wrap-timetable > .title").remove();
+			    $(".wrap-timetable > .theater-info").remove();
+			    $(".wrap-timetable > .time").remove();
+			    $(".wrap-timetable > p").remove();
+				$(".wrap-timetable").append($("<p>").text("영화관과 영화를 선택하면 시간표가 나옵니다.").addClass("ready"));
 
-		    // 선택된 요소가 하나 이하인 경우에만 선택이 가능합니다.
-		    if (selectedCount < 1 || $(this).hasClass("selected")) {
-		        $(this).toggleClass("selected");
-		        
-		    	// 변경된 쿼리 매개변수 값을 가져옵니다.
-		        var url = new URL(window.location.href);
+				var url = new URL(window.location.href);
 		        var params = url.searchParams;
 		        var screeningDate = params.get("screeningDate");
 		        var theaterName = $(this).text();
-		        //alert(theaterName);
 		        searchMovie(screeningDate, theaterName);
-		    } else {
-		    	alert("선택한 영화관을 선택해제한 후 재선택해주세요.");
-		    } // end if
+			} // end else
 		});
 		
 		$("#movieList").on("click", "li > label", function(event) {
-			// label이 속한 li 요소를 찾습니다.
+
+		    // label이 속한 li 요소를 찾습니다.
 		    var li = $(this).parent("li");
 		    
 		    // li 요소에서 input checkbox의 id 값을 가져옵니다.
-		    var checkboxId = li.find("input[type='checkbox']").attr("id");
+		    var url = new URL(window.location.href);
+		    var params = url.searchParams;
+		    var screeningDate = params.get("screeningDate");
+		    var theaterName = $(".theater.selected").text();
+		    var movieCode = li.find("input[type='checkbox']").attr("id");
 		    
-		    // 가져온 id 값을 출력하거나 필요한 다른 작업을 수행할 수 있습니다.
-		    alert(checkboxId);
+		    $(".wrap-timetable > .title").remove();
+		    $(".wrap-timetable > .theater-info").remove();
+		    $(".wrap-timetable > .time").remove();
+
+		    searchTime(screeningDate, theaterName, movieCode);
+		    //alert(movieCode+","+screeningDate+","+theaterName);
 	    });
+		
+ 		$(".wrap-timetable").on("click", ".time", function(event) {
+			var clickedId = $(this).attr("id");
+			
+			if($("#"+clickedId).hasClass("on")) {
+				 $(".wrap-timetable .time.on").removeClass("on").css("color", "black");
+			} else {
+				 $(".wrap-timetable .time.on").removeClass("on").css("color", "black");
+				$("#"+clickedId).addClass("on").css("color", "white");
+			} // end else
+		}); 
+ 		
+ 		$(".btn-rsv-next").click(function(event) {
+ 			var url = new URL(window.location.href);
+ 		    var params = url.searchParams;
+ 		    var screeningDate = params.get("screeningDate");
+ 		    var theaterName = $(".theater.selected").text();
+ 		    var movieCode = $("#movieList>li").find("input[type='checkbox']:checked").attr("id");
+ 		    var movieTitle = $("#movieList>li").find("input[type='checkbox']:checked").attr("movieTitle");
+ 		    var movieRate = $("#movieList>li").find("input[type='checkbox']:checked").parent().find("span").text();
+ 		    var theaterNumber = $(".wrap-timetable > .time.on").attr("theaterNumber");
+ 		    var screeningCode = $(".wrap-timetable > .time.on").attr("id");
+ 		    var screeningTime = $(".wrap-timetable > .time.on").text();
+ 		    
+ 		    // 유효성 검증
+ 		    if(theaterName=="") {
+ 		    	alert("영화관을 선택해주세요.");
+ 		    	return;
+ 		    } // end if
+ 		    
+ 		    if(movieTitle=="" || movieRate =="") {
+ 		    	alert("영화를 선택해주세요.");
+ 		    	return;
+ 		    } // end if
+ 		    
+ 		    if(theaterNumber =="" || screeningCode == "" || screeningTime=="") {
+ 		    	alert("영화 시간을 선택해주세요.");
+ 		    	return;
+ 		    } // end if
+ 		    
+ 		    if(movieRate.length > 3) {
+ 		    	alert("영화는 한 개만 선택 가능합니다.");
+ 		    	return;
+ 		    } // end if
+ 		    
+ 		    // 다음 페이지 파라미터로 넘길 값들 JSON으로 변경 
+ 		    var params = {
+ 		    		screeningDate: screeningDate,
+ 		    		theaterName: theaterName,
+ 		    		theaterNumber: theaterNumber,
+ 		    		movieCode: movieCode,
+ 		    		movieTitle: movieTitle,
+ 		    		movieRate: movieRate,
+ 		    		screeningCode: screeningCode,
+ 		    		screeningTime: screeningTime
+ 		    }
+ 		    
+ 		   	var form = document.createElement('form');        //form엘리먼트 생성
+ 		    
+ 		    form.setAttribute('method', 'post');              //POST 메서드 적용
+ 		    form.setAttribute('action', "selectSeat.jsp");	      //데이터를 전송할 url
+ 		    document.charset = "utf-8";                       //인코딩
+ 		    
+ 		    for (var key in params) {	// key, value로 이루어진 객체 params
+ 		        var hiddenField = document.createElement('input');
+ 		        hiddenField.setAttribute('type', 'hidden'); //값 입력
+ 		        hiddenField.setAttribute('name', key);
+ 		        hiddenField.setAttribute('value', params[key]);
+ 		        form.appendChild(hiddenField);
+ 		    }
+ 		    
+ 		    document.body.appendChild(form);
+ 		    form.submit();	// 전송
+ 		});
 	}); // ready
 
 	// 날짜를 클릭하고 상영관을 클릭하면 상영 중인 영화를 가져옴
@@ -154,42 +250,109 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 		var object = JSON.parse(request.responseText);
 		var result = object.result;
 		
-		for(var i = 0; i < result.length; i++) {
-			var movieTitle = result[i].movieTitle;
-			var movieRating = result[i].movieRating;
-			var movieCode = result[i].movieCode;
-
-			// 각 영화에 대한 li 요소 생성
-	        var li = document.createElement("li");
-	        
-	        // 체크박스 생성
-	        var checkbox = document.createElement("input");
-	        checkbox.type = "checkbox";
-	        checkbox.className = "p-movie-check";
-	        checkbox.setAttribute("id", movieCode);
-	        
-	        // 영화 등급 표시를 위한 레이블 생성
-	        var label = document.createElement("label");
-	        label.setAttribute("for", movieCode);
-
-	        var movieRatingSpan = document.createElement("span");
-	        movieRatingSpan.className = "rate-"+ movieRating.toLowerCase();
-	        movieRatingSpan.textContent = movieRating; // 등급 값 설정
-	        label.appendChild(movieRatingSpan);
-	        label.appendChild(document.createTextNode(movieTitle));
-	        
-	        var checkSpan = document.createElement("span");
-	        checkSpan.className = "check";
-	        
-	        // li 요소에 체크박스와 레이블 추가
-	        li.appendChild(checkbox);
-	        li.appendChild(label);
-	        li.appendChild(checkSpan);
-	        
-	        // li 요소를 ul에 추가
-	        ul.appendChild(li);
-		} // end for
+		if(result.length != 0) {
+			for(var i = 0; i < result.length; i++) {
+				var movieTitle = result[i].movieTitle;
+				var movieRating = result[i].movieRating;
+				var movieCode = result[i].movieCode;
+	
+				// 각 영화에 대한 li 요소 생성
+		        var li = document.createElement("li");
+		        
+		        // 체크박스 생성
+		        var checkbox = document.createElement("input");
+		        checkbox.type = "checkbox";
+		        checkbox.className = "p-movie-check";
+		        checkbox.setAttribute("id", movieCode);
+		        checkbox.setAttribute("movieTitle", movieTitle);
+		        
+		        // 영화 등급 표시를 위한 레이블 생성
+		        var label = document.createElement("label");
+		        label.setAttribute("for", movieCode);
+		        label.setAttribute("style", "overflow:hidden; text-overflow: ellipsis; white-space: nowrap; scrollbar-gutter: stable;");
+	
+		        var movieRatingSpan = document.createElement("span");
+		        movieRatingSpan.className = "rate-"+ movieRating.toLowerCase();
+		        movieRatingSpan.textContent = movieRating; // 등급 값 설정
+		        label.appendChild(movieRatingSpan);
+		        label.appendChild(document.createTextNode(movieTitle));
+		        
+		        var checkSpan = document.createElement("span");
+		        checkSpan.className = "check";
+		        
+		        // li 요소에 체크박스와 레이블 추가
+		        li.appendChild(checkbox);
+		        li.appendChild(label);
+		        li.appendChild(checkSpan);
+		        
+		        // li 요소를 ul에 추가
+		        ul.appendChild(li);
+			} // end for
+		} else {
+			// p 태그 생성
+			var paragraph = $("<p>");
+			paragraph.text("해당 날짜, 영화관에 상영 중인 영화가 없습니다.").css({"color":"blue", "text-align":"center", "margin-top":"30%"});
+			$("#movieList").append(paragraph);
+		} // end else
 	} // searchProcess
+	
+	// 선택 날짜, 영화관, 영화의 시간 가져오기
+	function searchTime(screeningDate, theaterName, movieCode) {
+		// ajax에서 처리할 데이터 모음
+		var param = {
+				screeningDate: screeningDate,
+				theaterName: theaterName,
+				movieCode: movieCode
+		}
+		
+		$.ajax({
+			type: 'POST',
+			url: '/theater_prj/MovieTimeServlet',
+			data: param,
+			success: function(response) {
+				// 받은 JSON 데이터를 파싱하여 표시
+				var data = JSON.parse(response);
+				$(".wrap-timetable > p").remove();
+				displayData(response);
+			},
+			error: function(xhr, status, error) {
+				console.error('Error', error);
+			}
+		});
+	} // searchTime
+	
+	// 시간표에 파싱한 데이터를 표시하는 함수
+	function displayData(response) {
+		var object = JSON.parse(response);
+		console.log(object);
+		
+		var divTimeTable = $(".wrap-timetable");
+		
+		for(var i = 0; i < object.length; i++) {
+			var divTitle = $("<div>").addClass("title");
+			var spanRate = $("<span>").addClass("rate-"+object[i].movieRating.toLowerCase());
+			var divTheaterInfo = $("<div>").addClass("theater-info");
+			var divTime = $("<div>").addClass("time");
+			
+			spanRate.append(object[i].movieRating);
+			divTitle.append(spanRate);
+			divTitle.append(object[i].movieTitle);
+			divTimeTable.append(divTitle);
+			
+			divTheaterInfo.attr("theaterName", object[i].theaterName);
+			divTheaterInfo.append(object[i].theaterNumber);
+			divTimeTable.append(divTheaterInfo);
+			
+			divTime.append(object[i].screeningTime);
+			divTime.css("margin-left", "25px");
+			divTime.css("padding", "8px 20px");
+			divTime.attr("screeningDate", object[i].screeningDate);
+			divTime.attr("id", object[i].screeningCode);
+			divTime.attr("theaterNumber", object[i].theaterNumber);
+			divTimeTable.append(divTime);
+		} // end for
+	} // displayDate
+		
 </script>
 </head>
 <body class="top">
@@ -239,7 +402,7 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 							<input type="hidden" name="cal" id="rsvcal" class="input-cal hasDatepicker"
 								value="${ today }" style="display: none;">
 							<ul class="cal-week">
-								<li><a href="#" class="prev viewDate" data-viewdate="">이전</a></li>
+								<li><a href="#" class="prev viewDate" data-viewdate="" onclick="alert('기능구현중')">이전</a></li>
 								
 								<%
 								StringBuilder classStringBuilder = new StringBuilder();
@@ -285,7 +448,7 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 									</li>
 								<% classStringBuilder.delete(0, classStringBuilder.length());
 								} // end for %>
-								<li><a href="#" class="next viewDate" data-viewdate="">다음</a></li>
+								<li><a href="#" class="next viewDate" data-viewdate="" onclick="alert('기능구현중')">다음</a></li>
 							</ul>
 						</div>
 						
@@ -294,7 +457,7 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 							<div class="theater-box" id="theaterBox">
 							<c:forEach var="rsVO" items="${ theaters }" varStatus="i">
 								<a href="ticket.jsp?screeningDate=${ param.screeningDate }&theaterName=${ rsVO.theaterName }"
-								 	class="theater">${ rsVO.theaterName }</a>
+								 	class="theater" id="${ rsVO.theaterName }">${ rsVO.theaterName }</a>
 							</c:forEach>
 							</div>
 						</div>
@@ -306,7 +469,7 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 								<a href="#" class="" data-type="reload">전체 해제</a> -->
 							</div>
 							<ul class="list-movie-name" id="movieList" style="height: 390px;">
-								<p class="ready" style="color: gray;">날짜와 영화관을 선택하면 영화가 나옵니다.</p>
+								<p class="ready" style="color: #7d7d7d; text-align: center; margin-top: 30%;">날짜와 영화관을 선택하면 영화가 나옵니다.</p>
 							</ul>
 						</div>
 					</div>
@@ -349,387 +512,5 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 		<jsp:include page="footer.jsp"></jsp:include>
 		<!-- E footer_area -->
 	</div>
-	
-<script type="text/javascript">
-	$(function() {
-		/* $.desktop.reservepop = {};
-		$.desktop.reservepop = {
-			option : {
-				theaterCode : "",
-				movieCode : "",
-				playDate : "",
-				screenPlanId : "",
-				playNumber : "",
-				sortType : 1,
-				grade : "",
-				screenPropertyCode : 0
-			},
-
-			initLoad : true,
-			selectedMovieCode : new Array(),
-			firstScreenPlanId : "",
-			dateWidget : null,
-			mouseOverMinimap : null,
-
-			init : function() {
-				$.desktop.reservepop.option.theaterCode = $("div.popup").data("theatercode");
-				$.desktop.reservepop.option.movieCode = $("div.popup").data("moviecode");
-				$.desktop.reservepop.option.playDate = $("div.popup").data("playdate");
-				$.desktop.reservepop.option.screenPlanId = $("div.popup").data("screenplanid");
-				$.desktop.reservepop.option.playNumber = $("div.popup").data("playnumber");
-
-				$.desktop.firstScreenPlanId = $.desktop.reservepop.option.screenPlanId;
-				$.desktop.reservepop.initLoad = true;
-				$.desktop.reservepop.selectedMovieCode = new Array();
-
-				if ($.desktop.reservepop.option.movieCode != "") {
-					$.desktop.reservepop.selectedMovieCode
-							.push($.desktop.reservepop.option.movieCode);
-				}
-
-				$.desktop.reservepop._initEvent();
-				$.desktop.reservepop._initSelected();
-
-				$.desktop.reservepop.loadDate($.desktop.reservepop.option.playDate);
-				$.desktop.reservepop.loadMovie($.desktop.reservepop.option.sortType);
-
-				$.desktop.reservepop.dateWidget = $("div.wrap-date #rsvcal", "div.popup").hide().datepicker(
-						{
-							minDate : "2024-04-30",
-							maxDate : "2024-05-30",
-							dateFormat : "yy-mm-dd",
-							onSelect : function(d, i) {
-								var selectedDate = d.replace(/-/gi, "");
-								$.desktop.reservepop.loadPlayDate(selectedDate,
-										selectedDate);
-							}
-						});
-			},
-
-			_initEvent : function() {
-
-				$("div.wrap-date", "div.popup").on("click", ".btn-show-cal", function(e) {
-					if ($.desktop.reservepop.dateWidget.datepicker("widget").is(":hidden")) {
-						$.desktop.reservepop.dateWidget.datepicker("show").datepicker("widget").show()
-						.position({
-							my : "right bottom",
-							at : "right top",
-							of : this
-						});
-					} else {
-						$.desktop.reservepop.dateWidget.hide();
-					}
-					e.preventDefault();
-				}); */
-
-				/* $("a.close-modal", "div.popup").click(function() {
-					if (confirm("모든 선택정보가 사라집니다. 계속하시겠습니까?") == false) {
-						return false;
-					}
-
-					$.modal.close();
-					return false;
-				}); */
-
-				$("div.section-pop-top", "div.popup").on("click",
-						"a.btn-rsv-reset", function() {
-							if (confirm("모든 선택정보가 사라집니다. 계속하시겠습니까?") == false) {
-								return false;
-							}
-							/* var theaterCode = $("div#popup_olddata").data("theatercode");
-							var movieCode = $("div#popup_olddata").data("moviecode");
-							var playDate = $("div#popup_olddata").data("playdate");
-							var screenPlanId = $("div#popup_olddata").data("screenplanid");
-							var playNumber = $("div#popup_olddata").data("playnumber");
-
-							$.desktop.reserve.openPrev(
-							    {
-							        playDate: playDate,
-							        theaterCode: theaterCode,
-							        movieCode: "",
-							        screenPlanId: "",
-							        playNumber: "",
-							    }
-							); */
-							location.href = "ticket.jsp"
-						});
-
-				/* $("div.wrap-date", "div.popup").on("click", "a.viewDate", function(event) {
-					var viewDate = $(this).data("viewdate");
-					if (viewDate != "") {
-						$.desktop.reservepop.loadDate(viewDate);
-					}
-					event.preventDefault();
-					return false;
-				}); */
-
-				/* $("div.wrap-date", "div.popup").on("click", "li.datelist>a", function(event) {
-					if ($(this).hasClass("disabled") == false) {
-						var date = $(this).data("date");
-						var selectDate = $(this).data("selectdate");
-						$("div.wrap-date #rsvcal", "div.popup").val(selectDate);
-
-						$.desktop.reservepop.option.playDate = date;
-						$(this).closest("ul").find("li.datelist>a").removeClass("selected");
-						$(this).closest("ul").find("li.datelist>a._sat").addClass("sat").removeClass("_sat");
-						$(this).closest("ul").find("li.datelist>a._sun").addClass("sun").removeClass("_sun");
-
-						$(this).addClass("selected");
-
-						if ($(this).hasClass("sun")) {
-							$(this).addClass("_sun").removeClass("sun");
-						}
-						if ($(this).hasClass("sat")) {
-							$(this).addClass("_sat").removeClass("sat");
-						}
-
-						$.desktop.reservepop.loadMovie();
-					}
-					event.preventDefault();
-					return false;
-				}) */
-
-				/* $("div.theater-box", "div.popup").on("click", "a", function(event) {
-					if ($.desktop.reservepop.option.theaterCode != $(this).data("theatercode")) {
-						$.desktop.reservepop.option.theaterCode = $(this).data("theatercode");
-						$("div.wrap-theater div.theater-box a.theater", "div.popup").removeClass("selected");
-						$(this).addClass("selected");
-						$.desktop.reservepop.selectedMovieCode = new Array();
-						$.desktop.reservepop.loadDate($.desktop.reservepop.option.playDate);
-						$.desktop.reservepop.loadMovie();
-						$.desktop.reservepop.loadScreenPlan($.desktop.reservepop.selectedMovieCode);
-					}
-					event.preventDefault();
-					return false;
-				});
-
-				$("div.wrap-movielist", "div.popup").on("click", ".p-movie-check", function(event) {
-					$.desktop.reservepop.selectedMovieCode = new Array();
-					$("input.p-movie-check:checked", "div.wrap-movielist").each(function(e) {
-						$.desktop.reservepop.selectedMovieCode.push($(this).val());
-					});
-					$.desktop.reservepop.loadScreenPlan($.desktop.reservepop.selectedMovieCode);
-				});
-
-				$("div.wrap-movielist", "div.popup").on("click", "div.btn-box1>a", function(event) {
-					event.preventDefault();
-					var type = $(this).data("type");
-					if (type == "select") {
-						$.desktop.reservepop.selectedMovieCode = new Array();
-						$("div.wrap-movielist input.p-movie-check", "div.popup").each(function() {
-							if ($(this).prop("disabled") == false) {
-								$.desktop.reservepop.selectedMovieCode.push($(this).val());
-								$(this).prop("checked", true);
-							}
-						});
-						$.desktop.reservepop.loadMovie();
-					} else if (type == "reload") {
-						$.desktop.reservepop.selectedMovieCode = new Array();
-						$.desktop.reservepop.loadMovie();
-						$.desktop.reservepop.loadScreenPlan($.desktop.reservepop.selectedMovieCode);
-					}
-					return false;
-				});
-
-				$("div.wrap-movielist").on("click", "div.btn-box2>a", function(event) {
-					event.preventDefault();
-					if ($(this).hasClass("selected") == false) {
-						var sorttype = $(this).data("sorttype");
-						$(this).closest("div.btn-box2").find("a").removeClass("selected");
-						$(this).addClass("selected");
-						$.desktop.reservepop.loadMovie(sorttype);
-					}
-					return false;
-				});
-
-				$("div.wrap-timetable", "div.popup").on("mouseenter", ".time", function(e) {
-					$("div.wrap-timetable div.pop-map","div.popup").remove();
-					var $this = $(this);
-					var screenPlanId = $(this).data("screenplanid");
-					$.desktop.reservepop.mouseOverMinimap = screenPlanId;
-					
-					$.post("/popup/ReserveMinimap",{screenPlanId : screenPlanId}, function(data) {
-						if ($.desktop.reservepop.mouseOverMinimap == screenPlanId) {
-							var $timeTable = $("<div class='pop-map'>"+ data+ "</div>");
-							$("div.wrap-timetable", "div.popup").append($timeTable);
-							var pos_this = $this.position();
-							var h_pop = $timeTable.height();
-							var w_pop = $timeTable.width();
-							var h_this = $this.height();
-							var w_this = $this.width();
-							$timeTable.css("top", parseInt(pos_this.top - h_pop - h_this + 7));
-							if ($this.index() % 3 == 2) {
-								$timeTable.css("left", parseInt(pos_this.left + w_this - w_pop - 7));
-							} else {
-								$timeTable.css("left",parseInt(pos_this.left));
-							}
-							$timeTable.css("margin-left", $this.css("margin-left"));
-							if ($.desktop.reservepop.mouseOverMinimap != screenPlanId) {
-								$timeTable.remove();
-							}
-						}
-					})
-				});
-
-				$("div.wrap-timetable", "div.popup").on("mouseleave", ".time", function() {
-					$("div.wrap-timetable div.pop-map", "div.popup").remove();
-				});
-
-				$("div.wrap-timetable", "div.popup").on("click", ".time", function(e) {
-					$(".wrap-timetable .time").removeClass("on");
-					$.desktop.reservepop.option.screenPlanId = $(this).data("screenplanid");
-					$.desktop.reservepop.option.grade = $(this).data("grade");
-					$.desktop.reservepop.option.screenPropertyCode = $(this).data("sproperty");
-
-					$(this).toggleClass("on");
-				});
-
-				$(".section-pop-bottom", "div.popup").on("click", "a.btn-rsv-next", function(event) {
-					event.preventDefault();
-
-					if ($.desktop.reservepop.option.theaterCode == "") {
-						alert("영화관을 선택하세요.");
-						return false;
-					}
-
-					if ($.desktop.reservepop.option.playDate == "") {
-						alert("날짜를 선택하세요.");
-						return false;
-					}
-
-					if ($.desktop.reservepop.option.screenPlanId == "") {
-						alert("영화 시간을 선택하세요.");
-						return false;
-					}
-
-					if ($.desktop.reservepop.option.grade == "18"
-							|| $.desktop.reservepop.option.grade == "x") {
-						alert("청불등급\r\n\r\n본 영화는 청소년 관람불가 영화입니다.\r\n\r\n만 18세 미만의 고객님(영, 유아)은 보호자(부모님 포함)를 동반하여도 관람하실 수 없습니다.\r\n만 18세 이상이라도 초/중/고 재학중인 고객님은 영화를 관람하실 수 없습니다.\r\n영화 관람 시, 반드시 신분증을 지참해주세요.");
-					} else if ($.desktop.reservepop.option.grade == "15") {
-						alert("15세 이상 등급\r\n\r\n본 영화는 15세 이상 관람 영화입니다.\r\n\r\n만 15세 미만 고객님(영, 유아포함)께서는 반드시 보호자(부모님 포함) 동반하에 관람이 가능합니다.");
-					} else if ($.desktop.reservepop.option.grade == "12") {
-						alert("12세 이상 등급\r\n\r\n본 영화는 12세 이상 관람 영화입니다.\r\n\r\n만 12세 미만 고객님(영, 유아포함)께서는 반드시 보호자(부모님 포함) 동반하에 관람이 가능합니다");
-					}
-
-					$.desktop.seatchoice.open({
-						playDate : $.desktop.reservepop.option.playDate,
-						theaterCode : $.desktop.reservepop.option.theaterCode,
-						screenPlanId : $.desktop.reservepop.option.screenPlanId
-					});
-
-					return false;
-				});
-			},
-
-			_initSelected : function() {
-				$("div.wrap-theater div.theater-box", "div.popup").find("a").removeClass("selected");
-				$("div.wrap-theater div.theater-box", "div.popup").find(
-								"a[data-theatercode=" + $.desktop.reservepop.option.theaterCode + "]").addClass("selected");
-			},
-
-			loadDate : function(viewDate) {
-				$.post("/popup/ReserveDateList", {
-					theaterCode : $.desktop.reservepop.option.theaterCode,
-					selectDate : $.desktop.reservepop.option.playDate,
-					viewDate : viewDate,
-				}, function(data) {
-					var $data = $(data);
-					var maxdate = $data.data("maxdate");
-					$("div.wrap-date #rsvcal", "div.popup").hide().datepicker("option", "maxDate", maxdate);
-					$("div.wrap-date ul.cal-week", "div.popup").html($data.html());
-				});
-			},
-
-			loadPlayDate : function(playDate) {
-				$.post("/popup/ReserveDateList", {
-					theaterCode : $.desktop.reservepop.option.theaterCode,
-					selectDate : playDate,
-					viewDate : playDate,
-				}, function(data) {
-					var $data = $(data);
-					var maxdate = $data.data("maxdate");
-					$("div.wrap-date #rsvcal", "div.popup").datepicker("option", "maxDate", maxdate);
-					$("div.wrap-date ul.cal-week", "div.popup").html($data.html());
-					$.desktop.reservepop.option.playDate = playDate;
-					$(this).closest("ul").find("li.datelist>a").removeClass("selected");
-					$(this).addClass("selected");
-
-					$.desktop.reservepop.loadMovie();
-				});
-			},
-
-			loadMovie : function(sortType) {
-				$.desktop.reservepop.option.sortType = sortType == undefined ? $.desktop.reservepop.option.sortType
-						: sortType;
-
-				if ($("div.wrap-date ul.cal-week a[data-date=" + $.desktop.reservepop.option.playDate + "]",
-						"div.popup").hasClass("disabled") == true) {
-					$("div.wrap-movielist input.p-movie-check", "div.popup").prop("disabled", true).prop("checked", false);
-					$.desktop.reservepop.clearScreenPlan();
-					return;
-				}
-
-				$.post("/popup/ReserveMovieList",
-						{
-						"PlayDate" : $.desktop.reservepop.option.playDate,
-						"TheaterCode" : $.desktop.reservepop.option.theaterCode,
-						"movieCode" : $.desktop.reservepop.selectedMovieCode
-								.toString(),
-						"SortType" : $.desktop.reservepop.option.sortType
-						},
-				function(data) {
-					$("div.wrap-movielist", "div.popup").html(data);
-
-					var selectMovieCode = new Array();
-					$("div.wrap-movielist input.p-movie-check", "div.popup").each(function() {
-						for (var i = 0; i < $.desktop.reservepop.selectedMovieCode.length; i++) {
-							if ($(this).val() == $.desktop.reservepop.selectedMovieCode[i]) {
-								if ($(this).prop("disabled") == true) {
-									$(this).prop("checked", false).removeProp("checked");
-								} else {
-									selectMovieCode.push($.desktop.reservepop.selectedMovieCode[i])
-								}
-								break;
-							}
-						}
-					});
-
-					$.desktop.reservepop.loadScreenPlan(selectMovieCode);
-				});
-			},
-
-			loadScreenPlan : function(movieCodeList) {
-				if (movieCodeList.length == 0) {
-					$.desktop.reservepop.clearScreenPlan();
-					return;
-				}
-
-				$.post("/popup/ReserveScreenPlan", {
-					"theaterCode" : $.desktop.reservepop.option.theaterCode,
-					"playDate" : $.desktop.reservepop.option.playDate,
-					"movieCode" : movieCodeList.toString()
-				}, function(data) {
-					if ($.trim(data) == "")
-						$.desktop.reservepop.clearScreenPlan();
-					else $("div.wrap-timetable", "div.popup").html(data);
-					if ($.desktop.firstScreenPlanId != "")
-						$("div.wrap-timetable div[data-screenplanid=" + $.desktop.firstScreenPlanId + "]", "div.popup").click();
-
-					$.desktop.firstScreenPlanId = "";
-				});
-			},
-
-			clearScreenPlan : function() {
-				$("div.wrap-timetable", "div.popup").html('<p class="ready">영화관과 영화를 선택하면 시간표가 나옵니다.</p>');
-			}
-		} */
-	});
-</script>
-
-<!-- <script type="text/javascript">
-	$(function() {
-		$.desktop.reservepop.init();
-	})
-</script> -->
 </body>
 </html>
