@@ -101,16 +101,21 @@
 	                    <h1 class="h3 mb-0 text-gray-800">공지사항관리</h1>
 	                </div>
 	                
+	                <form action="notice.jsp" name="frmSearch" id="frmSearch">
 	                <div style = "display: flex;">
-	                	<select class = "form-control form-control-user" style = "width: 150px; margin-right: 20px;">
-	                		<option value = "N/A">구분 선택</option>
+	                	<select name="field" id="field" class = "form-control form-control-user" style = "width: 150px; margin-right: 20px;">
+	                		<option value = "NA">구분 선택</option>
 	                		<c:forEach var="bVO" items="${ categories }" varStatus="i">
-                			<option value = "${ bVO.categoryNumber }"><c:out value="${ bVO.categoryName }"/></option>
+                			<option value = "${ bVO.categoryName }"${ param.field eq bVO.categoryName?" selected='selected'":"" }>
+                				<c:out value="${ bVO.categoryName }"/></option>
 	                		</c:forEach>
 	                	</select>
-	                	<input type = "text" class = "form-control form-control-user" style = "width: 500px; margin-right: 20px;" placeholder = "검색할 내용을 입력해주세요."/>
-	                	<input type = "button" class = "btn btn-primary btn-user btn-block" style = "width: 100px;" value = "검색">
+	                	<input type = "text" name="keyword" id="keyword" value="${ param.keyword }" class = "form-control form-control-user"
+	                		style = "width: 500px; margin-right: 20px;" placeholder = "검색할 내용을 입력해주세요."/>
+	                	<input type="text" style="display: none;">
+	                	<input type = "button" id="btnSearch" class = "btn btn-primary btn-user btn-block" style = "width: 100px;" value = "검색">
 	                </div>
+	                </form>
 	                
 	                <div style = "height: 520px;">
 		                <table class="table" style = "margin-top: 25px;">
@@ -128,7 +133,8 @@
 		                	<tr>
 	                		<td><c:out value="${ bVO.boardNumber }"/></td>
 	                		<td><c:out value="${ bVO.categoryName }"/></td>
-	                		<td><a href="noticeDetail.jsp?num=${ bVO.boardNumber }&rnum=${ bVO.rnum }"><c:out value="${ bVO.boardTitle }"/></a></td>
+	                		<td><a href="noticeDetail.jsp?num=${ bVO.boardNumber }&currentPage=${ empty param.currentPage ?1:param.currentPage }">
+	                			<c:out value="${ bVO.boardTitle }"/></a></td>
 	                		<td><c:out value="${ bVO.boardDate }"/></td>
 	                		<td><c:out value="${ bVO.boardViews }"/></td>
 	                		</tr>
@@ -139,8 +145,21 @@
 	                
 	                <div style="display: flex; justify-content: space-between; margin-top: 30px;">
 						<span style="display: flex; align-items: flex-end; margin: auto;">
+							<c:choose>
+							    <c:when test="${ param.field eq 'NA'}">
+							        <c:set var="link" value=""/>
+							    </c:when>
+							    <c:otherwise>
+							        <c:set var="link" value="&field=${ param.field }"/>
+							    </c:otherwise>
+							</c:choose>
+							<c:if test ="${ not empty param.keyword }">
+								<c:set var="link2" value="&keyword=${ param.keyword }"/>
+							</c:if>
 							<% for(int i = 1; i <= totalPage; i++) { %>
-								<input type="button" class="btn btn-primary btn-user btn-block" style="width: 40px; height: 40px; margin-right: 10px; margin-bottom: 10px;" value="<%= i %>" onclick="location.href='notice.jsp?currentPage=<%= i %>'">
+								<input type="button" class="btn btn-primary btn-user btn-block"
+									style="width: 40px; height: 40px; margin-right: 10px; margin-bottom: 10px;"
+									value="<%= i %>" onclick="location.href='notice.jsp?currentPage=<%= i %>${ link }${ link2 }'">
 							<% } // end for %>
 						</span>
 						<span style="align-self: flex-end;">
@@ -179,10 +198,21 @@
 	
 	<script type = "text/javascript">
 		$(function() {
+			$("#btnSearch").click(function() {
+				$("#frmSearch").submit();
+			}); // click
+			
+			$("#keyword").keydown(function(evt) {
+				if(evt.which == 13) {
+					$("#frmSearch").submit();
+				} // end if
+			}); // click
+			
 			$("#btnWrite").click(function(){
 				location.href = "noticeWrite.jsp";
 			}); // click
 		}); // ready
+		
 	</script>
 	<!-- notice page css, script -->
     

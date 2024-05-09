@@ -1,5 +1,6 @@
 <%@page import="admin.ScreeningVO"%>
 <%@page import="admin.ScreeningDAO1"%>
+<%@page import="VO.MovieVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" info="명화관 관리자 상영관리" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
@@ -174,8 +175,8 @@
                     <form id="searchForm" method="post" action="screening_service.jsp">
                         <!-- 지점 드롭다운 메뉴 -->
                         <select id="theaterDropdown" name="theater">
-                            <option value="강남점">--강남점--</option>
-                            <option value="역삼점">--역삼점--</option>
+                            <option value="강남점">강남점</option>
+                            <option value="역삼점">역삼점</option>
                             <!-- JavaScript로 받아온 지점 목록을 여기에 추가 -->
                         </select>
                         
@@ -208,26 +209,26 @@
 						        </tr>
 						    </thead>
 						    <tbody id="contentBoard">
-						        <% 
+						        <%
 						        try {
-						        	ScreeningDAO1 screeningDAO = ScreeningDAO1.getInstance();
-						            List<ScreeningVO> screeningList = screeningDAO.selectScreeningList();
-						            int num = 1;
-						            for (ScreeningVO screening : screeningList) {
+	        				        	ScreeningDAO1 screeningDAO = ScreeningDAO1.getInstance();
+	        				            List<ScreeningVO> screeningList = screeningDAO.selectScreeningList();
+	        				            int num = 1;
+	        				            for (ScreeningVO screening : screeningList) {
 						        %>
 						        <tr onClick='clickTable()'>
-								    <td><%= num++ %></td>
-								    <td><%= screening.getTheaterName() %></td>
-								    <td><%= screening.getTheaterNumber() %></td>
-								    <td><%= screening.getMovieName() %></td>
-								    <td><%= screening.getScreeningDate() %></td>
-								    <td><%= screening.getScreeningRound() %></td>
+								    <td><%=num++%></td>
+								    <td><%=screening.getTheaterName()%></td>
+								    <td><%=screening.getTheaterNumber()%></td>
+								    <td><%=screening.getMovieName()%></td>
+								    <td><%=screening.getScreeningDate()%></td>
+								    <td><%=screening.getScreeningRound()%></td>
 								</tr>
-						        <% 
-						            }
-						        } catch (SQLException e) {
-						            e.printStackTrace();
+						        <%
 						        }
+	        				        } catch (SQLException e) {
+	        				            e.printStackTrace();
+	        				        }
 						        %>
 						    </tbody>
 						</table>
