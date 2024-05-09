@@ -81,7 +81,6 @@ public class MovieChartDAO {
 				
 				mVOList.add(mVO);
 			}
-			System.out.println("sdjflksdjsldfjskdofjoiejlsdkjflsjflo");
 		} finally {
 			// 6. 리소스 해제
 			dbcon.dbClose(rs, pstmt, con);

@@ -26,19 +26,7 @@
 	src="//local.adguard.org?ts=1713490445734&amp;type=content-script&amp;dmn=www.cgv.co.kr&amp;url=http%3A%2F%2Fwww.cgv.co.kr%2Fmovies%2F%3Flt%3D1%26ft%3D0&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
 <script type="text/javascript" nonce="098ccc562cfd47e3818f4632ea5"
 	src="//local.adguard.org?ts=1713490445734&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
-<script type="application/ld+json">
-    {
-         "@context": "http://schema.org",
-         "@type": "Organization",
-         "name": "CGV",
-         "url": "https://www.cgv.co.kr",
-         "sameAs": [
-           "https://www.instagram.com/cgv_korea/",
-           "https://www.youtube.com/channel/UCmjUMtUw6wXLrsULdxuXWdg",
-           "https://www.facebook.com/CJCGV",
-           "https://play.google.com/store/apps/details?id=com.cgv.android.movieapp&pli=1" ]
-    }
-    </script>
+
 
 <!-- 공지사항 css -->
 <link rel="stylesheet" type="text/css" href="../css/notice.css">
@@ -134,7 +122,8 @@
 
 <link rel="stylesheet" media="all" type="text/css"
 	href="http://img.cgv.co.kr/R2014/css/customer.css" />
-
+<script type="text/javascript">
+</script>
 </head>
 
 <body class="">
@@ -190,11 +179,11 @@
 				sVO.setStartNum(startNum);
 				sVO.setEndNum(endNum);
 				
-				List<BoardVO> list = bDAO.selectBoard(sVO, FAQS);
+				List<BoardVO> list = bDAO.selectBoard(startNum,endNum, FAQS);
 				pageContext.setAttribute("list", list);	
 				pageContext.setAttribute("FAQS", FAQS);
+				
 				%>
-	
 		<!-- Contaniner -->
 		<div id="contaniner" class="">
 			<!-- 벽돌 배경이미지 사용 시 class="bg-bricks" 적용 / 배경이미지가 없을 경우 class 삭제  -->
@@ -206,10 +195,9 @@
 						<h2>고객센터 메뉴</h2>
 						<div class="snb">
 							<ul>
-								<li class='<%=qaChg %>'><a href="/support/faq/default.aspx"
-									title="현재선택">자주찾는 질문<i></i></a></li>
+								<li class='<%=qaChg %>'><a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=1">자주찾는 질문<i></i></a></li>
 								<li class='<%=noticeChg %>'><a
-									href="/support/news/default.aspx">공지/뉴스<i></i></a></li>
+									href= "http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=0">공지/뉴스<i></i></a></li>
 							</ul>
 						</div>
 					</div>
@@ -255,14 +243,16 @@
 
 						<div class="c_tab_wrap">
 							<ul class="c_tab type_free">
-								<li class='on'><a
-									href="/support/faq/default.aspx?type=0&searchtext="
-									style="font-size: 11px;" title="선택된 탭메뉴">전체</a></li>
+								<li class='on' id="allcategory"><a
+									href="javascript:void(0);"
+									style="font-size: 11px;" title="선택된 탭메뉴"  onclick="selectCategory(<%= startNum %>, <%= endNum %>,'<%= FAQS %>')" >전체</a></li>
 								<%
-								for(String category : faqsList){%>
-								<li id="<%=category%>"><a
-									href="#void"
-									style="font-size: 11px;"><%=category%></a></li>
+								for (String category : faqsList) {
+								%>
+								<li id="<%=category%>" ><a href="javascript:void(0);"
+									style="font-size: 11px;" onclick="selectCategory(<%= startNum %>,<%= endNum %>,'<%= FAQS %>','<%=category %>')" >
+										<%=category%>
+								</a></li>
 								<%
 								}
 								%>
@@ -272,7 +262,7 @@
 							총<span class="num"><%=totalCount%>건</span>이 검색되었습니다.
 						</div>
 						<div class="tbl_area">
-							<table cellspacing="0" cellpadding="0" class="tbl_notice_list">
+							<table  cellspacing="0" cellpadding="0" class="tbl_notice_list">
 								<caption>목록</caption>
 								<colgroup>
 									<col style="width: 40px;" />
@@ -288,7 +278,7 @@
 										<th scope="col">조회수</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody id="boardTable">
 									<c:forEach var="board" items="${list}">
 										<tr>
 											<td><c:out value="${board.boardNumber}" /></td>
@@ -303,16 +293,17 @@
 							</table>
 						</div>
 						<?xml version="1.0" encoding="utf-8"?>
-						<div class="paging">
+						<div class="paging" id="paging">
 							<ul>
 								<%for(int i=1 ; i<=totalPage ; i++){%>
-								<li class="on"><a href="board.jsp?FAQS=<%=faqsNum%>&currentPage=<%=i%>"><%=i%></a></li>
+								<li><a href="board.jsp?FAQS=<%=faqsNum%>&currentPage=<%=i%>"><%=i%></a></li>
 								<%}%>
 							</ul>
 							<button class="btn-paging end" type="button"
-								onclick="location='/support/news/default.aspx?page=5&amp;type=&amp;searchtext=&amp;searchfield=0'">끝</button>
+								onclick="">끝</button>
 						</div>
 					</div>
+					
 				</div>
 				<!-- //Contents End -->
 			</div>
@@ -337,50 +328,127 @@
 	</div>
 </body>
 </body>
-
 <script type="text/javascript">
-$(function() {
-    $('.c_tab.type_free li a').click(function(e) {
-        e.preventDefault(); // 기본 동작 중단
-        var category = $(this).parent().attr('id'); // 선택된 카테고리 가져오기
-        var faqs = '<%= FAQS %>'; // FAQS 값을 JavaScript 변수에 할당
-        var startNum = '<%= sVO.getStartNum() %>'; // startNum을 Java 코드로부터 받아옴
-        var endNum = '<%= sVO.getEndNum() %>'; // endNum을 Java 코드로부터 받아옴
-        loadPosts(category); // 선택된 카테고리에 해당하는 게시글 로드
-    });
+$(document).ready(function() {
+});
 
-    function loadPosts(category,faqs) {
+    // 카테고리를 클릭했을 때 해당 카테고리의 게시물을 로드하는 함수
+    function selectCategory(startNum, endNum ,FAQS,categoryId) {
+    	
+    	
+    	if(categoryId == null){
+        var clickedElement = document.getElementById("allcategory");
+    	clickedElement.className = 'on';
+        var allCategoryElements = document.querySelectorAll('.c_tab.type_free li');
+        for (var i = 0; i < allCategoryElements.length; i++) {
+            if (allCategoryElements[i] !== clickedElement) {
+            	allCategoryElements[i].classList.remove('on');
+            }
+        }
+    	}else{
+    	var clickedElement = document.getElementById(categoryId);
+    	clickedElement.className = 'on';
+    	 // 나머지 카테고리의 클래스 제거
+        var allCategoryElements = document.querySelectorAll('.c_tab.type_free li');
+        for (var i = 0; i < allCategoryElements.length; i++) {
+            if (allCategoryElements[i] !== clickedElement) {
+            	allCategoryElements[i].classList.remove('on');
+            }
+        }
+    	}
+    	
+        
+        //ajax에서 json처리할 데이터 모음
+    	var param={
+                startNum: startNum, // 시작 번호
+                endNum: endNum, // 종료 번호
+                FAQS: FAQS,
+                category: categoryId, // 카테고리 ID를 서버에 전달
+            }
+    	
         $.ajax({
-            type: 'GET',
-            url: 'getBoard.jsp', // getBoard.jsp 파일의 경로
-            data: {
-                category: category
-                faqs: fqas
-                startNum: startNum
-                endNum: endNum
-            },
-            dataType: 'json',
+            type: 'POST',
+            url: '/theater_prj/BoardCategoryServlet', // 해당 카테고리 게시물을 가져오는 서블릿 URL
+            data : param ,
             success: function(response) {
-                // 서버에서 받은 JSON 데이터를 처리하여 화면에 출력
-                var html = '';
-                $.each(response, function(index, item) {
-                    html += '<tr>';
-                    html += '<td>' + item.boardNumber + '</td>';
-                    html += '<td>' + item.categoryName + '</td>';
-                    html += '<td><a href="/support/faq/detail-view.aspx?idx=951&type=245&searchtext=&page=1">' + item.boardTitle + '</a></td>';
-                    html += '<td>' + item.boardViews + '</td>';
-                    html += '</tr>';
-                });
-                $('.tbl_notice_list tbody').html(html);
+                // 받은 JSON 데이터를 파싱하여 테이블에 표시
+                var data = JSON.parse(response);
+                displayData(response);
+                displayPagination(response);
+                                
             },
-            error: function() {
-                alert('게시물을 불러오는 도중 오류가 발생했습니다.');
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
             }
         });
     }
-});
 
+    // 테이블에 데이터를 표시하는 함수
+    function displayData(response) {
+    	var table = document.getElementById("boardTable");
+		table.innerHTML= "";	
+		
+		var object = JSON.parse(response);
+
+		var result = object.result;
+		for(var i=0 ; i < result.length; i++){
+			   var row = table.insertRow(i); // 행 추가
+
+		        // 각 속성에 대한 열 추가
+		        var cell1 = row.insertCell(0);
+		        var cell2 = row.insertCell(1);
+		        var cell3 = row.insertCell(2);
+		        var cell4 = row.insertCell(3);
+
+		        // 각 열에 데이터 입력
+		        cell1.innerHTML = result[i].boardNumber;
+		        cell2.innerHTML = result[i].categoryName;
+		        cell3.innerHTML = '<a href="/support/faq/detail-view.aspx?idx=951&type=245&searchtext=&page=1">' + result[i].boardTitle + '</a>';
+		        cell4.innerHTML = result[i].boardViews;
+			
+		}
+		
+  		
+    }
     
     
+    
+    function displayPagination(response) {
+        var paging = document.getElementById("paging");
+        paging.innerHTML= "";	
+      
+        var object = JSON.parse(response);
+
+		var totalPage = object.totalPage;
+		  
+		var paginationList = document.createElement("ul");
+		    for (var i = 1; i <= totalPage; i++) {
+		        var listItem = document.createElement("li");
+		        var link = document.createElement("a");
+		        link.href = "board.jsp?FAQS=" + object.faqsNum + "&currentPage=" + i;
+		        link.textContent = i;
+		        listItem.appendChild(link);
+		        paginationList.appendChild(listItem);
+		    }
+
+		    // 페이지네이션 요소에 추가
+		    paging.appendChild(paginationList);
+
+		    var endButton = document.createElement("button");
+		    endButton.classList.add("btn-paging", "end");
+		    endButton.type = "button";
+		    endButton.textContent = "끝";
+		    // endButton.onclick에 필요한 동작을 추가하세요
+
+		    paging.appendChild(endButton);
+		
+    }
+	
+  
+    
+    
+  
+
+
 </script>
 </html>
