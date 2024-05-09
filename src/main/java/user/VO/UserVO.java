@@ -16,7 +16,7 @@ public class UserVO {
     private String userId;
     private String userPassword;
     private String userName;
-    private Date userBirthday;
+    private String userBirthday;
     private String userPhone;
     private Date userInputDate;
     private char userDeleteFlag;
