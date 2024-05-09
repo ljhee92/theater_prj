@@ -125,7 +125,7 @@ public class ReservingDAO {
 			con = dbCon.getConnection(id, pass);
 			
 			StringBuilder selectMovie = new StringBuilder();
-			selectMovie.append("select distinct m.movie_title, m.movie_rating ")
+			selectMovie.append("select distinct m.movie_title, m.movie_rating, m.movie_code ")
 			.append("from movie m ")
 			.append("inner join screening s ")
 			.append("on s.movie_code = m.movie_code ")
@@ -141,6 +141,7 @@ public class ReservingDAO {
 				rsVO = ReservingVO.builder()
 						.movieTitle(rs.getString("movie_title"))
 						.movieRating(rs.getString("movie_rating"))
+						.movieCode(rs.getString("movie_code"))
 						.build();
 				theaters.add(rsVO);
 			} // end while
