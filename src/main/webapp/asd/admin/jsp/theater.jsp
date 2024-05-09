@@ -190,24 +190,18 @@
 
 	function searchTheaterSeat() {
 		// 선택된 영화관과 상영관 정보 가져오기
-		var selectedTheater = document
-				.querySelector("select[name='theaterName']").value;
+		var selectedTheater = document.querySelector("select[name='theaterName']").value;
 
-		var selectedTheaterNum = document
-				.querySelector("select[name='theaterNum']").value;
+		var selectedTheaterNum = document.querySelector("select[name='theaterNum']").value;
 
-		document.getElementById("name").value = document
-				.querySelector("select[name='theaterName']").value;
-		document.getElementById("number").value = document
-				.querySelector("select[name='theaterNum']").value;
+		document.getElementById("name").value = document.querySelector("select[name='theaterName']").value;
+		document.getElementById("number").value = document.querySelector("select[name='theaterNum']").value;
 
 		// 선택된 영화관과 상영관 정보를 표시할 요소 선택
-		var selectedTheaterElement = document
-				.getElementById('selectedTheather');
+		var selectedTheaterElement = document.getElementById('selectedTheather');
 
 		// 선택된 영화관과 상영관 정보 표시
-		selectedTheaterElement.innerText = selectedTheater + ' '
-				+ selectedTheaterNum + " 관리중";
+		selectedTheaterElement.innerText = selectedTheater + ' '+ selectedTheaterNum + " 관리중";
 
 		var request = new XMLHttpRequest(); // request 변수를 선언
 		// alert(document.querySelector("select[name='theaterName'] ").value);
@@ -378,9 +372,9 @@
 					+ "&seatInfo=" + encodeURIComponent(seatInfo)
 					+ "&setSeatStatus=" + encodeURIComponent(setSeatStatus));
 
-			//checkSeat();
+			
 
-		}
+		}//checkSeat();
 
 	}//saveSeat
 </script>

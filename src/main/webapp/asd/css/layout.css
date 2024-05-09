@@ -457,7 +457,7 @@ footer .company_info_wrap{display:flex; justify-content:space-between; align-ite
    Slider Modules
 ============================================ */
 .sect-common, .cols-movie {overflow:hidden; width:980px;}
-.sect-common {height:450px; margin-top:25px}
+.sect-common {height:400px; margin-top:25px}
 .cols-movie {height:388px;}
 
 .slider {overflow:hidden; position:relative; z-index:1; width:100%; height:100%;}
@@ -1123,6 +1123,37 @@ a.ico_cancel_i {position: absolute;top: 50%;right: 0;margin-top: -8px;}
 .com_tabtype.unit2 .tab_title.tit02{left:495px}
 
 /* E COMMON */ 
+
+#menu .cols-content {
+  display: flex;
+}
+
+#menu .col-aside {
+  flex: 0 0 auto; /* This prevents the aside column from growing or shrinking */
+}
+
+#menu .col-detail {
+  flex: 1; /* This allows the detail column to grow and take up remaining space */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* S 회사소개 */
 .coexist{padding:60px 0;}
