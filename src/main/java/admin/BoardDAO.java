@@ -47,9 +47,30 @@ public class BoardDAO {
 			.append("from board b ")
 			.append("inner join category c ")
 			.append("on c.category_number = b.category_number ")
-			.append("where c.category_type_flag = 'N'");
+			.append("where c.category_type_flag = 'N' ");
+			
+			// 카테고리 혹은 검색 키워드가 존재하면 해당하는 레코드 수만 검색
+			if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() == null) { // 카테고리만 넣었을 때
+				selectTotalCnt.append(" and c.category_name = ? ");
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 키워드만 넣었을 때
+				selectTotalCnt.append(" and b.board_title like '%'||?||'%' ");
+			} else if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 둘 다 넣었을 때
+				selectTotalCnt.append(" and c.category_name = ? ")
+				.append(" and b.board_title like '%'||?||'%' ");
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && "".equals(sVO.getKeyword())) { // 둘 다 안 넣었을 때
+				// 전체 검색!
+			} // end else
 			
 			pstmt = con.prepareStatement(selectTotalCnt.toString());
+			
+			if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() == null) { // 카테고리만 넣었을 때
+				pstmt.setString(1, sVO.getField());
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 키워드만 넣었을 때
+				pstmt.setString(1, sVO.getKeyword());
+			}  else if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 둘 다 넣었을 때
+				pstmt.setString(1, sVO.getField());
+				pstmt.setString(2, sVO.getKeyword());
+			} // end else
 			
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
@@ -131,15 +152,38 @@ public class BoardDAO {
 			.append("	from board b ")
 			.append("	inner join category c ")
 			.append("	on c.category_number = b.category_number ")
-			.append("	where c.category_type_flag = 'N' ")
-			.append(") ")
+			.append("	where c.category_type_flag = 'N' ");
+			
+			// Dynamic Query
+			if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() == null) { // 카테고리만 넣었을 때
+				selectBoard.append(" and c.category_name = ? ");
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 키워드만 넣었을 때
+				selectBoard.append(" and b.board_title like '%'||?||'%' ");
+			} else if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 둘 다 넣었을 때
+				selectBoard.append(" and c.category_name = ? ")
+				.append(" and b.board_title like '%'||?||'%' ");
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && "".equals(sVO.getKeyword())) { // 둘 다 안 넣었을 때
+			} // end else
+			
+			selectBoard.append(") ")
 			.append("where rnum between ? and ? ")
 			.append("order by board_number desc");
 			
 			pstmt = con.prepareStatement(selectBoard.toString());
+			int bindIndex = 0;
 			
-			pstmt.setInt(1, sVO.getStartNum());
-			pstmt.setInt(2, sVO.getEndNum());
+			// Dynamic Query
+			if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() == null) { // 카테고리만 넣었을 때
+				pstmt.setString(++bindIndex, sVO.getField());
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 키워드만 넣었을 때
+				pstmt.setString(++bindIndex, sVO.getKeyword());
+			}  else if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 둘 다 넣었을 때
+				pstmt.setString(++bindIndex, sVO.getField());
+				pstmt.setString(++bindIndex, sVO.getKeyword());
+			} // end else
+			
+			pstmt.setInt(++bindIndex, sVO.getStartNum());
+			pstmt.setInt(++bindIndex, sVO.getEndNum());
 			
 			rs = pstmt.executeQuery();
 			while(rs.next()) {

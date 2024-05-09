@@ -58,7 +58,7 @@ public class TheaterSeatsSearchServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		//System.out.println("result 리턴전 :  " + result);
+		System.out.println("result 리턴전 :  " + result);
 		return result.toString();
 	}
 }

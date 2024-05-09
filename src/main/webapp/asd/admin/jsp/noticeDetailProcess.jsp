@@ -44,7 +44,6 @@
 	if("d".equals(flag)) { // 삭제라면 
 		int boardNumber = Integer.parseInt(request.getParameter("num"));
 		bDAO.deleteBoard(boardNumber);
-		response.sendRedirect("notice.jsp");
 		return;
 	} // end if
 	
