@@ -72,7 +72,6 @@ public class MovieDetailDAO {
                         .movieInputDate(rs.getString("MOVIE_INPUT_DATE"))
                         .build();
 				
-				System.out.println(mVO.getMovieCode());
 
 			}
 		} finally {
