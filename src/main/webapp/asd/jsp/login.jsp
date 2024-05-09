@@ -69,6 +69,7 @@
 <style type="text/css">
 
 
+
 /* 로그인 */
 .wrap-login{ width: 980px; position:relative;padding:30px 30px 0;}
 .wrap-login h3{height:auto;margin:0;background:none;line-height:1.2;text-align:left; color:#222222; font-size:15px;}
@@ -282,6 +283,11 @@ window.location.href = prevPage;
 </script>
 <!-- E 로그인 세션 확인  -->
 
+
+
+	<!-- Contaniner -->
+	<div id="contaniner"  class=""><!-- 벽돌 배경이미지 사용 시 class="bg-bricks" 적용 / 배경이미지가 없을 경우 class 삭제  -->
+
 <div class="wrap-login">
     <div class="sect-login">
         <ul class="tab-menu-round">
@@ -329,6 +335,8 @@ window.location.href = prevPage;
 
 </div>
 <!-- 실컨텐츠 끝 --> 
+<!-- E Contaniner -->
+</div>
 
 		<!-- S footer_area -->
 		

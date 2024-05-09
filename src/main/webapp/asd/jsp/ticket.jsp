@@ -115,15 +115,15 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 				$("#"+clickedId).addClass("selected");
 				
 				$(".wrap-timetable > .title").remove();
-			    $(".wrap-timetable > .theater-info").remove();
-			    $(".wrap-timetable > .time").remove();
-			    $(".wrap-timetable > p").remove();
+			  $(".wrap-timetable > .theater-info").remove();
+			  $(".wrap-timetable > .time").remove();
+			  $(".wrap-timetable > p").remove();
 				$(".wrap-timetable").append($("<p>").text("영화관과 영화를 선택하면 시간표가 나옵니다.").addClass("ready"));
 
 				var url = new URL(window.location.href);
-		        var params = url.searchParams;
-		        var screeningDate = params.get("screeningDate");
-		        var theaterName = $(this).text();
+		    var params = url.searchParams;
+		    var screeningDate = params.get("screeningDate");
+		    var theaterName = $(this).text();
 		        searchMovie(screeningDate, theaterName);
 			} // end else
 		});
