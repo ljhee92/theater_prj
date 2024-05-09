@@ -122,7 +122,7 @@
         
         
         
-        alert("다음 과정 진행 가능합니다.")
+
         $("#subFrm").submit();
     }
 </script>
