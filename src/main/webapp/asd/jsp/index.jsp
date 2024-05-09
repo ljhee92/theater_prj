@@ -1,3 +1,4 @@
+<%@page import="VO.MovieVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info=""%>
 <%@page import="java.util.Date"%>
@@ -6,7 +7,7 @@
 <%@page import="java.time.Instant"%>
 <%@page import="java.util.List"%>
 <%@page import="user.DAO.MovieDAO"%>
-<%@page import="VO.MovieVO"%>
+
 <%@page import="java.time.temporal.ChronoUnit"%>
 <%@page import="java.time.LocalDate"%>
 
@@ -413,7 +414,7 @@ for (MovieVO tempMovie : mVO) {
 									<dd>
 										<strong>3828-4632</strong> <span>고객센터 운영시간 (연중무휴
 											00:00~24:00)
-											<p>내가 상담하는거 아닌데 알빠노!.</p>
+											<p>내가 상담하는거 아닌데 알빠노!.</p></span>
 									</dd>
 								</dl>
 

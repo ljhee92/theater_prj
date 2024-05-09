@@ -44,7 +44,7 @@ public class TheaterSeatsSearchServlet extends HttpServlet {
 				result.append("{");
 				result.append("\"SeatLowNumber\": \"" + sVOList.get(i).getSeatLowNumber() + "\",");
 				result.append("\"SeatColNumber\": \"" + sVOList.get(i).getSeatColNumber() + "\",");
-				result.append("\"heaterName\": \"" + sVOList.get(i).getTheaterName() + "\",");
+				result.append("\"SeaterName\": \"" + sVOList.get(i).getTheaterName() + "\",");
 				result.append("\"TheaterNumber\": \"" + sVOList.get(i).getTheaterNumber() + "\",");
 				result.append("\"ReservationStatus\": \"" + sVOList.get(i).getReservationStatus() + "\"");
 				result.append("}");

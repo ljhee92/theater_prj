@@ -51,7 +51,7 @@
             LoginDAO lDAO = LoginDAO.getInstance();
             UserVO uVO = UserVO.builder().userId(id).userPassword(pw).build();
             UserVO result = lDAO.Login(uVO);
-            String checkTempFlag = result.getUserTemporaryFlag() + "";
+            /* String checkTempFlag = result.getUserTemporaryFlag() + ""; */
             
         	 
             if (result != null) { // result가 null이 아니라면 로그인성공
@@ -59,6 +59,8 @@
             	
         
         session.setAttribute("id", result.getUserId());// 세션 설정
+        session.setAttribute("userBirthDay",result.getUserBirthday());
+        session.setAttribute("userName",result.getUserName());
  
 
          if (result.getUserTemporaryFlag() == 'Y') {// 비밀번호변경flag가 Y일 경우 알람창 출력
@@ -77,7 +79,17 @@
             location.href=prevPage;
         </script>
         
-       <% }
+       <% }else{%>
+    	   
+    	   <script type="text/javascript">
+            alert("로그인 실패\n 아이디와 비밀번호를 확인해주세요.");
+            window.history.back();
+        </script>
+    	   
+    	   
+    	   
+    	   
+      <%  }//end else
 
         
 
