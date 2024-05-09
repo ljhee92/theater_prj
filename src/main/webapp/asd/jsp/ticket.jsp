@@ -93,13 +93,13 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 		});
 		
 		$(".theater").click(function(event) {
-		    // 클릭 이벤트를 기본 동작으로부터 중지합니다.
+			// 클릭 이벤트를 기본 동작으로부터 중지합니다.
 		    event.preventDefault();
 		    
 		 	// 선택된 요소의 개수를 세어봅니다.
 		    var selectedCount = $(".theater.selected").length;
 
-		    // 선택된 요소가 하나 이상인 경우에만 선택이 가능합니다.
+		    // 선택된 요소가 하나 이하인 경우에만 선택이 가능합니다.
 		    if (selectedCount < 1 || $(this).hasClass("selected")) {
 		        $(this).toggleClass("selected");
 		        
@@ -110,8 +110,21 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 		        var theaterName = $(this).text();
 		        //alert(theaterName);
 		        searchMovie(screeningDate, theaterName);
-		    }
+		    } else {
+		    	alert("선택한 영화관을 선택해제한 후 재선택해주세요.");
+		    } // end if
 		});
+		
+		$("#movieList").on("click", "li > label", function(event) {
+			// label이 속한 li 요소를 찾습니다.
+		    var li = $(this).parent("li");
+		    
+		    // li 요소에서 input checkbox의 id 값을 가져옵니다.
+		    var checkboxId = li.find("input[type='checkbox']").attr("id");
+		    
+		    // 가져온 id 값을 출력하거나 필요한 다른 작업을 수행할 수 있습니다.
+		    alert(checkboxId);
+	    });
 	}); // ready
 
 	// 날짜를 클릭하고 상영관을 클릭하면 상영 중인 영화를 가져옴
@@ -134,6 +147,7 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 	
 	function searchMovieProcess(request) {
 		var ul = document.getElementById("movieList");
+		var messageParagraph = ul.querySelector("p");
 		ul.innerHTML = "";
 		
 		// 서버에서 받은 JSON 데이터 파싱
@@ -142,10 +156,9 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 		
 		for(var i = 0; i < result.length; i++) {
 			var movieTitle = result[i].movieTitle;
-			//console.log(movieTitle);
 			var movieRating = result[i].movieRating;
-			//console.log(movieRating);
-			
+			var movieCode = result[i].movieCode;
+
 			// 각 영화에 대한 li 요소 생성
 	        var li = document.createElement("li");
 	        
@@ -153,13 +166,15 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 	        var checkbox = document.createElement("input");
 	        checkbox.type = "checkbox";
 	        checkbox.className = "p-movie-check";
+	        checkbox.setAttribute("id", movieCode);
 	        
-	        // 영화 평점 표시를 위한 레이블 생성
+	        // 영화 등급 표시를 위한 레이블 생성
 	        var label = document.createElement("label");
+	        label.setAttribute("for", movieCode);
 
 	        var movieRatingSpan = document.createElement("span");
 	        movieRatingSpan.className = "rate-"+ movieRating.toLowerCase();
-	        movieRatingSpan.textContent = movieRating; // 평점 값 설정
+	        movieRatingSpan.textContent = movieRating; // 등급 값 설정
 	        label.appendChild(movieRatingSpan);
 	        label.appendChild(document.createTextNode(movieTitle));
 	        
@@ -287,15 +302,11 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 						<div class="wrap-theater wrap-movielist">
 							<h4 class="title">영화</h4>
 							<div class="btn-box1">
-								<a href="#" class="" data-type="select">전체 선택</a>
-								<a href="#" class="" data-type="reload">전체 해제</a>
+								<!-- <a href="#" class="" data-type="select">전체 선택</a>
+								<a href="#" class="" data-type="reload">전체 해제</a> -->
 							</div>
 							<ul class="list-movie-name" id="movieList" style="height: 390px;">
-								<!-- <li><input type="checkbox" id="pm_20228797"
-									name="movie_movieCode" value="20228797" class="p-movie-check">
-									<label for="pm_20228797"><span class="rate-15">15</span>범죄도시4</label>
-									<span class="check"></span>
-								</li> -->
+								<p class="ready" style="color: gray;">날짜와 영화관을 선택하면 영화가 나옵니다.</p>
 							</ul>
 						</div>
 					</div>
@@ -339,29 +350,6 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 		<!-- E footer_area -->
 	</div>
 	
-	
-<!-- <script type="text/javascript">
-	function simpleReserv(playDate, theaterCode, movieCode, screenPlanId) {
-		$.desktop.reserve.open({
-			playDate : playDate,
-			theaterCode : theaterCode,
-			movieCode : movieCode,
-			screenPlanId : screenPlanId
-		});
-		return false;
-	}
-
-	$(function() {
-		$(".simplereservepop").click(function(e) {
-			e.preventDefault();
-			$.desktop.reserve.open({
-				playDate : ''
-			});
-			return false;
-		})
-	})
-</script> -->
-
 <script type="text/javascript">
 	$(function() {
 		/* $.desktop.reservepop = {};

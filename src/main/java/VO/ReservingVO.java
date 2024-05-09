@@ -15,7 +15,7 @@ import lombok.ToString;
 @Builder
 public class ReservingVO {
 	
-	private String screeningCode, movieTitle, movieRating, screeningDate, theaterName, theaterNumber, screeningTime;
+	private String screeningCode, movieTitle, movieRating, movieCode, screeningDate, theaterName, theaterNumber, screeningTime;
 	private int ticketPrice, screeningRound;
 
 } // class

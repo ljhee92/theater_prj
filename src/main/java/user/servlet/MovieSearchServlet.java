@@ -40,7 +40,8 @@ public class MovieSearchServlet extends HttpServlet {
 			movieList = rsDAO.selectMovie(screeningDate, theaterName);
 			for(int i = 0; i < movieList.size(); i++) {
 				result.append("{\"movieTitle\": \"" + movieList.get(i).getMovieTitle() + "\",");
-				result.append("\"movieRating\": \"" + movieList.get(i).getMovieRating() + "\"}");
+				result.append("\"movieRating\": \"" + movieList.get(i).getMovieRating() + "\",");
+				result.append("\"movieCode\": \"" + movieList.get(i).getMovieCode() + "\"}");
 				if (i < movieList.size() - 1) {
 	                result.append(",");
 	            }
