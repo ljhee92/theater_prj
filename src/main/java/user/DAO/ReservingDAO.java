@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import VO.ReservingVO;
+import VO.SeatVO;
 import util.DbConnection;
 
 public class ReservingDAO {
@@ -203,5 +204,53 @@ public class ReservingDAO {
 
 		return theaters;
 	} // selectTheater
+	
+	/**
+	 * 선택한 영화관, 상영관의 좌석 구하기
+	 * @param theaterName
+	 * @param theaterNumber
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<SeatVO> selectSeat(String theaterName, String theaterNumber) throws SQLException {
+		List<SeatVO> seats = new ArrayList<>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder selectAbleSeat = new StringBuilder();
+			selectAbleSeat.append("select seat_lownumber, seat_colnumber, reservation_status ")
+			.append("from seat ")
+			.append("where theater_name = ? and theater_number = ? ")
+			.append("order by seat_lownumber, to_number(seat_colnumber) ");
+			
+			pstmt = con.prepareStatement(selectAbleSeat.toString());
+			pstmt.setString(1, theaterName);
+			pstmt.setString(2, theaterNumber);
+			
+			rs = pstmt.executeQuery();
+			SeatVO sVO = null;
+			while(rs.next()) {
+				sVO = SeatVO.builder()
+						.seatLowNumber(rs.getString("seat_lownumber"))
+						.seatColNumber(rs.getString("seat_colnumber"))
+						.theaterName(theaterName)
+						.theaterNumber(theaterNumber)
+						.reservationStatus(rs.getString("reservation_status").charAt(0))
+						.build();
+				seats.add(sVO);
+			} // end while
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		} // end finally
+		return seats;
+	} // selectSeat
 
 } // class

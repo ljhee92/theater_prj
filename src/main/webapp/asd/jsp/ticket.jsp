@@ -101,7 +101,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		$("div.section-pop-top", "div.popup").on("click", "a.btn-rsv-reset", function() {
 			if (confirm("모든 선택정보가 사라집니다. 계속하시겠습니까?") == false) {
 				return false;
-			}
+			} // end if
 			location.href = "ticket.jsp"
 		});
 		
@@ -223,7 +223,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
  		        hiddenField.setAttribute('name', key);
  		        hiddenField.setAttribute('value', params[key]);
  		        form.appendChild(hiddenField);
- 		    }
+ 		    } // end for
  		    
  		    document.body.appendChild(form);
  		    form.submit();	// 전송
@@ -332,7 +332,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 	// 시간표에 파싱한 데이터를 표시하는 함수
 	function displayData(response) {
 		var object = JSON.parse(response);
-		console.log(object);
+		//console.log(object);
 		
 		var divTimeTable = $(".wrap-timetable");
 		
@@ -472,10 +472,6 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 						
 						<div class="wrap-theater wrap-movielist">
 							<h4 class="title">영화</h4>
-							<div class="btn-box1">
-								<!-- <a href="#" class="" data-type="select">전체 선택</a>
-								<a href="#" class="" data-type="reload">전체 해제</a> -->
-							</div>
 							<ul class="list-movie-name" id="movieList" style="height: 390px;">
 								<p class="ready" style="color: #7d7d7d; text-align: center; margin-top: 30%;">날짜와 영화관을 선택하면 영화가 나옵니다.</p>
 							</ul>
