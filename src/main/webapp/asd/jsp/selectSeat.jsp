@@ -181,20 +181,12 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 					<div class="section-pop-theater">
 						<div class="wrap-number-info">
 							<span class="kind">인원</span>
-							<select class="input-select id_2780"
-								data-salepriceid="2780" data-price="13000"
+							<select class="input-select id_2780" data-salepriceid="2780" data-price="13000"
 								data-salepricename="성인" data-salepricecode="106">
-								<option value="0">0 명</option>
-								<option value="1">1 명</option>
-								<option value="2">2 명</option>
-								<option value="3">3 명</option>
-								<option value="4">4 명</option>
-								<option value="5">5 명</option>
-								<option value="6">6 명</option>
-								<option value="7">7 명</option>
-								<option value="8">8 명</option>
+								<c:forEach var="person" begin="0" end="8" step="1">
+								<option value="${ person }">${ person }명</option>
+								</c:forEach>
 							</select>
-
 						</div>
 						<!--.number-info-->
 
@@ -214,8 +206,6 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 							</div>
 
 							<div class="map big seatmap">
-
-
 
 								<span class="screen">SCREEN</span>
 
@@ -770,8 +760,8 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 						<div class="seats-control">
 
 							<div class="right">
-								<a href="#" class="btn-reset-seats">다시선택</a> <span
-									class="status">선택인원 <span class="number-chosen">0</span>
+								<a href="#" class="btn-reset-seats">다시선택</a>
+								<span class="status">선택인원 <span class="number-chosen">0</span>
 									/ <span class="number-want">0</span>명
 								</span>
 							</div>
@@ -1426,6 +1416,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 </script> -->
 <%
 	} catch(Exception e) {
+		out.println("에러 발생. 담당자에게 문의해주세요.");
 		e.printStackTrace();
 	} // end catch
 %>
