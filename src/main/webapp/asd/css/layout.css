@@ -457,7 +457,7 @@ footer .company_info_wrap{display:flex; justify-content:space-between; align-ite
    Slider Modules
 ============================================ */
 .sect-common, .cols-movie {overflow:hidden; width:980px;}
-.sect-common {height:400px; margin-top:25px}
+.sect-common {height:400px; margin-top:80px;}
 .cols-movie {height:388px;}
 
 .slider {overflow:hidden; position:relative; z-index:1; width:100%; height:100%;}

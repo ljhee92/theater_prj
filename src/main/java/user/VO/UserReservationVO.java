@@ -15,7 +15,7 @@ import lombok.ToString;
 @Builder
 public class UserReservationVO {
 	
-	String reservationNumber, movieTitle, moviePosterPath,theaterName,seatLownumber,seatColnumber;
+	String reservationNumber, movieTitle, moviePosterPath,theaterName,theaterNumber,seatLownumber,seatColnumber,screeningTime,paymentMethod;
 	int totalPrice;
 	Date reservationDate,screeningDate; 
 	
