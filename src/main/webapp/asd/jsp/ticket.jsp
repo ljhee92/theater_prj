@@ -72,6 +72,18 @@
 <script src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
 <!-- 예매 CSS, JS -->
 
+<style type="text/css">
+.section-pop-left .wrap-theater .list-movie-name input.p-movie-check:checked ~ .check {
+	background: #f9f9f9;
+}
+
+input[type="radio"] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+  opacity: 0;
+}
+</style>
+
 <!-- S 로그인 세션 확인  -->
 <%
 // 세션에서 로그인 여부 확인
@@ -115,35 +127,35 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 				$("#"+clickedId).addClass("selected");
 				
 				$(".wrap-timetable > .title").remove();
-			  $(".wrap-timetable > .theater-info").remove();
-			  $(".wrap-timetable > .time").remove();
-			  $(".wrap-timetable > p").remove();
+				$(".wrap-timetable > .theater-info").remove();
+			 	$(".wrap-timetable > .time").remove();
+			  	$(".wrap-timetable > p").remove();
 				$(".wrap-timetable").append($("<p>").text("영화관과 영화를 선택하면 시간표가 나옵니다.").addClass("ready"));
 
 				var url = new URL(window.location.href);
-		    var params = url.searchParams;
-		    var screeningDate = params.get("screeningDate");
-		    var theaterName = $(this).text();
+			    var params = url.searchParams;
+			    var screeningDate = params.get("screeningDate");
+			    var theaterName = $(this).text();
+			    
 		        searchMovie(screeningDate, theaterName);
 			} // end else
 		});
 		
 		$("#movieList").on("click", "li > label", function(event) {
-
 		    // label이 속한 li 요소를 찾습니다.
 		    var li = $(this).parent("li");
 		    
-		    // li 요소에서 input checkbox의 id 값을 가져옵니다.
+		    // li 요소에서 input radio의 id 값을 가져옵니다.
 		    var url = new URL(window.location.href);
 		    var params = url.searchParams;
 		    var screeningDate = params.get("screeningDate");
 		    var theaterName = $(".theater.selected").text();
-		    var movieCode = li.find("input[type='checkbox']").attr("id");
+		    var movieCode = li.find("input[type='radio']").attr("id");
 		    
 		    $(".wrap-timetable > .title").remove();
 		    $(".wrap-timetable > .theater-info").remove();
 		    $(".wrap-timetable > .time").remove();
-
+		    
 		    searchTime(screeningDate, theaterName, movieCode);
 		    //alert(movieCode+","+screeningDate+","+theaterName);
 	    });
@@ -164,9 +176,9 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
  		    var params = url.searchParams;
  		    var screeningDate = params.get("screeningDate");
  		    var theaterName = $(".theater.selected").text();
- 		    var movieCode = $("#movieList>li").find("input[type='checkbox']:checked").attr("id");
- 		    var movieTitle = $("#movieList>li").find("input[type='checkbox']:checked").attr("movieTitle");
- 		    var movieRate = $("#movieList>li").find("input[type='checkbox']:checked").parent().find("span").text();
+ 		    var movieCode = $("#movieList>li").find("input[type='radio']:checked").attr("id");
+ 		    var movieTitle = $("#movieList>li").find("input[type='radio']:checked").attr("movieTitle");
+ 		    var movieRate = $("#movieList>li").find("input[type='radio']:checked").parent().find("span").text();
  		    var theaterNumber = $(".wrap-timetable > .time.on").attr("theaterNumber");
  		    var screeningCode = $(".wrap-timetable > .time.on").attr("id");
  		    var screeningTime = $(".wrap-timetable > .time.on").text();
@@ -184,11 +196,6 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
  		    
  		    if(theaterNumber =="" || screeningCode == "" || screeningTime=="") {
  		    	alert("영화 시간을 선택해주세요.");
- 		    	return;
- 		    } // end if
- 		    
- 		    if(movieRate.length > 3) {
- 		    	alert("영화는 한 개만 선택 가능합니다.");
  		    	return;
  		    } // end if
  		    
@@ -259,12 +266,13 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 				// 각 영화에 대한 li 요소 생성
 		        var li = document.createElement("li");
 		        
-		        // 체크박스 생성
-		        var checkbox = document.createElement("input");
-		        checkbox.type = "checkbox";
-		        checkbox.className = "p-movie-check";
-		        checkbox.setAttribute("id", movieCode);
-		        checkbox.setAttribute("movieTitle", movieTitle);
+		        // 라디오 생성
+		        var radio = document.createElement("input");
+		        radio.type = "radio";
+		        radio.className = "p-movie-check";
+		        radio.setAttribute("id", movieCode);
+		        radio.setAttribute("name", "movie-check");
+		        radio.setAttribute("movieTitle", movieTitle);
 		        
 		        // 영화 등급 표시를 위한 레이블 생성
 		        var label = document.createElement("label");
@@ -280,8 +288,8 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		        var checkSpan = document.createElement("span");
 		        checkSpan.className = "check";
 		        
-		        // li 요소에 체크박스와 레이블 추가
-		        li.appendChild(checkbox);
+		        // li 요소에 라디오와 레이블 추가
+		        li.appendChild(radio);
 		        li.appendChild(label);
 		        li.appendChild(checkSpan);
 		        
