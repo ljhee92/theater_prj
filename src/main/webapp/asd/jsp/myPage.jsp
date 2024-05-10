@@ -117,7 +117,7 @@
 	width: 155px;
 	height: 340px;
 	float: left;
-	background-color: #eacacb;
+	/* background-color: #eacacb; */
 }
 
 .right-div {
@@ -125,8 +125,9 @@
 	height: 340px;
 	float: left;
 	background-color: white;
-	overflow-y: auto; /* 세로 스크롤이 필요한 경우에만 스크롤이 표시됩니다. */
-	max-height: 500px; /* 최대 높이를 설정하여 스크롤이 필요한 경우만 스크롤이 표시됩니다. */
+	overflow-y: auto;
+	max-height: 500px;
+	/* 	 border: 2px solid #000; */
 }
 
 .user-information-box {
@@ -158,6 +159,84 @@
 	align-items: center; /* 세로 중앙 정렬 */
 }
 </style>
+<style type="text/css">
+.container2 {
+	width: 629px;
+	height: 340px;
+	border: 2px solid #000;
+	padding-left: 0; /* 왼쪽 여백 제거 */
+	padding-right: 0; /* 오른쪽 여백 제거 */
+}
+
+.top-section {
+	width: 625px;
+	height: 30px;
+	background-color: #ccc; /* 배경색은 회색 */
+	display: flex; /* 가운데 정렬을 위한 Flexbox 사용 */
+	justify-content: center; /* 가로 정렬 가운데로 설정 */
+	align-items: center; /* 세로 정렬 가운데로 설정 */
+}
+
+.top-section div {
+	font-weight: bold; /* 텍스트 진하게 설정 */
+}
+
+.bottom-section {
+	width: 625px;
+	height: 256px;
+	/* background-color: #f0f0f0; */ /* 배경색은 연한 회색 */
+	display: flex; /* 요소들을 가로로 배열하기 위해 Flexbox 사용 */
+}
+
+.buttom-section {
+	width: 625px;
+	height: 50px;
+	/* background-color: #f0f0f0; */ /* 배경색은 연한 회색 */
+	display: flex; /* 요소들을 가로로 배열하기 위해 Flexbox 사용 */
+}
+
+.image-div {
+	margin-top: 20px;
+}
+
+.bottom-section .left-div {
+	width: 150px;
+	height: 256px;
+	/* background-color: #f8d7da; */ /* 첫 번째 div 배경색 */
+}
+
+.bottom-section .middle-div {
+	width: 475px;
+	height: 256px;
+	/* background-color: #d4edda; */ /* 두 번째 div 배경색 */
+}
+
+.buttom-section .bottom-div {
+	width: 625px;
+	height: 50px;
+	/* background-color: #cce5ff; */ /* 세 번째 div 배경색 */
+}
+
+.inner-div {
+	width: 450px;
+	height: 210px;
+	/* background-color: #D6F793; */ /* 세 번째 div 배경색 */
+	margin-left: 13px;
+	margin-top: 20px;
+}
+
+.dynamic-value {
+	height: 23px; /* 각 동적 값에 대한 높이를 조절할 수 있습니다. */
+}
+
+.dynamic-value p {
+	font-weight: bold; /* 텍스트를 진하게 설정합니다. */
+}
+
+.dynamic-value span {
+	font-weight: normal; /* span 태그의 텍스트를 표준으로 설정합니다. */
+}
+</style>
 
 
 <%
@@ -184,7 +263,7 @@ $(document).ready(function(){
         // 클릭된 메뉴의 텍스트 내용을 가져옴
         var menuText = $(this).text();
         // 가져온 메뉴 텍스트를 alert로 표시
-        alert("선택된 메뉴: " + menuText);
+        //alert("선택된 메뉴: " + menuText);
         
         
         
@@ -198,7 +277,7 @@ $(document).ready(function(){
 
             
 
-            마이페이지 메인
+            마이페이지에 추가할거 추천받아엽;;;
             
             
             `;
@@ -315,6 +394,7 @@ $(document).ready(function(){
 
 
 function selectReservation() {
+	$(".right-div").empty();
     var id = "<%=userId%>";
     
     var request = new XMLHttpRequest(); // request 변수를 선언
@@ -398,15 +478,16 @@ function selectReservation() {
                                             '</div>' +
                                         '</div>' +
                                         '<div class="row">' +
-                                        	'<div class="col text-end" style="margin-top: 10px;">' +
-                                    		    '<strong style="font-size: 20px;">총 결제금액 : </strong>' +
-                                  		  '</div>' +
-                                  		  	'<div class="col text-start" style="margin-top: 10px;">' +
-                                 			   '<strong style="font-size: 20px ;">' + groupedReservation.totalPrice + '</strong>' +
-                                		'</div>' +
-                                		'<div class="col text-end">' +
-                                				'<button type="button" class="btn btn-info float-end">상세보기</button>' +
-                            				'</div>' +
+                                     // selectReservation 함수 내에서 예매내역을 생성하는 부분 수정
+                                        '<div class="col text-end">' +
+                                            '<p style="margin-top: 5px;"><strong>총 결제금액 : </strong></p>' +
+                                        '</div>' +
+                                        '<div class="col text-start">' +
+                                            '<strong style="font-size: 20px;">' + groupedReservation.totalPrice + '</strong>' +
+                                        '</div>' +
+                                        '<div class="col text-end">' +
+                                            '<button type="button" class="btn btn-info float-end" onclick="reservationDetail(\'' + groupedReservation.reservationNumber + '\')">상세보기</button>' +
+                                        '</div>' +
                                         '</div>' +
                                     '</div>' +
                                 '</div>' +
@@ -436,14 +517,223 @@ function selectReservation() {
 
 
 
+//예약 상세 조회
+function reservationDetail(reservationNumber) {
+    var request = new XMLHttpRequest(); // request 변수를 선언
+
+    request.open(
+        "POST",
+        "http://localhost/theater_prj/SelectReservationDetailServlet",
+        true
+    );
+    request.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded; charset=UTF-8"
+    );
+
+    // 에러 핸들링
+    request.onerror = function() {
+        alert("요청을 보낼 때 오류가 발생했습니다.");
+    };
+
+    request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+            if (request.status == 200) {
+                // 응답을 받으면 처리
+                var jsonResponse = request.responseText;
+                var responseObject = JSON.parse(jsonResponse);
+                
+                if (responseObject.success) {
+                    // 예약 내역을 담을 변수
+                    var reservationHTML = '';
+
+                    // 예매 내역 데이터
+                    var reservationData = responseObject.result;
+
+                    // 예매 내역 데이터를 reservationNumber를 기준으로 그룹화
+                    var groupedReservations = {};
+                    reservationData.forEach(function (reservation) {
+                        if (!groupedReservations.hasOwnProperty(reservation.reservationNumber)) {
+                            groupedReservations[reservation.reservationNumber] = [];
+                        }
+                        groupedReservations[reservation.reservationNumber].push(reservation);
+                    });
+
+                 // 각 그룹별로 예매 내역 HTML 생성
+                    Object.keys(groupedReservations).forEach(function (reservationNumber) {
+                        var groupedReservation = groupedReservations[reservationNumber][0]; // 그룹 내 첫 번째 예매 내역 사용
+
+                        var seatNumbersCombined = groupedReservations[reservationNumber].map(function (reservation) {
+                            return reservation.seatLownumber + reservation.seatColnumber;
+                        }).join(', '); // seatNumbers 결합
+
+                        // 예매 내역 HTML 생성
+                        var html = '<div class="container2">' +
+                            '<div class="top-section">' +
+                            '<div>예매 내역</div>' +
+                            '</div>' +
+                            '<div class="bottom-section">' +
+                            '<div class="left-div">' +
+                            '<div class="image-div">' +
+                            '<img src="../images/movie/' + groupedReservation.moviePosterPath + '" alt="이미지_설명" style="width:150px">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="middle-div">' +
+                            '<div class="inner-div">' +
+                            '<div class="dynamic-value">' +
+                            '<p>예매번호 : <span id="booking-number">' + groupedReservation.reservationNumber + '</span></p>' +
+                            '</div>' +
+                            '<div class="dynamic-value">' +
+                            '<p>영화명 : <span id="movie-title">' + groupedReservation.movieTitle + '</span></p>' +
+                            '</div>' +
+                            '<div class="dynamic-value">' +
+                            '<p>극장 : <span id="theater">' + groupedReservation.theaterName + '</span></p>' +
+                            '</div>' +
+                            '<div class="dynamic-value">' +
+                            '<p>상영관 : <span id="theater-room">' + groupedReservation.theaterNumber + '</span></p>' +
+                            '</div>' +
+                            '<div class="dynamic-value">' +
+                            '<p>일시 : <span id="datetime">' + groupedReservation.screeningDate + ' ' + groupedReservation.screeningTime + '</span></p>' +
+                            '</div>' +
+                            '<div class="dynamic-value">' +
+                            '<p>인원 : <span id="people">' + groupedReservations[reservationNumber].length + '명</span></p>' +
+                            '</div>' +
+                            '<div class="dynamic-value">' +
+                            '<p>좌석 : <span id="seats">' + seatNumbersCombined + '</span></p>' +
+                            '</div>' +
+                            '<div class="dynamic-value">' +
+                            '<p>결제금액 : <span id="payment-amount">' + groupedReservation.totalPrice + '</span></p>' +
+                            '</div>' +
+                            '<div class="dynamic-value">' +
+                            '<p>결제수단 : <span id="payment-method">' + groupedReservation.paymentMethod + '</span></p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="buttom-section">' +
+                            '<div class="bottom-div">' +
+                            '<div class="bottom-div d-flex justify-content-center">' +
+                            '<button type="button" class="btn btn-danger mx-2" onclick="checkReservationTime(\'' + groupedReservation.reservationNumber + '\')">예매취소</button>' +
+                            '<button type="button" onclick="selectReservation()" class="btn btn-secondary mx-2">목록으로</button>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                        reservationHTML += html;
+                    });
+
+                    // 생성된 예매 내역 HTML을 .right-div 요소에 삽입
+                    $(".right-div").html(reservationHTML);
+                } else {
+                    alert("예약 상세 정보를 불러오는 데 실패했습니다.");
+                }
+            } else {
+                alert("서버 오류로 인해 예약 상세 정보를 불러오지 못했습니다.");
+            }
+        }
+    };
+
+    // POST 요청의 파라미터를 설정하여 보냄
+    request.send("reservationNumber=" + encodeURIComponent(reservationNumber));
+}//reservationDetail
 
 
 
 
 
+function checkReservationTime(reservationNumber){
+
+
+	  // 알림창 생성
+	  var confirmation = confirm("정말 취소하시겠습니까?\n신용카드 결제내역의 경우\n3~5 영업일 이내에 환불됩니다.");
+
+	  // 확인 버튼이 눌렸을 때
+	  if (confirmation) {//확인버튼 == 취소신청
+
+			var request = new XMLHttpRequest(); // request 변수를 선언
+
+			request
+					.open(
+							"POST",
+							"http://localhost/theater_prj/CheckReservationTimeServlet",
+							true);
+			request.setRequestHeader("Content-Type",
+					"application/x-www-form-urlencoded; charset=UTF-8");
+
+			// 에러 핸들링
+			request.onerror = function() {
+				alert("요청을 보낼 때 오류가 발생했습니다.");
+			};
+
+			request.onreadystatechange = function() {
+				if (request.readyState == 4) {
+					if (request.status == 200) {
+						 // 응답을 받으면 처리
+			            var jsonResponse = request.responseText;
+			            var responseObject = JSON.parse(jsonResponse);
+			            if (responseObject.success) {
+
+			                //취소메서드 있는곳
+			            	deleteReservation(reservationNumber);
+			                
+
+			            } else {
+			                alert("상영이 이미 시작된 영화는 예매를 취소할 수 없습니다.");
+			                return;
+			            }//end else
+					} else {
+						alert("문제가 발생했습니다.");
+					}
+				}
+			};
+
+			// POST 요청의 파라미터를 설정하여 보냄
+			request.send("reservationNumber=" + encodeURIComponent(reservationNumber));
+
+
+	  }
+}//checkReservationTime
 
 
 
+function deleteReservation(reservationNumber) {
+    alert(reservationNumber);
+
+    var request = new XMLHttpRequest();
+
+    request.open(
+        "POST",
+        "http://localhost/theater_prj/DeleteReservationServlet",
+        true
+    );
+    request.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded; charset=UTF-8"
+    );
+
+    request.onerror = function() {
+        alert("요청을 보낼 때 오류가 발생했습니다.");
+    };
+
+    request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+            if (request.status == 200) {
+                var jsonResponse = request.responseText;
+                var responseObject = JSON.parse(jsonResponse);
+                if (responseObject.success) {
+                    alert("예매가 성공적으로 취소되었습니다.");
+                    selectReservation();
+                } else {
+                    alert("예매 취소를 실패하였습니다.");
+                }
+            } else {
+                alert("문제가 발생했습니다.");
+            }
+        }
+    };
+
+    request.send("reservationNumber=" + encodeURIComponent(reservationNumber));
+}
 
 
 
@@ -594,26 +884,6 @@ function checkPassword(currentPassword) {//비밀번호 확인 메서드
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function changePWWin() {
     // 자식 창이 열릴 때 부모 창을 모달로 만듭니다.
     var parentWindow = window;
@@ -731,20 +1001,11 @@ function changePWWin() {
 
 						</div>
 
-						<div class="right-div">마이페이지 메인</div>
+						<div class="right-div">마이페이지에 추가할거 추천받아엽;;;</div>
 
 
 
-
-
-
-
-
-
-
-
-
-
+					
 
 					</div>
 				</div>

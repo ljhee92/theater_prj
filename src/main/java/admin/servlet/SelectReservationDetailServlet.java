@@ -13,20 +13,21 @@ import javax.servlet.http.HttpServletResponse;
 import user.DAO.UserReservationDAO;
 import user.VO.UserReservationVO;
 
-@WebServlet("/SelectReservationServlet")
-public class SelectReservationServlet extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+@WebServlet("/SelectReservationDetailServlet")
+public class SelectReservationDetailServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //System.out.println("서블릿 입장");
+
         request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
-        String userId = request.getParameter("id");
+        String reservationNumber = request.getParameter("reservationNumber");
 
         try {
-            String resultJSON = getJSON(userId);
+            String resultJSON = getJSON(reservationNumber);
             response.getWriter().write(resultJSON);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,12 +39,12 @@ public class SelectReservationServlet extends HttpServlet {
 
     }
 
-    public String getJSON(String userId) throws SQLException {
+    public String getJSON(String reservationNumber) throws SQLException {
         StringBuilder result = new StringBuilder("");
         result.append("{\"success\":");
         UserReservationDAO urDAO = UserReservationDAO.getInstance();
         try {
-            List<UserReservationVO> urVOList = urDAO.selectUserReservation(userId);
+            List<UserReservationVO> urVOList = urDAO.selectUserReservationDetail(reservationNumber);
             if (urVOList.isEmpty()) {
                 result.append("false}");
             } else {
@@ -52,14 +53,16 @@ public class SelectReservationServlet extends HttpServlet {
                 for (int i = 0; i < urVOList.size(); i++) {
                     result.append("{");
                     result.append("\"reservationNumber\": \"" + urVOList.get(i).getReservationNumber() + "\",");
-                    result.append("\"reservationDate\": \"" + urVOList.get(i).getReservationDate() + "\",");
                     result.append("\"movieTitle\": \"" + urVOList.get(i).getMovieTitle() + "\",");
                     result.append("\"moviePosterPath\": \"" + urVOList.get(i).getMoviePosterPath() + "\",");
                     result.append("\"theaterName\": \"" + urVOList.get(i).getTheaterName() + "\",");
+                    result.append("\"theaterNumber\": \"" + urVOList.get(i).getTheaterNumber() + "\",");
                     result.append("\"screeningDate\": \"" + urVOList.get(i).getScreeningDate() + "\",");
+                    result.append("\"screeningTime\": \"" + urVOList.get(i).getScreeningTime() + "\",");
                     result.append("\"seatLownumber\": \"" + urVOList.get(i).getSeatLownumber() + "\",");
                     result.append("\"seatColnumber\": \"" + urVOList.get(i).getSeatColnumber() + "\",");
-                    result.append("\"totalPrice\": \"" + urVOList.get(i).getTotalPrice() + "\"");
+                    result.append("\"totalPrice\": \"" + urVOList.get(i).getTotalPrice() + "\",");
+                    result.append("\"paymentMethod\": \"" + urVOList.get(i).getPaymentMethod() + "\"");
                     result.append("}");
                     if (i < urVOList.size() - 1) {
                         result.append(",");
@@ -72,7 +75,7 @@ public class SelectReservationServlet extends HttpServlet {
             e.printStackTrace();
             result.append("false}");
         }
-        //System.out.println(result);
+       // System.out.println(result);
         return result.toString();
     }
 }

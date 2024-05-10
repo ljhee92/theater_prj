@@ -259,7 +259,7 @@ String prevPage ="";
 String id = (String)session.getAttribute("id");
 
 
-log("로그인페이지에서 header : " + request.getHeader("Referer"));
+
 
 if (request.getParameter("prevPage")==null){
 	prevPage="index.html";
@@ -268,8 +268,7 @@ if (request.getParameter("prevPage")==null){
 }
 
 
-log("로그인중인 id ; " + id);
-log("이전페이지 ; " + prevPage);
+
 
 if (id != null) {%>
 
