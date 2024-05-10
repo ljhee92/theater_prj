@@ -405,7 +405,7 @@ function selectReservation() {
                                  			   '<strong style="font-size: 20px ;">' + groupedReservation.totalPrice + '</strong>' +
                                 		'</div>' +
                                 		'<div class="col text-end">' +
-                                				'<button type="button" class="btn btn-info float-end">예매 취소</button>' +
+                                				'<button type="button" class="btn btn-info float-end">상세보기</button>' +
                             				'</div>' +
                                         '</div>' +
                                     '</div>' +
