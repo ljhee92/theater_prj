@@ -1,5 +1,18 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
+<%@page import="VO.SeatVO"%>
+<%@page import="java.util.List"%>
+<%@page import="user.DAO.ReservingDAO"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.ParseException"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info="로그인 후 좌석 선택 페이지"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +39,6 @@
 <link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/R2014/js/jquery.ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
 <link rel="stylesheet" href="http://img.cgv.co.kr/CGV_RIA/Ticket/Common/css/2024/0325/FORM_TYPE/reservation_tnb.css">
 
-<script type="text/javascript" src="/common/js/extraTheaters.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.tmpl.min.js"></script>
@@ -63,136 +75,131 @@
 <script src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
 <!-- 예매 CSS, JS -->
 
-<!-- 로그인/로그아웃 script 시작 -->
-<!-- <script type="text/javascript">
-    $(function () {
-        $(".nomemberloginpop").click(function () {
-            if ($(this).prop("tagName") == "A") {
-                var redirect = $(this).prop("href");
-                $.desktop.login.openNoMember(function () {
-                    window.location.href = redirect;
-                });
-            } else {
-                window.location.reload(true);
-            }
-            return false;
-        });
-
-        $(".loginpop").click(function (e) {
-            if ($("header").data("loginstatus") == 0) {
-                e.preventDefault();
-                var redirect = $(this).data("redirect"), reload = $(this).data("reload"), callback = $(this).data("callback");
-                if (callback != null && callback != "") {
-                    $.desktop.login.open(function (phoneStatus, isNomember) {
-                        if (isNomember) {
-                            window.location.reload(true);
-                            return;
-                        }
-                        var _callback = eval(callback); _callback.apply();
-                    });
-                }
-                else if (reload != null && reload != "") { $.desktop.login.open(function () { window.location.reload(true); }); }
-                else if (redirect != null && redirect != "") {
-                    $.desktop.login.open(function (phoneStatus, isNomember) {
-                        if (isNomember) {
-                            window.location.reload(true);
-                            return;
-                        }
-                        window.location.href = redirect;
-                    });
-                }
-                else if ($(this).prop("tagName") == "A") {
-                    redirect = $(this).prop("href"); $.desktop.login.open(function (phoneStatus, isNomember) {
-                        if (isNomember) {
-                            window.location.reload(true);
-                            return;
-                        }
-                        window.location.href = redirect;
-                    });
-                }
-                return false;
-            }
-        });
-    });
-</script>
+<!-- S 로그인 세션 확인  -->
+<%
+// 세션에서 로그인 여부 확인
+String id = (String)session.getAttribute("id");
+if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디렉션
+%>
 <script type="text/javascript">
-    $(function () {
-        $("header").on("click", ".logoutpop", function () {
-            $.ajax({
-                url: "/Member/LogoutPop",
-                dataType: "json",
-                method: "POST",
-                success: function (data) {
-                    if (data.ResultCode == 1) {
-                        $.desktop.login.logout(
-                            function () { window.location.href = "/"; }
-                        )
-                    }
-                    else {
-                        alert(data.Message);
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("로그아웃 시도중 오류가 발생하였습니다.");
-                    console.log(errorThrown);
-                }
-            });
-            return false;
-        });
-    });
-</script> -->
-<!-- 로그인/로그아웃 script 종료 -->
+window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않고 직접 접근했을 경우 예매 첫 페이지로 이동
+</script>  
+<%}%>
+<!-- E 로그인 세션 확인  -->
+
+<script type="text/javascript">
+	$(function() {
+		// 인원 선택이 변경되면
+		$(".input-select").change(function(){
+			var selectedPerson = $(".input-select").val();
+			var price = (10000*selectedPerson).toLocaleString('ko-KR');
+			
+			// 왼쪽 하단 인원, 가격, 오른쪽 하단 선택 인원(오른쪽만) 변경
+			if(selectedPerson == 0) {
+				$(".table-movie-info .number").text("");
+				$(".total-price .price").text("0");
+				$(".right .number-want").text("0");
+			} else {
+				$(".table-movie-info .number").text(selectedPerson+"명");
+				$(".total-price .price").text(price);
+				$(".right .number-want").text(selectedPerson);
+			} // end else
+		});
+	});
+</script>
 
 </head>
 <body class="">
+<%
+	request.setCharacterEncoding("UTF-8");
+	
+	// 파라미터로 넘어온 JSON Parsing
+	Map<String, String[]> requestParams = request.getParameterMap();
+	Map<String, String> params = new HashMap<>();
+	
+	for(String key : requestParams.keySet()) {
+		//System.out.println("======================= "+key+":"+request.getParameter(key));
+		params.put(key, request.getParameter(key));
+	}
+	
+	// 날짜 형식 변환
+	String inputDateStr = params.get("screeningDate");
+	SimpleDateFormat inputSdf = new SimpleDateFormat("yyyyMMdd");
+	SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy-MM-dd");
+	
+	// 선택한 영화관의 좌석 가져오기
+	ReservingDAO rsDAO = ReservingDAO.getInstance();
+	List<SeatVO> seatsInfo = rsDAO.selectSeat(params.get("theaterName"), params.get("theaterNumber"));
+	Map<String, List<String>> seatsMap = new HashMap<>();
+
+	// seatsInfo에서 중복을 제거하여 seatLowNumber를 키로 사용하고, seatColNumber를 값으로 매핑
+	for (SeatVO seat : seatsInfo) {
+	    String seatLowNumber = seat.getSeatLowNumber();
+	    String seatColNumber = seat.getSeatColNumber();
+	    
+	    // 중복을 제거하기 위해 해당 seatLowNumber에 대한 리스트 가져오기 또는 생성
+	    List<String> seatColNumbers = seatsMap.getOrDefault(seatLowNumber, new ArrayList<>());
+	    
+	    // 새로운 seatColNumber를 리스트에 추가
+	    seatColNumbers.add(seatColNumber);
+	    
+	    // 맵에 새로운 seatColNumbers 리스트 추가
+	    seatsMap.put(seatLowNumber, seatColNumbers);
+	} // end for
+
+	try{
+		Date inputDate = inputSdf.parse(inputDateStr);
+		String outputDate = outputSdf.format(inputDate);
+	
+		request.setAttribute("params", params);
+		request.setAttribute("outputDate", outputDate);
+		request.setAttribute("seatsInfo", seatsInfo);
+		request.setAttribute("seatsMap", seatsMap);
+%>
 
 	<div id="wrap">
 		<!-- S Header -->
 		<jsp:include page="header.jsp"></jsp:include>
 		<!-- E Header -->
-
+		
 		<!-- Contaniner -->
 		<div id="container" class>
 			<!-- Contents Area -->
 			<div id="contents" class style="padding-bottom: 0px;">
 				<!-- Contents Start -->
-				<input type="hidden" id="isOpenUserEmailYNPopup"
-					name="isOpenUserEmailYNPopup" value="False" />
 
 				<!-- 좌석 선택 본문 -->
-				<div class="popup seatChoice" data-theatercode="1001"
-					data-moviecode="20249318" data-playdate="20240502"
-					data-screenplanid="792105">
+				<div class="popup seatChoice" data-theatercode="${ params['theaterName'] }"
+					data-moviecode="${ params['movieCode'] }" data-playdate="${ params['screeningDate'] }"
+					data-screenplanid="${ params['screeningCode'] }">
 					<div class="section-pop-top">
 						<h3 class="title">인원/좌석선택</h3>
-						<a href="#" class="btn-rsv-reset">다시 예매</a>
+						<a href="ticket.jsp" class="btn-rsv-reset" onclick="confirm('모든 선택정보가 사라집니다. 계속하시겠습니까?');">다시 예매</a>
 					</div>
 
 					<div class="section-pop-movie">
-						<img
-							src="https://file.cineq.co.kr/i.aspx?movieid=20249318&amp;size=210"
-							class="poster" alt="포스터">
+						<img src="../images/movie/${ params['movieCode'] }.jpg" class="poster" alt="포스터">
 
-						<div class="title">
-							<span class="rate-15">15</span>챌린저스
+						<div class="title" style="white-space:normal; overflow:visible; margin-left:20px;">
+							<span class="rate-${fn:toLowerCase(params['movieRate'])}">${ params['movieRate'] }</span>${ params['movieTitle'] }
 						</div>
-						<table class="table-movie-info">
+						<table class="table-movie-info" style="margin-left:15px; margin-top:40px;">
 							<tbody>
 								<tr>
 									<th>영화관</th>
-									<td>신도림</td>
+									<td>${ params['theaterName'] }</td>
 								</tr>
 								<tr>
 									<th>상영관</th>
-									<td>8관</td>
+									<td>${ params['theaterNumber'] }</td>
 								</tr>
 								<tr>
 									<th>날짜</th>
-									<td>2024.05.02(목)</td>
+									<td>${ outputDate }</td>
 								</tr>
 								<tr>
 									<th>시간</th>
-									<td class="time">18:25</td>
+									<td class="time">${ params['screeningTime'] }</td>
 								</tr>
 								<tr>
 									<th>인원</th>
@@ -205,7 +212,7 @@
 							</tbody>
 						</table>
 
-						<span class="total-price"><span>0</span> 원</span>
+						<span class="total-price"><span class="price">0</span> 원</span>
 
 					</div>
 					<!--.section-pop-movie-->
@@ -213,26 +220,18 @@
 					<div class="section-pop-theater">
 						<div class="wrap-number-info">
 							<span class="kind">인원</span>
-							<select class="input-select id_2780"
-								data-salepriceid="2780" data-price="13000"
+							<select class="input-select id_2780" data-salepriceid="2780" data-price="13000"
 								data-salepricename="성인" data-salepricecode="106">
-								<option value="0">0 명</option>
-								<option value="1">1 명</option>
-								<option value="2">2 명</option>
-								<option value="3">3 명</option>
-								<option value="4">4 명</option>
-								<option value="5">5 명</option>
-								<option value="6">6 명</option>
-								<option value="7">7 명</option>
-								<option value="8">8 명</option>
+								<c:forEach var="person" begin="0" end="8" step="1">
+								<option value="${ person }">${ person }명</option>
+								</c:forEach>
 							</select>
-
 						</div>
 						<!--.number-info-->
 
 						<div class="wrap-seats">
 							<div class="title-head">
-								<span class="title-time">18:25</span>
+								<span class="title-time" style="width:300px;">${ params['screeningTime'] }</span>
 							</div>
 
 							<div class="note">
@@ -247,553 +246,21 @@
 
 							<div class="map big seatmap">
 
-
-
 								<span class="screen">SCREEN</span>
-
-								<ul class="row" data-rowname="A">
-									<li class="head">A</li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="A3" value="A3" data-seatgroup="2" data-rowname="A"
-										data-colnumber="3" data-seatmapid="8001" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="A3"
-										class="mini">3</label></li>
-									<li><input type="checkbox" class="choose-seat " id="A4"
-										value="A4" data-seatgroup="2" data-rowname="A"
-										data-colnumber="4" data-seatmapid="8002" data-screenid="66"
-										data-screenplanid="792105"><label for="A4"
-										class="mini">4</label></li>
-									<li><input type="checkbox" class="choose-seat " id="A5"
-										value="A5" data-seatgroup="2" data-rowname="A"
-										data-colnumber="5" data-seatmapid="8003" data-screenid="66"
-										data-screenplanid="792105"><label for="A5"
-										class="mini">5</label></li>
-									<li><input type="checkbox" class="choose-seat " id="A6"
-										value="A6" data-seatgroup="2" data-rowname="A"
-										data-colnumber="6" data-seatmapid="8004" data-screenid="66"
-										data-screenplanid="792105"><label for="A6"
-										class="mini">6</label></li>
-									<li><input type="checkbox" class="choose-seat " id="A7"
-										value="A7" data-seatgroup="2" data-rowname="A"
-										data-colnumber="7" data-seatmapid="8005" data-screenid="66"
-										data-screenplanid="792105"><label for="A7"
-										class="mini">7</label></li>
-									<li><input type="checkbox" class="choose-seat " id="A8"
-										value="A8" data-seatgroup="2" data-rowname="A"
-										data-colnumber="8" data-seatmapid="8006" data-screenid="66"
-										data-screenplanid="792105"><label for="A8"
-										class="mini">8</label></li>
-									<li><input type="checkbox" class="choose-seat " id="A9"
-										value="A9" data-seatgroup="2" data-rowname="A"
-										data-colnumber="9" data-seatmapid="8007" data-screenid="66"
-										data-screenplanid="792105"><label for="A9"
-										class="mini">9</label></li>
-									<li></li>
-									<li></li>
-									<li></li>
-								</ul>
-								<ul class="row" data-rowname="B">
-									<li class="head">B</li>
-									<li><input type="checkbox" class="choose-seat " id="B1"
-										value="B1" data-seatgroup="1" data-rowname="B"
-										data-colnumber="1" data-seatmapid="8010" data-screenid="66"
-										data-screenplanid="792105"><label for="B1"
-										class="mini">1</label></li>
-									<li><input type="checkbox" class="choose-seat " id="B2"
-										value="B2" data-seatgroup="1" data-rowname="B"
-										data-colnumber="2" data-seatmapid="8011" data-screenid="66"
-										data-screenplanid="792105"><label for="B2"
-										class="mini">2</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="B3"
-										value="B3" data-seatgroup="2" data-rowname="B"
-										data-colnumber="3" data-seatmapid="8012" data-screenid="66"
-										data-screenplanid="792105"><label for="B3"
-										class="mini">3</label></li>
-									<li><input type="checkbox" class="choose-seat " id="B4"
-										value="B4" data-seatgroup="2" data-rowname="B"
-										data-colnumber="4" data-seatmapid="8013" data-screenid="66"
-										data-screenplanid="792105"><label for="B4"
-										class="mini">4</label></li>
-									<li><input type="checkbox" class="choose-seat " id="B5"
-										value="B5" data-seatgroup="2" data-rowname="B"
-										data-colnumber="5" data-seatmapid="8014" data-screenid="66"
-										data-screenplanid="792105"><label for="B5"
-										class="mini">5</label></li>
-									<li><input type="checkbox" class="choose-seat " id="B6"
-										value="B6" data-seatgroup="2" data-rowname="B"
-										data-colnumber="6" data-seatmapid="8015" data-screenid="66"
-										data-screenplanid="792105"><label for="B6"
-										class="mini">6</label></li>
-									<li><input type="checkbox" class="choose-seat " id="B7"
-										value="B7" data-seatgroup="2" data-rowname="B"
-										data-colnumber="7" data-seatmapid="8016" data-screenid="66"
-										data-screenplanid="792105"><label for="B7"
-										class="mini">7</label></li>
-									<li><input type="checkbox" class="choose-seat " id="B8"
-										value="B8" data-seatgroup="2" data-rowname="B"
-										data-colnumber="8" data-seatmapid="8017" data-screenid="66"
-										data-screenplanid="792105"><label for="B8"
-										class="mini">8</label></li>
-									<li><input type="checkbox" class="choose-seat " id="B9"
-										value="B9" data-seatgroup="2" data-rowname="B"
-										data-colnumber="9" data-seatmapid="8018" data-screenid="66"
-										data-screenplanid="792105"><label for="B9"
-										class="mini">9</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="B10"
-										value="B10" data-seatgroup="3" data-rowname="B"
-										data-colnumber="10" data-seatmapid="8019" data-screenid="66"
-										data-screenplanid="792105"><label for="B10"
-										class="mini">10</label></li>
-									<li><input type="checkbox" class="choose-seat " id="B11"
-										value="B11" data-seatgroup="3" data-rowname="B"
-										data-colnumber="11" data-seatmapid="8020" data-screenid="66"
-										data-screenplanid="792105"><label for="B11"
-										class="mini">11</label></li>
-								</ul>
-								<ul class="row" data-rowname="C">
-									<li class="head">C</li>
-									<li><input type="checkbox" class="choose-seat " id="C1"
-										value="C1" data-seatgroup="1" data-rowname="C"
-										data-colnumber="1" data-seatmapid="8021" data-screenid="66"
-										data-screenplanid="792105"><label for="C1"
-										class="mini">1</label></li>
-									<li><input type="checkbox" class="choose-seat " id="C2"
-										value="C2" data-seatgroup="1" data-rowname="C"
-										data-colnumber="2" data-seatmapid="8022" data-screenid="66"
-										data-screenplanid="792105"><label for="C2"
-										class="mini">2</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="C3"
-										value="C3" data-seatgroup="2" data-rowname="C"
-										data-colnumber="3" data-seatmapid="8023" data-screenid="66"
-										data-screenplanid="792105"><label for="C3"
-										class="mini">3</label></li>
-									<li><input type="checkbox" class="choose-seat " id="C4"
-										value="C4" data-seatgroup="2" data-rowname="C"
-										data-colnumber="4" data-seatmapid="8024" data-screenid="66"
-										data-screenplanid="792105"><label for="C4"
-										class="mini">4</label></li>
-									<li><input type="checkbox" class="choose-seat " id="C5"
-										value="C5" data-seatgroup="2" data-rowname="C"
-										data-colnumber="5" data-seatmapid="8025" data-screenid="66"
-										data-screenplanid="792105"><label for="C5"
-										class="mini">5</label></li>
-									<li><input type="checkbox" class="choose-seat " id="C6"
-										value="C6" data-seatgroup="2" data-rowname="C"
-										data-colnumber="6" data-seatmapid="8026" data-screenid="66"
-										data-screenplanid="792105"><label for="C6"
-										class="mini">6</label></li>
-									<li><input type="checkbox" class="choose-seat " id="C7"
-										value="C7" data-seatgroup="2" data-rowname="C"
-										data-colnumber="7" data-seatmapid="8027" data-screenid="66"
-										data-screenplanid="792105"><label for="C7"
-										class="mini">7</label></li>
-									<li><input type="checkbox" class="choose-seat " id="C8"
-										value="C8" data-seatgroup="2" data-rowname="C"
-										data-colnumber="8" data-seatmapid="8028" data-screenid="66"
-										data-screenplanid="792105"><label for="C8"
-										class="mini">8</label></li>
-									<li><input type="checkbox" class="choose-seat " id="C9"
-										value="C9" data-seatgroup="2" data-rowname="C"
-										data-colnumber="9" data-seatmapid="8029" data-screenid="66"
-										data-screenplanid="792105"><label for="C9"
-										class="mini">9</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="C10"
-										value="C10" data-seatgroup="3" data-rowname="C"
-										data-colnumber="10" data-seatmapid="8030" data-screenid="66"
-										data-screenplanid="792105"><label for="C10"
-										class="mini">10</label></li>
-									<li><input type="checkbox" class="choose-seat " id="C11"
-										value="C11" data-seatgroup="3" data-rowname="C"
-										data-colnumber="11" data-seatmapid="8031" data-screenid="66"
-										data-screenplanid="792105"><label for="C11"
-										class="mini">11</label></li>
-								</ul>
-								<ul class="row" data-rowname="D">
-									<li class="head">D</li>
-									<li><input type="checkbox" class="choose-seat " id="D1"
-										value="D1" data-seatgroup="1" data-rowname="D"
-										data-colnumber="1" data-seatmapid="8032" data-screenid="66"
-										data-screenplanid="792105"><label for="D1"
-										class="mini">1</label></li>
-									<li><input type="checkbox" class="choose-seat " id="D2"
-										value="D2" data-seatgroup="1" data-rowname="D"
-										data-colnumber="2" data-seatmapid="8033" data-screenid="66"
-										data-screenplanid="792105"><label for="D2"
-										class="mini">2</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="D3"
-										value="D3" data-seatgroup="2" data-rowname="D"
-										data-colnumber="3" data-seatmapid="8034" data-screenid="66"
-										data-screenplanid="792105"><label for="D3"
-										class="mini">3</label></li>
-									<li><input type="checkbox" class="choose-seat " id="D4"
-										value="D4" data-seatgroup="2" data-rowname="D"
-										data-colnumber="4" data-seatmapid="8035" data-screenid="66"
-										data-screenplanid="792105"><label for="D4"
-										class="mini">4</label></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="D5" value="D5" data-seatgroup="2" data-rowname="D"
-										data-colnumber="5" data-seatmapid="8036" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="D5"
-										class="mini">5</label></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="D6" value="D6" data-seatgroup="2" data-rowname="D"
-										data-colnumber="6" data-seatmapid="8037" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="D6"
-										class="mini">6</label></li>
-									<li><input type="checkbox" class="choose-seat " id="D7"
-										value="D7" data-seatgroup="2" data-rowname="D"
-										data-colnumber="7" data-seatmapid="8038" data-screenid="66"
-										data-screenplanid="792105"><label for="D7"
-										class="mini">7</label></li>
-									<li><input type="checkbox" class="choose-seat " id="D8"
-										value="D8" data-seatgroup="2" data-rowname="D"
-										data-colnumber="8" data-seatmapid="8039" data-screenid="66"
-										data-screenplanid="792105"><label for="D8"
-										class="mini">8</label></li>
-									<li><input type="checkbox" class="choose-seat " id="D9"
-										value="D9" data-seatgroup="2" data-rowname="D"
-										data-colnumber="9" data-seatmapid="8040" data-screenid="66"
-										data-screenplanid="792105"><label for="D9"
-										class="mini">9</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="D10"
-										value="D10" data-seatgroup="3" data-rowname="D"
-										data-colnumber="10" data-seatmapid="8041" data-screenid="66"
-										data-screenplanid="792105"><label for="D10"
-										class="mini">10</label></li>
-									<li><input type="checkbox" class="choose-seat " id="D11"
-										value="D11" data-seatgroup="3" data-rowname="D"
-										data-colnumber="11" data-seatmapid="8042" data-screenid="66"
-										data-screenplanid="792105"><label for="D11"
-										class="mini">11</label></li>
-								</ul>
-								<ul class="row" data-rowname="E">
-									<li class="head">E</li>
-									<li><input type="checkbox" class="choose-seat " id="E1"
-										value="E1" data-seatgroup="1" data-rowname="E"
-										data-colnumber="1" data-seatmapid="8043" data-screenid="66"
-										data-screenplanid="792105"><label for="E1"
-										class="mini">1</label></li>
-									<li><input type="checkbox" class="choose-seat " id="E2"
-										value="E2" data-seatgroup="1" data-rowname="E"
-										data-colnumber="2" data-seatmapid="8044" data-screenid="66"
-										data-screenplanid="792105"><label for="E2"
-										class="mini">2</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="E3"
-										value="E3" data-seatgroup="2" data-rowname="E"
-										data-colnumber="3" data-seatmapid="8045" data-screenid="66"
-										data-screenplanid="792105"><label for="E3"
-										class="mini">3</label></li>
-									<li><input type="checkbox" class="choose-seat " id="E4"
-										value="E4" data-seatgroup="2" data-rowname="E"
-										data-colnumber="4" data-seatmapid="8046" data-screenid="66"
-										data-screenplanid="792105"><label for="E4"
-										class="mini">4</label></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="E5" value="E5" data-seatgroup="2" data-rowname="E"
-										data-colnumber="5" data-seatmapid="8047" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="E5"
-										class="mini">5</label></li>
-									<li><input type="checkbox" class="choose-seat " id="E6"
-										value="E6" data-seatgroup="2" data-rowname="E"
-										data-colnumber="6" data-seatmapid="8048" data-screenid="66"
-										data-screenplanid="792105"><label for="E6"
-										class="mini">6</label></li>
-									<li><input type="checkbox" class="choose-seat " id="E7"
-										value="E7" data-seatgroup="2" data-rowname="E"
-										data-colnumber="7" data-seatmapid="8049" data-screenid="66"
-										data-screenplanid="792105"><label for="E7"
-										class="mini">7</label></li>
-									<li><input type="checkbox" class="choose-seat " id="E8"
-										value="E8" data-seatgroup="2" data-rowname="E"
-										data-colnumber="8" data-seatmapid="8050" data-screenid="66"
-										data-screenplanid="792105"><label for="E8"
-										class="mini">8</label></li>
-									<li><input type="checkbox" class="choose-seat " id="E9"
-										value="E9" data-seatgroup="2" data-rowname="E"
-										data-colnumber="9" data-seatmapid="8051" data-screenid="66"
-										data-screenplanid="792105"><label for="E9"
-										class="mini">9</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat"
-										id="E10" value="E10" data-seatgroup="3" data-rowname="E"
-										data-colnumber="10" data-seatmapid="8052" data-screenid="66"
-										data-screenplanid="792105" accessible=""><label
-										for="E10" class="mini">10</label></li>
-									<li></li>
-								</ul>
-								<ul class="row">
-									<li class="head">&nbsp;</li>
-								</ul>
-								<ul class="row" data-rowname="F">
-									<li class="head">F</li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat "
-										id="F2" value="F2" data-seatgroup="1" data-rowname="F"
-										data-colnumber="2" data-seatmapid="8055" data-screenid="66"
-										data-screenplanid="792105" accessible=""><label
-										for="F2" class="mini">2</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="F3"
-										value="F3" data-seatgroup="2" data-rowname="F"
-										data-colnumber="3" data-seatmapid="8056" data-screenid="66"
-										data-screenplanid="792105"><label for="F3"
-										class="mini">3</label></li>
-									<li><input type="checkbox" class="choose-seat " id="F4"
-										value="F4" data-seatgroup="2" data-rowname="F"
-										data-colnumber="4" data-seatmapid="8057" data-screenid="66"
-										data-screenplanid="792105"><label for="F4"
-										class="mini">4</label></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="F5" value="F5" data-seatgroup="2" data-rowname="F"
-										data-colnumber="5" data-seatmapid="8058" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="F5"
-										class="mini">5</label></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="F6" value="F6" data-seatgroup="2" data-rowname="F"
-										data-colnumber="6" data-seatmapid="8059" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="F6"
-										class="mini">6</label></li>
-									<li><input type="checkbox" class="choose-seat " id="F7"
-										value="F7" data-seatgroup="2" data-rowname="F"
-										data-colnumber="7" data-seatmapid="8060" data-screenid="66"
-										data-screenplanid="792105"><label for="F7"
-										class="mini">7</label></li>
-									<li><input type="checkbox" class="choose-seat " id="F8"
-										value="F8" data-seatgroup="2" data-rowname="F"
-										data-colnumber="8" data-seatmapid="8061" data-screenid="66"
-										data-screenplanid="792105"><label for="F8"
-										class="mini">8</label></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-								</ul>
-								<ul class="row" data-rowname="G">
-									<li class="head">G</li>
-									<li><input type="checkbox" class="choose-seat " id="G1"
-										value="G1" data-seatgroup="1" data-rowname="G"
-										data-colnumber="1" data-seatmapid="8062" data-screenid="66"
-										data-screenplanid="792105"><label for="G1"
-										class="mini">1</label></li>
-									<li><input type="checkbox" class="choose-seat " id="G2"
-										value="G2" data-seatgroup="1" data-rowname="G"
-										data-colnumber="2" data-seatmapid="8101" data-screenid="66"
-										data-screenplanid="792105"><label for="G2"
-										class="mini">2</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="G3"
-										value="G3" data-seatgroup="2" data-rowname="G"
-										data-colnumber="3" data-seatmapid="8063" data-screenid="66"
-										data-screenplanid="792105"><label for="G3"
-										class="mini">3</label></li>
-									<li><input type="checkbox" class="choose-seat " id="G4"
-										value="G4" data-seatgroup="2" data-rowname="G"
-										data-colnumber="4" data-seatmapid="8064" data-screenid="66"
-										data-screenplanid="792105"><label for="G4"
-										class="mini">4</label></li>
-									<li><input type="checkbox" class="choose-seat " id="G5"
-										value="G5" data-seatgroup="2" data-rowname="G"
-										data-colnumber="5" data-seatmapid="8065" data-screenid="66"
-										data-screenplanid="792105"><label for="G5"
-										class="mini">5</label></li>
-									<li><input type="checkbox" class="choose-seat " id="G6"
-										value="G6" data-seatgroup="2" data-rowname="G"
-										data-colnumber="6" data-seatmapid="8066" data-screenid="66"
-										data-screenplanid="792105"><label for="G6"
-										class="mini">6</label></li>
-									<li><input type="checkbox" class="choose-seat " id="G7"
-										value="G7" data-seatgroup="2" data-rowname="G"
-										data-colnumber="7" data-seatmapid="8067" data-screenid="66"
-										data-screenplanid="792105"><label for="G7"
-										class="mini">7</label></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="G8" value="G8" data-seatgroup="2" data-rowname="G"
-										data-colnumber="8" data-seatmapid="8068" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="G8"
-										class="mini">8</label></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-								</ul>
-								<ul class="row" data-rowname="H">
-									<li class="head">H</li>
-									<li><input type="checkbox" class="choose-seat " id="H1"
-										value="H1" data-seatgroup="1" data-rowname="H"
-										data-colnumber="1" data-seatmapid="8069" data-screenid="66"
-										data-screenplanid="792105"><label for="H1"
-										class="mini">1</label></li>
-									<li><input type="checkbox" class="choose-seat " id="H2"
-										value="H2" data-seatgroup="1" data-rowname="H"
-										data-colnumber="2" data-seatmapid="8070" data-screenid="66"
-										data-screenplanid="792105"><label for="H2"
-										class="mini">2</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="H3"
-										value="H3" data-seatgroup="2" data-rowname="H"
-										data-colnumber="3" data-seatmapid="8071" data-screenid="66"
-										data-screenplanid="792105"><label for="H3"
-										class="mini">3</label></li>
-									<li><input type="checkbox" class="choose-seat " id="H4"
-										value="H4" data-seatgroup="2" data-rowname="H"
-										data-colnumber="4" data-seatmapid="8072" data-screenid="66"
-										data-screenplanid="792105"><label for="H4"
-										class="mini">4</label></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="H5" value="H5" data-seatgroup="2" data-rowname="H"
-										data-colnumber="5" data-seatmapid="8073" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="H5"
-										class="mini">5</label></li>
-									<li><input type="checkbox" class="choose-seat " id="H6"
-										value="H6" data-seatgroup="2" data-rowname="H"
-										data-colnumber="6" data-seatmapid="8074" data-screenid="66"
-										data-screenplanid="792105"><label for="H6"
-										class="mini">6</label></li>
-									<li><input type="checkbox" class="choose-seat " id="H7"
-										value="H7" data-seatgroup="2" data-rowname="H"
-										data-colnumber="7" data-seatmapid="8075" data-screenid="66"
-										data-screenplanid="792105"><label for="H7"
-										class="mini">7</label></li>
-									<li><input type="checkbox" class="choose-seat " id="H8"
-										value="H8" data-seatgroup="2" data-rowname="H"
-										data-colnumber="8" data-seatmapid="8076" data-screenid="66"
-										data-screenplanid="792105"><label for="H8"
-										class="mini">8</label></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-								</ul>
-								<ul class="row" data-rowname="I">
-									<li class="head">I</li>
-									<li><input type="checkbox" class="choose-seat " id="I1"
-										value="I1" data-seatgroup="1" data-rowname="I"
-										data-colnumber="1" data-seatmapid="8077" data-screenid="66"
-										data-screenplanid="792105"><label for="I1"
-										class="mini">1</label></li>
-									<li><input type="checkbox" class="choose-seat " id="I2"
-										value="I2" data-seatgroup="1" data-rowname="I"
-										data-colnumber="2" data-seatmapid="8078" data-screenid="66"
-										data-screenplanid="792105"><label for="I2"
-										class="mini">2</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="I3"
-										value="I3" data-seatgroup="2" data-rowname="I"
-										data-colnumber="3" data-seatmapid="8079" data-screenid="66"
-										data-screenplanid="792105"><label for="I3"
-										class="mini">3</label></li>
-									<li><input type="checkbox" class="choose-seat " id="I4"
-										value="I4" data-seatgroup="2" data-rowname="I"
-										data-colnumber="4" data-seatmapid="8080" data-screenid="66"
-										data-screenplanid="792105"><label for="I4"
-										class="mini">4</label></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="I5" value="I5" data-seatgroup="2" data-rowname="I"
-										data-colnumber="5" data-seatmapid="8081" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="I5"
-										class="mini">5</label></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="I6" value="I6" data-seatgroup="2" data-rowname="I"
-										data-colnumber="6" data-seatmapid="8082" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="I6"
-										class="mini">6</label></li>
-									<li><input type="checkbox" class="choose-seat " id="I7"
-										value="I7" data-seatgroup="2" data-rowname="I"
-										data-colnumber="7" data-seatmapid="8083" data-screenid="66"
-										data-screenplanid="792105"><label for="I7"
-										class="mini">7</label></li>
-									<li><input type="checkbox" class="choose-seat " id="I8"
-										value="I8" data-seatgroup="2" data-rowname="I"
-										data-colnumber="8" data-seatmapid="8084" data-screenid="66"
-										data-screenplanid="792105"><label for="I8"
-										class="mini">8</label></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-								</ul>
-								<ul class="row" data-rowname="J">
-									<li class="head">J</li>
-									<li><input type="checkbox" class="choose-seat " id="J1"
-										value="J1" data-seatgroup="1" data-rowname="J"
-										data-colnumber="1" data-seatmapid="8085" data-screenid="66"
-										data-screenplanid="792105"><label for="J1"
-										class="mini">1</label></li>
-									<li><input type="checkbox" class="choose-seat " id="J2"
-										value="J2" data-seatgroup="1" data-rowname="J"
-										data-colnumber="2" data-seatmapid="8086" data-screenid="66"
-										data-screenplanid="792105"><label for="J2"
-										class="mini">2</label></li>
-									<li></li>
-									<li><input type="checkbox" class="choose-seat " id="J3"
-										value="J3" data-seatgroup="2" data-rowname="J"
-										data-colnumber="3" data-seatmapid="8087" data-screenid="66"
-										data-screenplanid="792105"><label for="J3"
-										class="mini">3</label></li>
-									<li><input type="checkbox" class="choose-seat " id="J4"
-										value="J4" data-seatgroup="2" data-rowname="J"
-										data-colnumber="4" data-seatmapid="8088" data-screenid="66"
-										data-screenplanid="792105"><label for="J4"
-										class="mini">4</label></li>
-									<li><input type="checkbox" class="choose-seat disabled"
-										id="J5" value="J5" data-seatgroup="2" data-rowname="J"
-										data-colnumber="5" data-seatmapid="8089" data-screenid="66"
-										data-screenplanid="792105" disabled=""><label for="J5"
-										class="mini">5</label></li>
-									<li><input type="checkbox" class="choose-seat " id="J6"
-										value="J6" data-seatgroup="2" data-rowname="J"
-										data-colnumber="6" data-seatmapid="8090" data-screenid="66"
-										data-screenplanid="792105"><label for="J6"
-										class="mini">6</label></li>
-									<li><input type="checkbox" class="choose-seat " id="J7"
-										value="J7" data-seatgroup="2" data-rowname="J"
-										data-colnumber="7" data-seatmapid="8091" data-screenid="66"
-										data-screenplanid="792105"><label for="J7"
-										class="mini">7</label></li>
-									<li><input type="checkbox" class="choose-seat " id="J8"
-										value="J8" data-seatgroup="2" data-rowname="J"
-										data-colnumber="8" data-seatmapid="8092" data-screenid="66"
-										data-screenplanid="792105"><label for="J8"
-										class="mini">8</label></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-								</ul>
-								<ul class="row" data-rowname="K">
-									<li class="head">K</li>
-									<li><input type="checkbox" class="choose-seat " id="K1"
-										value="K1" data-seatgroup="1" data-rowname="K"
-										data-colnumber="1" data-seatmapid="8093" data-screenid="66"
-										data-screenplanid="792105"><label for="K1"
-										class="mini">1</label></li>
-									<li><input type="checkbox" class="choose-seat " id="K2"
-										value="K2" data-seatgroup="1" data-rowname="K"
-										data-colnumber="2" data-seatmapid="8094" data-screenid="66"
-										data-screenplanid="792105"><label for="K2"
-										class="mini">2</label></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-									<li></li>
-								</ul>
+								
+								<c:forEach var="map" items="${ seatsMap }" varStatus="i">
+									<ul class="row" data-rowname="${ map.key }">
+										<li class="head">${ map.key }</li>
+										<c:forEach var="value" items="${ map.value }" varStatus="i">
+										<li><input type="checkbox" class="choose-seat" id="${ map.key }${ value }" 
+											value="${ map.key }${ value }" data-seatgroup="" data-rowname="${ map.key }"
+											data-colnumber="${ value }" data-seatmapid="" data-screenid=""
+											data-screenplanid="" disabled="">
+											<label for="${ map.key }${ value }" class="mini">${ value }</label>
+										</li>
+										</c:forEach>
+									</ul>
+								</c:forEach>
 							</div>
 
 						</div>
@@ -802,8 +269,8 @@
 						<div class="seats-control">
 
 							<div class="right">
-								<a href="#" class="btn-reset-seats">다시선택</a> <span
-									class="status">선택인원 <span class="number-chosen">0</span>
+								<a href="#" class="btn-reset-seats">다시선택</a>
+								<span class="status">선택인원 <span class="number-chosen">0</span>
 									/ <span class="number-want">0</span>명
 								</span>
 							</div>
@@ -815,7 +282,7 @@
 
 					<div class="section-pop-bottom">
 						<div class="wrap-rsv-select">
-							<a href="#" class="btn-rsv-cancel2">이전</a>
+							<a href="ticket.jsp" class="btn-rsv-cancel2" onclick="confirm('모든 선택정보가 사라집니다. 계속하시겠습니까?');">이전</a>
 							<a href="#" class="btn-rsv-next2">다음</a>
 						</div>
 					</div>
@@ -840,7 +307,7 @@
 			<!-- E footer_area -->
 		</div>
 		
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     var currentTheaterCode = "1001";
 
     
@@ -1455,6 +922,12 @@
 
         $.desktop.seatchoicepop.init();
     });
-</script>
+</script> -->
+<%
+	} catch(Exception e) {
+		out.println("에러 발생. 담당자에게 문의해주세요.");
+		e.printStackTrace();
+	}
+%>
 </body>
 </html>
