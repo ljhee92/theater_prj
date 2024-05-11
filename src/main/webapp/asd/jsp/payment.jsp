@@ -1,3 +1,4 @@
+<%@page import="user.DAO.ReservationDAO"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.HashMap"%>
@@ -63,13 +64,9 @@
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/swiper.min.js"></script>
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/swiper-bundle.min.css" />
 
-<!--bootstrap 시작-->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<!--bootstrap 끝-->
-
 <!-- 예매 CSS, JS -->
 <link href="https://www.cineq.co.kr/bundles/css?v=oiZxrFB4-kROndwe9FLU4L2IiIJAaPO8AdRMkkO1wbE1" rel="stylesheet">
+<link rel="stylesheet" href="http://img.cgv.co.kr/CGV_RIA/Ticket/Common/css/2024/0325/FORM_TYPE/reservation_popup.css">
 <script src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
 <!-- 예매 CSS, JS -->
 
@@ -129,7 +126,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 				divTitle.text("은행선택");
 
 				var divContent = $("<div>").addClass("content-select");
-				var select = $("<select>");
+				var select = $("<select>").addClass("bank");
 				var options = ["KB국민은행", "신한은행", "NH농협은행"];
 				options.forEach(function(optionText) {
 					var option = $("<option>", {
@@ -157,7 +154,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 				divSelectTitle.text("카드 선택");
 
 				var divSelectContent = $("<div>").addClass("content-select");
-				var select = $("<select>");
+				var select = $("<select>").addClass("card");
 				var options = ["BC카드", "신한카드", "현대카드"];
 				options.forEach(function(optionText) {
 					var option = $("<option>", {
@@ -249,6 +246,108 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 				$(".section-pop-payment").append(divSectionPopMethod);
 			} // end else
 		});
+	
+		$(".btn-rsv-payment").click(function(){
+			if($("input[type='radio']:checked").val() == "bank") {
+				// 입금기한 날짜 구하기
+				var today = new Date();
+				today.setDate(today.getDate() + 7); // 현재 날짜에 7일을 더함
+				
+				var year = today.getFullYear();
+				var month = ('0' + (today.getMonth() + 1)).slice(-2);
+				var day = ('0' + today.getDate()).slice(-2);
+
+				var dateString = year + '-' + month  + '-' + day;
+				
+				// 동적으로 생성할 테이블 데이터 배열
+				var tableData = [
+				    { label: "은행명", value: $(".bank").val() },
+				    { label: "계좌번호", value: "873801-01-3452123" },
+				    { label: "예금주", value: "(주)명화관" },
+				    { label: "입금기한", value: dateString }
+				];
+
+				// 동적으로 생성할 테이블 요소 생성 및 데이터 적용
+				var tableHtml = '<table id="test_table" style="border-collapse: separate; border-spacing: 0 10px;">';
+				for (var i = 0; i < tableData.length; i++) {
+				    tableHtml += '<tr><th>' + tableData[i].label + '</th><td style="background: transparent;">' + tableData[i].value + '</td></tr>';
+				}
+				tableHtml += '</table>';
+
+				// 팝업 내용 동적으로 생성
+				var popupContent = 
+				    '<div class="bd">' +
+				        '<div class="article desc" style="border-bottom: none; background: none;">' +
+				            '<ol>' +
+				                '<li style="display: list-item;">무통장 입금은 아래 지정된 계좌번호로 입금기한 내에 반드시 입금하셔야 합니다.</li>' +
+				                '<li style="display: list-item;">확인 버튼을 누르셔야 예매가 완료됩니다. 감사합니다.</li>' +
+				            '</ol>' +
+				        '</div>' +
+				        '<div class="article desc" style="border-bottom: none; background: none;">' +
+				            tableHtml +
+				        '</div>' +
+				    '</div>';
+
+				// 팝업 동적 생성
+				var popupHtml = 
+				    '<div class="ft_layer_popup popup_reservation_check" style="display: block;">' +
+				        popupContent +
+				        '<div class="ft">' +
+				            '<input type="button" class="ok-button" value="확인" style="display: inline-block; position: relative; background-color: #C62424; width:130px; height:45px; border: 0px; color: #fff; border-radius: 5px;"><span class="sreader"></span>' +
+				        '</div>' +
+				    '</div>';
+
+				// 생성한 팝업 HTML을 해당 위치에 추가
+				$(".popups").append(popupHtml);
+			} else {
+				var isValid = true; // 모든 입력 필드의 유효성 검사 결과를 저장할 변수
+
+				// 카드 번호 입력 필드를 확인
+				$(".inputCardNum").each(function() {
+				    var cardNum = $(this).val();
+				    if (!$.isNumeric(cardNum) || cardNum.length !== 4) {
+				        alert("카드 번호는 숫자 네자리로 입력해야 합니다.");
+				        isValid = false; // 유효하지 않은 입력이 있음을 표시
+				        return false; // 순회 중단
+				    } // end if
+				});
+
+				// 입력 필드의 유효성을 모두 확인한 후에 최종 결과를 확인
+				if (!isValid) {
+				    return false; // 유효하지 않은 입력이 있을 경우 함수 종료
+				} // end if
+
+				// 모든 입력 필드가 유효할 경우에만 아래 코드가 실행됨
+				// 유효한 경우에만 유효기간 입력 필드를 확인
+				$(".inputPeriod").each(function() {
+				    var period = $(this).val();
+				    if (!$.isNumeric(period) || period.length !== 2) {
+				        alert("유효 기간은 숫자 두자리로 입력해야 합니다.");
+				        isValid = false; // 유효하지 않은 입력이 있음을 표시
+				        return false; // 순회 중단
+				    } // end if
+				});
+				
+				if (!isValid) {
+					return false;
+				} // end if
+				
+				var pass = $(".inputPass").val();
+				if(!$.isNumeric(pass) || pass.length !== 2) {
+					alert("카드 비밀번호를 정확히 입력해주세요.");
+					isValid= false;
+					return false;
+				} // end if
+				
+				var payMethod = $("input[type='radio']:checked").val();
+				location.href="reservationProcess.jsp?payMethod="+payMethod;
+			} // end else
+		});
+		
+		$(".popups").on("click", ".ok-button", function(){
+			var payMethod = $("input[type='radio']:checked").val();
+			location.href="reservationProcess.jsp?payMethod="+payMethod;
+		});
 	})
 </script>
 </head>
@@ -261,7 +360,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 	Map<String, String> params = new HashMap<>();
 	
 	for(String key : requestParams.keySet()) {
-		System.out.println("======================= "+key+":"+request.getParameter(key));
+		//System.out.println("======================= "+key+":"+request.getParameter(key));
 		params.put(key, request.getParameter(key));
 	} // end for
 	
@@ -270,12 +369,11 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 	SimpleDateFormat inputSdf = new SimpleDateFormat("yyyyMMdd");
 	SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy-MM-dd");
 	
-	try{
-		Date inputDate = inputSdf.parse(inputDateStr);
-		String outputDate = outputSdf.format(inputDate);
-	
-	request.setAttribute("params", params);
-	request.setAttribute("outputDate", outputDate);
+	Date inputDate = inputSdf.parse(inputDateStr);
+	String outputDate = outputSdf.format(inputDate);
+
+	session.setAttribute("params", params);
+	session.setAttribute("outputDate", outputDate);
 %>
 
 	<div id="wrap">
@@ -348,7 +446,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 				        <div class="section-pop-method">
 					        <div class="title-select"">은행선택</div>
 				        	<div class="content-select">
-						        <select name = "bank" style="margin-left: 40px;">
+						        <select class="bank" name = "bank" style="margin-left: 40px;">
 						        	<option value = "KB국민은행">KB국민은행</option>
 						        	<option value = "신한은행">신한은행</option>
 						        	<option value = "NH농협은행">NH농협은행</option>
@@ -367,29 +465,10 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 				        <div class="wrap-3" style="margin-left:550px">
 				            <span class="title">총 결제금액</span>
 				            <span class="final-price"><span>${ params['price'] }</span> 원</span>
-				            <a href="#" class="btn-rsv-payment" data-bs-toggle="modal" data-bs-target="#exampleModal">결제</a>
+				            <a href="#" class="btn-rsv-payment">결제</a>
 				        </div>
 				        
 				    </div><!--.section-pop-bottom2-->
-				    
-				    <!-- 모달 -->
-					<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
-					  <div class="modal-dialog">
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-					        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					      </div>
-					      <div class="modal-body">
-					        ...
-					      </div>
-					      <div class="modal-footer">
-					        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					        <button type="button" class="btn btn-primary">Save changes</button>
-					      </div>
-					    </div>
-					  </div> -->
-					</div>
 				</div>
 
 				<!--/ Contents End -->
@@ -397,6 +476,9 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 			<!-- /Contents Area -->
 		</div>
 		<!-- E Contaniner -->
+		
+		<div class="popups">
+		</div>
 
 		<!-- S 예매하기 및 TOP Fixed 버튼 -->
 		<div class="fixedBtn_wrap">
@@ -411,12 +493,5 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 		<jsp:include page="footer.jsp"></jsp:include>
 		<!-- E footer_area -->
 		</div>
-
-<%
-	} catch(Exception e) {
-		out.println("에러 발생. 담당자에게 문의해주세요.");
-		e.printStackTrace();
-	}
-%>
 </body>
 </html>

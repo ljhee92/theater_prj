@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import VO.ReservingVO;
 import user.DAO.ReservingDAO;
+import user.VO.ReservingVO;
 
 @WebServlet("/MovieSearchServlet")
 public class MovieSearchServlet extends HttpServlet {

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import VO.ReservingVO;
+import user.VO.ReservingVO;
 import user.VO.UserSeatVO;
 import util.DbConnection;
 
