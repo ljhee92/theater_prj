@@ -1,5 +1,5 @@
 <%@page import="java.util.ArrayList"%>
-<%@page import="VO.ReservingVO"%>
+<%@page import="user.VO.ReservingVO"%>
 <%@page import="java.util.List"%>
 <%@page import="user.DAO.ReservingDAO"%>
 <%@page import="java.util.Locale"%>
@@ -94,7 +94,9 @@ if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디�
 <script type="text/javascript">
 window.location.href = "login.jsp?prevPage=ticket.jsp";
 </script>  
-<%}%>
+<%
+  }
+  %>
 <!-- E 로그인 세션 확인  -->
 
 <script type="text/javascript">
@@ -412,7 +414,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		<jsp:include page="header.jsp"></jsp:include>
 		<!-- E Header -->
 
-        <jsp:useBean id="rsVO" class="VO.ReservingVO" scope="page"/>
+        <jsp:useBean id="rsVO" class="user.VO.ReservingVO" scope="page"/>
         <jsp:setProperty property="*" name="rsVO"/>
 		<%
 		LocalDateTime now = LocalDateTime.now();

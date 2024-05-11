@@ -1,4 +1,4 @@
-<%@page import="admin.BoardDAO"%>
+<%@page import="admin.DAO.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     info = "공지사항 상세보기에서 수정 또는 삭제를 위한 JSP" %>
