@@ -63,6 +63,11 @@
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/swiper.min.js"></script>
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/swiper-bundle.min.css" />
 
+<!--bootstrap 시작-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<!--bootstrap 끝-->
+
 <!-- 예매 CSS, JS -->
 <link href="https://www.cineq.co.kr/bundles/css?v=oiZxrFB4-kROndwe9FLU4L2IiIJAaPO8AdRMkkO1wbE1" rel="stylesheet">
 <script src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
@@ -362,10 +367,29 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 				        <div class="wrap-3" style="margin-left:550px">
 				            <span class="title">총 결제금액</span>
 				            <span class="final-price"><span>${ params['price'] }</span> 원</span>
-				            <a href="#" class="btn-rsv-payment">결제</a>
+				            <a href="#" class="btn-rsv-payment" data-bs-toggle="modal" data-bs-target="#exampleModal">결제</a>
 				        </div>
 				        
 				    </div><!--.section-pop-bottom2-->
+				    
+				    <!-- 모달 -->
+					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+					        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					      </div>
+					      <div class="modal-body">
+					        ...
+					      </div>
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					        <button type="button" class="btn btn-primary">Save changes</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
 				</div>
 
 				<!--/ Contents End -->
