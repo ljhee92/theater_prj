@@ -2,6 +2,7 @@ package user.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -65,13 +66,12 @@ public class BoardCategoryServlet extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	public String getJson(int startNum,int endNum,String FAQS,String category) throws SQLException {
 		
-		if(FAQS == null) FAQS="";
 		BoardDAO bDAO = BoardDAO.getInstance();
-		
+
 		List<BoardVO> boardList = null;
 		int totalBoardCount = 0;
 		
-		if(category== null) {
+		if(category== null || category.equals("")) {
 			boardList = bDAO.selectBoard(startNum, endNum, FAQS);
 			totalBoardCount = bDAO.selectTotalCount(FAQS);
 		}
@@ -79,37 +79,47 @@ public class BoardCategoryServlet extends HttpServlet {
 			boardList = bDAO.selectOneCategory(startNum, endNum, FAQS, category);	
 			totalBoardCount = bDAO.selectCategoryCount(FAQS, category);
 		}
-        int totalPage = (int) Math.ceil((double) totalBoardCount / (endNum - startNum + 1));
 
-		
-		JSONObject jsonObj=new JSONObject();
+        int totalPage = (int) Math.ceil((double) totalBoardCount / (endNum - startNum + 1));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = "";
+        JSONObject jsonObj=new JSONObject();
 		
 		JSONArray jsonArr=new JSONArray();
 		
 		JSONObject jsonTemp=null;
+		try {
 		for (int i = 0; i < boardList.size(); i++) {
 			BoardVO board = boardList.get(i);
-			
+			date = sdf.format(board.getBoardInputDate());
 			jsonTemp=new JSONObject();
 			jsonTemp.put("categoryName", board.getCategoryName());
 			jsonTemp.put("boardNumber",board.getBoardNumber());
 			jsonTemp.put("boardTitle", board.getBoardTitle());
 			jsonTemp.put("boardContent", board.getBoardContent());
 			jsonTemp.put("boardAdmin", board.getAdminId());
-			jsonTemp.put("boardInputDate", board.getBoardInputDate());
+			jsonTemp.put("boardInputDate", date);
 			jsonTemp.put("rnum", board.getRnum());
 			jsonTemp.put("boardViews", board.getBoardViews());
 			
 			jsonArr.add(jsonTemp);
 		}
 		
+		jsonObj.put("status", "SUCCESS");
+		jsonObj.put("totalPage", totalPage);
+		jsonObj.put("Categorycount", totalBoardCount);
 		jsonObj.put("result", jsonArr);
-        jsonObj.put("totalPage", totalPage);
-
+		jsonObj.put("FAQS", FAQS);
+		jsonObj.put("startNum", startNum);
+		jsonObj.put("endNum", endNum);
 		
+		jsonObj.put("category", category);
 		
-//		System.out.println(result.toString());
-//		return result.toString();
+		}catch(Exception e) {
+			e.printStackTrace();
+			jsonObj.put("status", "FAIL");
+		}
+		
 		System.out.println(jsonObj);
 		return jsonObj.toJSONString();
 	}

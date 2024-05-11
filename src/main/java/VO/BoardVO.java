@@ -1,5 +1,8 @@
 package VO;
 
+
+import java.sql.Date;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +17,7 @@ public class BoardVO {
 	private String boardNumber;
 	private String boardTitle;
 	private String boardContent;
-	private String boardInputDate;
+	private Date boardInputDate;
 	private String adminId;
 	private int rnum;
 	private int boardViews;

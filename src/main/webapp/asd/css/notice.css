@@ -15,7 +15,5 @@
 .tbl_notice_list tr:nth-child(even) {
     background-color: #f9f9f9; /* 연한 회색 계열 배경색 */
 }
-.txt :hover {
-    
-}
+
 
