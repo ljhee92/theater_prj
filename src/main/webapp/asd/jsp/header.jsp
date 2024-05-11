@@ -381,20 +381,17 @@
 
 							</dl>
 						</li>
-						<%
-						String notice = "0";
-						String qa = "1";
-						%>
+						
 						<li>
 							<h2 onclick="gaEventLog('PC_GNB','주메뉴_해택','')">
-								<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=<%=notice%>">공지사항</a>
+								<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=N">공지사항</a>
 							</h2>
 
 							<dl class="nav_overMenu">
 
 								<dt>
 									<h2>
-										<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=<%=notice%>">공지사항</a>
+										<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=N">공지사항</a>
 									</h2>
 								</dt>
 
@@ -403,14 +400,14 @@
 
 						<li>
 							<h2 onclick="gaEventLog('PC_GNB','주메뉴_해택','')">
-								<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=<%=qa%>">자주찾는 질문</a>
+								<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=Q">자주찾는 질문</a>
 							</h2>
 
 							<dl class="nav_overMenu">
 
 								<dt>
 									<h2>
-									<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=<%=qa%>">자주찾는질문</a>
+									<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=Q">자주찾는질문</a>
 									</h2>
 								</dt>
 

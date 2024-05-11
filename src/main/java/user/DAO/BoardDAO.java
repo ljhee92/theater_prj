@@ -217,7 +217,7 @@ public class BoardDAO {
 						.boardNumber(rs.getString("BOARD_NUMBER"))
 						.boardTitle(rs.getString("BOARD_TITLE"))
 						.boardContent(rs.getString("BOARD_CONTENT"))
-						.boardInputDate(rs.getString("BOARD_INPUT_DATE"))
+						.boardInputDate(rs.getDate("BOARD_INPUT_DATE"))
 						.boardViews(rs.getInt("BOARD_VIEWS"))
 						.adminId(rs.getString("ADMIN_ID"))
 						.rnum(rs.getInt("rnum"))
@@ -256,7 +256,6 @@ public class BoardDAO {
 			// 2. 데이터베이스 연결
 			con = dbCon.getConnection(id, pass);
 
-		
 			StringBuilder sbQuery = new StringBuilder();
 			sbQuery
 			.append("	SELECT * FROM (")
@@ -265,18 +264,16 @@ public class BoardDAO {
 			.append("           ROW_NUMBER() OVER (ORDER BY b.BOARD_INPUT_DATE DESC) AS rnum ")
 			.append("    FROM board b ")
 			.append("    JOIN category c ON b.category_number = c.category_number ")
-			.append("    WHERE c.category_type_flag = ? ")
+			.append("    WHERE c.category_type_flag = ? and CATEGORY_NAME = ? ")
 			.append(") sub ")
-			.append("WHERE CATEGORY_NAME = ? ")
+			.append("WHERE rnum between ? and ? ")
 			.append("ORDER BY BOARD_NUMBER desc");
-
-			
 			
 			pstmt = con.prepareStatement( sbQuery.toString());
 			pstmt.setString(1, FAQS );
-//			pstmt.setInt(2, 1);
-//			pstmt.setInt(3, endNum);
 			pstmt.setString(2, category);
+			pstmt.setInt(3, startNum);
+			pstmt.setInt(4, endNum);
 			//5. 바인드변수에 값 설정
 			//6. 쿼리문 수행 후 결과얻기
 			rs= pstmt.executeQuery();
@@ -288,7 +285,7 @@ public class BoardDAO {
 						.boardNumber(rs.getString("BOARD_NUMBER"))
 						.boardTitle(rs.getString("BOARD_TITLE"))
 						.boardContent(rs.getString("BOARD_CONTENT"))
-						.boardInputDate(rs.getString("BOARD_INPUT_DATE"))
+						.boardInputDate(rs.getDate("BOARD_INPUT_DATE"))
 						.boardViews(rs.getInt("BOARD_VIEWS"))
 						.adminId(rs.getString("ADMIN_ID"))
 						.rnum(rs.getInt("rnum"))
@@ -300,5 +297,121 @@ public class BoardDAO {
 			dbCon.dbClose(rs, pstmt, con);
 		}
 		return list;
+	}
+	
+	/**
+	 * 게시물 제목에 관련 단어 있는지 찾는 메서드
+	 * @param startNum
+	 * @param endNum
+	 * @param FAQS
+	 * @param category
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<BoardVO> selectSearchBoard(int startNum,int endNum, String FAQS,String searchText) throws SQLException{
+		List<BoardVO> list = new ArrayList<BoardVO>();
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		DbConnection dbCon = DbConnection.getInstance();
+		
+
+		try {
+			// 1. 데이터베이스 접속 정보
+			String id = "son";
+			String pass = "jimin";
+
+			// 2. 데이터베이스 연결
+			con = dbCon.getConnection(id, pass);
+
+			StringBuilder sbQuery = new StringBuilder();
+			sbQuery
+			.append("	SELECT * FROM (")
+			.append("    SELECT c.CATEGORY_NAME, b.BOARD_NUMBER, b.BOARD_TITLE, b.BOARD_CONTENT, ")
+			.append("           b.BOARD_INPUT_DATE, b.BOARD_VIEWS, b.ADMIN_ID, ")
+			.append("           ROW_NUMBER() OVER (ORDER BY b.BOARD_INPUT_DATE DESC) AS rnum ")
+			.append("    FROM board b ")
+			.append("    JOIN category c ON b.category_number = c.category_number ")
+			.append("    WHERE c.category_type_flag = ? and b.BOARD_TITLE LIKE '%' || ? || '%' ")
+			.append(") sub ")
+			.append("WHERE rnum between ? and ? ")
+			.append("ORDER BY BOARD_NUMBER desc");
+			
+			pstmt = con.prepareStatement( sbQuery.toString());
+			pstmt.setString(1, FAQS );
+			pstmt.setString(2, searchText);
+			pstmt.setInt(3, startNum);
+			pstmt.setInt(4, endNum);
+			//5. 바인드변수에 값 설정
+			//6. 쿼리문 수행 후 결과얻기
+			rs= pstmt.executeQuery();
+			BoardVO bVO = null;
+			
+			while(rs.next()) {
+				bVO = BoardVO.builder()
+						.categoryName(rs.getString("CATEGORY_NAME"))
+						.boardNumber(rs.getString("BOARD_NUMBER"))
+						.boardTitle(rs.getString("BOARD_TITLE"))
+						.boardContent(rs.getString("BOARD_CONTENT"))
+						.boardInputDate(rs.getDate("BOARD_INPUT_DATE"))
+						.boardViews(rs.getInt("BOARD_VIEWS"))
+						.adminId(rs.getString("ADMIN_ID"))
+						.rnum(rs.getInt("rnum"))
+						.build();
+				list.add(bVO);
+			}
+		}finally {
+			//7. 연결 끊기
+			dbCon.dbClose(rs, pstmt, con);
+		}
+		return list;
+	}
+	/**
+	 * 검색 리스트 카운트 조회 메서드
+	 * @param FAQS
+	 * @param category
+	 * @return
+	 * @throws SQLException
+	 */
+	public int selectSearchCount(String FAQS,String category) throws SQLException{
+		int totalCnt = 0;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {		
+			// 1. 데이터베이스 접속 정보
+			String id = "son";
+			String pass = "jimin";
+			
+			// 2. 데이터베이스 연결
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder sbQuery = new StringBuilder();
+			sbQuery
+			.append("	select count(*) cnt from board b ")
+			.append("	join category c on b.category_number = c.category_number ")
+			.append("	where c.category_type_flag = ? and b.board_title LIKE '%' || ? || '%' ");
+			
+			pstmt = con.prepareStatement(sbQuery.toString());
+			pstmt.setString(1, FAQS);
+			pstmt.setString(2, category);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				totalCnt = rs.getInt("cnt");
+			}//end if
+			
+		}finally {
+			//7. 연결 끊기			
+			dbCon.dbClose(rs, pstmt, con);
+		}
+		
+		return totalCnt;
 	}
 }
