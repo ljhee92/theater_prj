@@ -30,6 +30,7 @@
         for (int i = 0; i < screeningList.size(); i++) {
             ScreeningVO screening = screeningList.get(i);
             jsonResponse.append("{");
+            jsonResponse.append("\"screeningCode\": \"" + screening.getScreeningCode() + "\",");
             jsonResponse.append("\"theaterName\": \"" + screening.getTheaterName() + "\",");
             jsonResponse.append("\"theaterNumber\": \"" + screening.getTheaterNumber() + "\",");
             jsonResponse.append("\"movieName\": \"" + screening.getMovieName() + "\",");

@@ -99,7 +99,7 @@
                 success: function(jsonArr) {
                     // 검색 결과를 테이블에 반영
                     updateTable(jsonArr);
-                    alert(JSON.stringify(jsonArr));
+                    alert("searchButton:jsonArr response: " + JSON.stringify(jsonArr));
                 },
                 error: function(xhr) {
                     alert(xhr.statusText);
@@ -107,34 +107,58 @@
             });
         });
         
-        $("#contentBoard").on("click", "tr", clickTable);
+        //$("#contentBoard").on("click", "tr", clickTable);
         
          
         $("#registerButton").click(function() {
             $("#registerForm").show();
             $("#table-content").hide();
+            $("#editForm").hide();
         });
+        
+        
         
         $("#toBack").click(function() {
             $("#registerForm").hide();
+            $("#editForm").hide();
             $("#table-content").show();
         });
 
+ 
+            
+           
+            });
 
-     
-        function clickTable(){
-        	alert("클릭되면 나오는 함수 clickTable()")
+        function clickTable(sCode, tName, tNum, mName, sDate, sRound) {
+            // 클릭한 테이블의 정보를 가져오는 코드
+            $("#registerForm").hide();
+            $("#table-content").hide();
+            $("#editForm").show();
+            
+            
+            $("#eScreeningCode").val(sCode);
+            $("#eTheaterName").val(tName);
+            $("#eTheaterNumber").val(tNum);
+            $("#eMovieName").val(mName);
+            $("#eScreeningRound").val(sRound);
+            
+            
+           
+
+            
+            
         }
            
+           
         function updateTable(jsonArr) {
+        	alert("update table 메서드");
+        	alert(JSON.stringify(jsonArr));
             // id="content"를 삭제하고
             $("#contentBoard").empty();
-            var resultNum = 0; // 결과 번호를 초기화합니다.
             // jsonArr를 반복하고, jsonObject을 parsing하여
             jsonArr.forEach(function(screening) {
-                resultNum++; // 각 행마다 번호를 증가시킵니다.
-                var newRow = "<tr onclick='clickTable()'>" +
-                    "<td>" + resultNum + "</td>" + // 결과 번호를 표시합니다.
+                var newRow = "<tr onclick=\"clickTable('"+ screening.screeningCode + "', '" + screening.theaterName + "','" + screening.theaterNumber + "','" + screening.movieName + "', '" + screening.screeningDate + "','" + screening.screeningRound + "')\">" +
+                    "<td>" + screening.screeningCode + "</td>" + // 결과 번호를 표시합니다.
                     "<td>" + screening.theaterName + "</td>" +
                     "<td>" + screening.theaterNumber + "</td>" +
                     "<td>" + screening.movieName + "</td>" +
@@ -146,7 +170,8 @@
             });
         }
 
-    });
+
+  //  });
 </script>
 <!-- Custom fonts for this template-->
 <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -177,6 +202,7 @@
                         <select id="theaterDropdown" name="theater">
                             <option value="강남점">강남점</option>
                             <option value="역삼점">역삼점</option>
+                            <option value="동대구역점">동대구역점</option>
                             <!-- JavaScript로 받아온 지점 목록을 여기에 추가 -->
                         </select>
                         
@@ -213,11 +239,10 @@
 						        try {
 	        				        	ScreeningDAO1 screeningDAO = ScreeningDAO1.getInstance();
 	        				            List<ScreeningVO> screeningList = screeningDAO.selectScreeningList();
-	        				            int num = 1;
 	        				            for (ScreeningVO screening : screeningList) {
 						        %>
-						        <tr onClick='clickTable()'>
-								    <td><%=num++%></td>
+						        <tr onClick="clickTable('<%=screening.getScreeningCode()%>', '<%=screening.getTheaterName()%>','<%=screening.getTheaterNumber()%>', '<%=screening.getMovieName()%>', '<%=screening.getScreeningDate()%>', '<%=screening.getScreeningRound()%>')">
+								    <td><%=screening.getScreeningCode()%></td>
 								    <td><%=screening.getTheaterName()%></td>
 								    <td><%=screening.getTheaterNumber()%></td>
 								    <td><%=screening.getMovieName()%></td>
@@ -236,8 +261,12 @@
 				    <!-- 상영관리 밑 컨텐츠 -->
 				    <div id="registerForm" style="display:none;">
 				    <%@ include file = "registerForm.jsp" %>
-				    <button id="toBack" class="btn btn-info">뒤로</button>
 				    </div>
+				    <div id="editForm" style="display:none;">
+				    <%-- <%@ include file = "screening_edit_form.jsp" %> --%>
+				    <c:import url="screening_edit_form.jsp"/>
+				    </div>
+				    <div></br><button id="toBack" class="btn btn-warning">뒤로</button></div>
 				</div>
                 <!-- /.container-fluid -->
             </div>

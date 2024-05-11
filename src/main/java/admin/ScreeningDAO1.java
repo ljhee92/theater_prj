@@ -34,6 +34,7 @@ public class ScreeningDAO1 {
   	        con = dbCon.getConnection(id, pass);
  
 	        String selectDeptProf =   "SELECT"
+	        					+ "    S.screening_code,"
 				        		+ "    S.theater_name,"
 				        		+ "    S.theater_number,"
 				        		+ "    M.movie_title,"
@@ -51,6 +52,7 @@ public class ScreeningDAO1 {
 	            
 	             ScreeningVOBuilder srVOBuilder = ScreeningVO.builder();
 	             ScreeningVO srVO = srVOBuilder
+	            		 .screeningCode(rs.getString("Screening_Code"))
 	            		 .theaterName(rs.getString("THEATER_NAME"))
 	            		 .theaterNumber(rs.getString("THEATER_NUMBER"))
 	            		 .movieName(rs.getString("MOVIE_TITLE"))
@@ -81,7 +83,7 @@ public class ScreeningDAO1 {
 	        con = dbCon.getConnection(id, pass);
 	        
 	        // 검색 조건에 따라 동적으로 쿼리를 생성하여 실행
-	        String selectScreening = "SELECT S.theater_name, S.theater_number, M.movie_title, S.screening_date, ST.screening_time "
+	        String selectScreening = "SELECT S.screening_Code, S.theater_name, S.theater_number, M.movie_title, S.screening_date, ST.screening_time "
 	                                + "FROM screening S "
 	                                + "INNER JOIN movie M ON S.movie_code = M.movie_code "
 	                                + "INNER JOIN screening_time ST ON S.screening_round = ST.screening_round "
@@ -121,6 +123,7 @@ public class ScreeningDAO1 {
 	        while (rs.next()) {
 	            ScreeningVOBuilder srVOBuilder = ScreeningVO.builder();
 	            ScreeningVO srVO = srVOBuilder
+	            				.screeningCode(rs.getString("SCREENING_CODE"))
 	                            .theaterName(rs.getString("THEATER_NAME"))
 	                            .theaterNumber(rs.getString("THEATER_NUMBER"))
 	                            .movieName(rs.getString("MOVIE_TITLE"))
@@ -250,6 +253,97 @@ public class ScreeningDAO1 {
 	    }
 
 	    return screeningCode;
+	}
+	
+	public void updateScreening(ScreeningVO sVO) throws SQLException {
+	    DbConnection dbCon = DbConnection.getInstance();
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+
+	    try {
+	        String id = "son";
+	        String pass = "jimin";
+	        con = dbCon.getConnection(id, pass);
+
+	        // 상영 정보를 업데이트하기 위한 SQL 쿼리
+	        String updateQuery = "UPDATE screening SET theater_name = ?, screening_date = ?, screening_round = ?, theater_number = ? WHERE screening_Code=?";
+
+	        pstmt = con.prepareStatement(updateQuery);
+
+	        // 영화 코드 조회
+	        String movieCode = getMovieCode(sVO.getMovieName());
+
+	        pstmt.setString(1, sVO.getTheaterName()); // 상영관 정보 설정
+	        pstmt.setString(2, sVO.getScreeningDate()); // 상영 날짜 설정
+	        pstmt.setString(3, sVO.getScreeningRound()); // 상영 회차 설정
+	        pstmt.setString(4, sVO.getTheaterNumber()); // 상영 극장 이름 설정
+	        pstmt.setString(5, sVO.getScreeningCode()); // 상영 극장 이름 설정
+
+	        pstmt.executeUpdate();
+	    } finally {
+	    	dbCon.dbClose(null, pstmt, con);
+	    }
+	}
+	public void deleteScreening(String screeningCode) throws SQLException {
+		DbConnection dbCon = DbConnection.getInstance();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			con = dbCon.getConnection(id, pass);
+			
+			// 상영 정보를 업데이트하기 위한 SQL 쿼리
+			String updateQuery = "DELETE FROM screening	"
+							   + "WHERE screening_Code = ?";
+			
+			pstmt = con.prepareStatement(updateQuery);
+			
+			pstmt.setString(1, screeningCode);
+			
+			pstmt.executeQuery();
+		} finally {
+			dbCon.dbClose(null, pstmt, con);
+		}
+	}
+	    
+	    public String selectScreeningCode(ScreeningVO sVO) throws SQLException {
+	    	DbConnection dbCon = DbConnection.getInstance();
+	    	Connection con = null;
+	    	ResultSet rs = null;
+	    	String screeningCode = null;
+	    	PreparedStatement pstmt = null;
+	    	
+	    	try {
+	    		String id = "son";
+	    		String pass = "jimin";
+	    		con = dbCon.getConnection(id, pass);
+	    		
+	    		// 상영 정보를 업데이트하기 위한 SQL 쿼리
+	    		String selectQuery = "select screening_Code from SCREENING WHERE theater_name = ? AND theater_number = ? AND movie_code = ? AND SCREENING_ROUND=? AND SCREENING_DATE=?";
+	    		
+	    		pstmt = con.prepareStatement(selectQuery);
+	    		
+	    		// 영화 코드 조회
+	    		String movieCode = getMovieCode(sVO.getMovieName());
+	    		pstmt.setString(1, sVO.getTheaterName()); // 상영 극장 이름 설정
+	    		pstmt.setString(2, sVO.getTheaterNumber()); // 상영관 정보 설정
+	    		pstmt.setString(3, movieCode); // 영화 코드 설정
+	    		pstmt.setString(4, sVO.getScreeningRound()); // 상영 회차 설정
+	    		pstmt.setString(5, sVO.getScreeningDate()); // 상영 날짜 설정
+	    		
+	    		System.out.println("theaterName : " + sVO.getTheaterName() + "theaterNumber : " + sVO.getTheaterNumber() + "movieCode : " + movieCode + "ScreeningRound : " + sVO.getScreeningRound() + "ScreeningDate : " + sVO.getScreeningDate());
+	    		rs = pstmt.executeQuery();
+	    		if(rs.next()) {
+	    			screeningCode = rs.getString("Screening_Code");
+	    		}else {
+					return "해당 컬럼 없음";
+				}
+	    	} finally {
+	    		dbCon.dbClose(null, pstmt, con);
+	    	}
+			return screeningCode;
 	}
 
 

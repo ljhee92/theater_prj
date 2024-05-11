@@ -60,37 +60,52 @@ List<String> theaterList = new ArrayList<String>();
 
 <h1>상영 등록</h1>
 <hr/>
-<form id="addNewScreeningForm">
-    지점 : 
-    <select id="theaterName" name="theaterName">
-        <c:forEach items="${theaterList}" var="theater">
-            <option value="${theater}">${theater}</option>
-        </c:forEach>
-    </select><br/>
-    상영관 : 
-    <select id="screeningRoom" name="screeningRoom">
-        <option value="1관">1관</option>
-        <option value="2관">2관</option>
-        <option value="3관">3관</option>
-    </select><br/>
-    영화명 : 
-    <select id="movieName" name="movieName">
-        <c:forEach items="${movieList}" var="movie">
-            <option value="${movie}">${movie}</option>
-        </c:forEach>
-    </select> <br/>
-    상영시작시간 : 
-    <input type="date" id="openDate" name="openDate" /> 
-    <select id="screeningRound" name="screeningRound">
-    <option value="1">09:00 ~ 12:00</option>
-    <option value="2">12:00 ~ 15:00</option>
-    <option value="3">15:00 ~ 18:00</option>
-    <option value="4">18:00 ~ 21:00</option>
-    </select>
+<form id="addNewScreeningForm" class="pt-3" style="max-width:920px;">
+    <div class="form-group">
+        지점 : 
+        <select id="theaterName" name="theaterName" class="form-select" aria-label="Default select example">
+            <c:forEach items="${theaterList}" var="theater">
+                <option value="${theater}">${theater}</option>
+            </c:forEach>
+        </select>
+    </div>
     
+    <div class="form-group">
+        상영관 : 
+        <select id="screeningRoom" name="screeningRoom" class="form-select" aria-label="Default select example">
+            <option value="1관">1관</option>
+            <option value="2관">2관</option>
+            <option value="3관">3관</option>
+        </select><br/>
+    </div>
+
+    <div class="form-group">
+        영화명 : 
+        <select id="movieName" name="movieName" class="form-select" aria-label="Default select example">
+            <c:forEach items="${movieList}" var="movie">
+                <option value="${movie}">${movie}</option>
+            </c:forEach>
+        </select> <br/>
+    </div>
+
+    <div class="form-group">
+        상영시작시간 : 
+        <input type="date" id="openDate" name="openDate" /> 
+        <select id="screeningRound" name="screeningRound" class="form-select" aria-label="Default select example">
+            <option value="1">09:00 ~ 12:00</option>
+            <option value="2">12:00 ~ 15:00</option>
+            <option value="3">15:00 ~ 18:00</option>
+            <option value="4">18:00 ~ 21:00</option>
+        </select>
+    </div>
+
     <br/>
     <br/>
+    <div>
     <input type="button" id="addNewMovie" class="btn btn-info" value="상영 등록" />
+    </div>
+    
 </form>
+
 </body>
 </html>
