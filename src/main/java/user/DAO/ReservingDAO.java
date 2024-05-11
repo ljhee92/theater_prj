@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import VO.ReservingVO;
-import VO.SeatVO;
+import user.VO.UserSeatVO;
 import util.DbConnection;
 
 public class ReservingDAO {
@@ -212,8 +212,8 @@ public class ReservingDAO {
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<SeatVO> selectSeat(String theaterName, String theaterNumber) throws SQLException {
-		List<SeatVO> seats = new ArrayList<>();
+	public List<UserSeatVO> selectSeat(String theaterName, String theaterNumber) throws SQLException {
+		List<UserSeatVO> seats = new ArrayList<>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -236,21 +236,74 @@ public class ReservingDAO {
 			pstmt.setString(2, theaterNumber);
 			
 			rs = pstmt.executeQuery();
-			SeatVO sVO = null;
+			UserSeatVO usVO = null;
 			while(rs.next()) {
-				sVO = SeatVO.builder()
-						.seatLowNumber(rs.getString("seat_lownumber"))
-						.seatColNumber(rs.getString("seat_colnumber"))
-						.theaterName(theaterName)
-						.theaterNumber(theaterNumber)
-						.reservationStatus(rs.getString("reservation_status").charAt(0))
-						.build();
-				seats.add(sVO);
+				usVO = UserSeatVO.builder()
+								.seatLowNumber(rs.getString("seat_lownumber"))
+								.seatColNumber(rs.getString("seat_colnumber"))
+								.theaterName(theaterName)
+								.theaterNumber(theaterNumber)
+								.reservationStatus(rs.getString("reservation_status"))
+								.build();
+				seats.add(usVO);
 			} // end while
 		} finally {
 			dbCon.dbClose(rs, pstmt, con);
 		} // end finally
 		return seats;
 	} // selectSeat
+	
+	/**
+	 * 영화관, 상영관별 예약되어있는 좌석 가져오기
+	 * @param screeningCode
+	 * @param theaterName
+	 * @param theaterNumber
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<UserSeatVO> selectReservatedSeats(String screeningCode, String theaterName, String theaterNumber) throws SQLException {
+		List<UserSeatVO> reservatedSeats = new ArrayList<UserSeatVO>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder selectReservatedSeats = new StringBuilder();
+			selectReservatedSeats.append("select rs.seat_lownumber, rs.seat_colnumber ")
+			.append("from reserved_seat rs ")
+			.append("join reservation r ")
+			.append("on r.reservation_number = rs.reservation_number ")
+			.append("join screening s ")
+			.append("on s.screening_code = r.screening_code ")
+			.append("where s.screening_code = ? and rs.theater_name = ? and rs.theater_number = ? ");
+			
+			pstmt = con.prepareStatement(selectReservatedSeats.toString());
+
+			pstmt.setString(1, screeningCode);
+			pstmt.setString(2, theaterName);
+			pstmt.setString(3, theaterNumber);
+			
+			rs = pstmt.executeQuery();
+			
+			UserSeatVO usVO = null;
+			while(rs.next()) {
+				usVO = UserSeatVO.builder()
+					.seatLowNumber(rs.getString("seat_lownumber"))
+					.seatColNumber(rs.getString("seat_colnumber"))
+					.build();
+				reservatedSeats.add(usVO);
+			} // end while
+			
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		} // end finally
+		return reservatedSeats;
+	} // selectReservatedSeats
 
 } // class
