@@ -373,7 +373,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 				    </div><!--.section-pop-bottom2-->
 				    
 				    <!-- 모달 -->
-					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+					<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
 					  <div class="modal-dialog">
 					    <div class="modal-content">
 					      <div class="modal-header">
@@ -388,7 +388,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 					        <button type="button" class="btn btn-primary">Save changes</button>
 					      </div>
 					    </div>
-					  </div>
+					  </div> -->
 					</div>
 				</div>
 
