@@ -114,14 +114,14 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 		
 		// 인원 선택이 변경되면
 		$(".input-select").change(function(){
-			var selectedPerson = $(".input-select").val();
+			var selectedPerson = $(this).val();
 			var checkedSeat = $("input[type='checkbox']:checked").length;
 			var price = (10000*selectedPerson).toLocaleString('ko-KR');
 			
 			// 변경한 선택 옵션이 선택한 좌석 수보다 적을 때
 			if(selectedPerson < checkedSeat) {
 				alert("선택한 좌석보다 인원수가 적습니다.");
-				$(".input-select").val(checkedSeat);
+				$(this).val(checkedSeat);
 				return;
 			} // end if
 			
@@ -185,7 +185,23 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 				$(".right .number-chosen").text("0");
 				$(".table-movie-info .seats").text("");
 			})
-		})
+		});
+		
+		// 다시예매 버튼 클릭 시
+		$(".btn-rsv-reset").click(function() {
+			if(confirm('모든 선택정보가 사라집니다. 계속하시겠습니까?')) {
+				location.href="ticket.jsp";
+			} else {
+			} // end else
+		});
+		
+		// 이전 버튼 클릭 시
+		$(".btn-rsv-cancel2").click(function() {
+			if(confirm('모든 선택정보가 사라집니다. 계속하시겠습니까?')) {
+				location.href="ticket.jsp";
+			} else {
+			} // end else
+		});
 		
 		// 다음 버튼 클릭 시
 		$(".btn-rsv-next2").click(function() {
@@ -309,21 +325,22 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 
 				<!-- 좌석 선택 본문 -->
 				<div class="popup seatChoice" data-theatername="${ params['theaterName'] }" data-theaternumber="${ params['theaterNumber'] }"
-					data-moviecode="${ params['movieCode'] }" data-movietitle="${ paramas['movieTitle'] }" data-movierate="${ params['movieRate'] }"
+					data-moviecode="${ params['movieCode'] }" data-movietitle="${ params['movieTitle'] }" data-movierate="${ params['movieRate'] }"
 					data-screeningdate="${ params['screeningDate'] }" data-screeningtime="${ params['screeningTime'] }"
 					data-screeningcode="${ params['screeningCode'] }">
 					<div class="section-pop-top">
 						<h3 class="title">인원/좌석선택</h3>
-						<a href="ticket.jsp" class="btn-rsv-reset" onclick="confirm('모든 선택정보가 사라집니다. 계속하시겠습니까?');">다시 예매</a>
+						<a href="#" class="btn-rsv-reset">다시 예매</a>
 					</div>
 
 					<div class="section-pop-movie">
 						<img src="../images/movie/${ params['movieCode'] }.jpg" class="poster" alt="포스터">
 
 						<div class="title" style="white-space:normal; overflow:visible; margin:15px 20px 5px 20px;">
-							<span class="rate-${fn:toLowerCase(params['movieRate'] == '18' ? 'x' : params['movieRate'])}">${ params['movieRate'] }</span>${ params['movieTitle'] }
+							<span class="rate-${fn:toLowerCase(params['movieRate'] == '18' ? 'x' : params['movieRate'])}">
+							${ params['movieRate'] }</span>${ params['movieTitle'] }
 						</div>
-						<table class="table-movie-info" style="margin-left:15px; margin-top:20px; width:auto;">
+						<table class="table-movie-info" style="margin-left:15px; margin-top:20px; width:220px;">
 							<tbody>
 								<tr>
 									<th>영화관</th>
@@ -429,7 +446,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 
 					<div class="section-pop-bottom">
 						<div class="wrap-rsv-select">
-							<a href="ticket.jsp" class="btn-rsv-cancel2" onclick="confirm('모든 선택정보가 사라집니다. 계속하시겠습니까?');">이전</a>
+							<a href="#" class="btn-rsv-cancel2">이전</a>
 							<a href="#" class="btn-rsv-next2">다음</a>
 						</div>
 					</div>
