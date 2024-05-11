@@ -1,5 +1,7 @@
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" info="로그인 후 결제 페이지(무통장입금)"%>
+	pageEncoding="UTF-8" info="결제 페이지" trimDirectiveWhitespaces="true" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,88 +65,33 @@
 <script src="https://www.cineq.co.kr/bundles/script?v=BivSx9O848D5V0Qog32Mgvmnh92IWQV9phYbkYbZeJg1"></script>
 <!-- 예매 CSS, JS -->
 
-<!-- 로그인/로그아웃 script 시작 -->
-<!-- <script type="text/javascript">
-    $(function () {
-        $(".nomemberloginpop").click(function () {
-            if ($(this).prop("tagName") == "A") {
-                var redirect = $(this).prop("href");
-                $.desktop.login.openNoMember(function () {
-                    window.location.href = redirect;
-                });
-            } else {
-                window.location.reload(true);
-            }
-            return false;
-        });
-
-        $(".loginpop").click(function (e) {
-            if ($("header").data("loginstatus") == 0) {
-                e.preventDefault();
-                var redirect = $(this).data("redirect"), reload = $(this).data("reload"), callback = $(this).data("callback");
-                if (callback != null && callback != "") {
-                    $.desktop.login.open(function (phoneStatus, isNomember) {
-                        if (isNomember) {
-                            window.location.reload(true);
-                            return;
-                        }
-                        var _callback = eval(callback); _callback.apply();
-                    });
-                }
-                else if (reload != null && reload != "") { $.desktop.login.open(function () { window.location.reload(true); }); }
-                else if (redirect != null && redirect != "") {
-                    $.desktop.login.open(function (phoneStatus, isNomember) {
-                        if (isNomember) {
-                            window.location.reload(true);
-                            return;
-                        }
-                        window.location.href = redirect;
-                    });
-                }
-                else if ($(this).prop("tagName") == "A") {
-                    redirect = $(this).prop("href"); $.desktop.login.open(function (phoneStatus, isNomember) {
-                        if (isNomember) {
-                            window.location.reload(true);
-                            return;
-                        }
-                        window.location.href = redirect;
-                    });
-                }
-                return false;
-            }
-        });
-    });
-</script>
+<!-- S 로그인 세션 확인  -->
+<%
+// 세션에서 로그인 여부 확인
+String id = (String)session.getAttribute("id");
+if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디렉션
+%>
 <script type="text/javascript">
-    $(function () {
-        $("header").on("click", ".logoutpop", function () {
-            $.ajax({
-                url: "/Member/LogoutPop",
-                dataType: "json",
-                method: "POST",
-                success: function (data) {
-                    if (data.ResultCode == 1) {
-                        $.desktop.login.logout(
-                            function () { window.location.href = "/"; }
-                        )
-                    }
-                    else {
-                        alert(data.Message);
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("로그아웃 시도중 오류가 발생하였습니다.");
-                    console.log(errorThrown);
-                }
-            });
-            return false;
-        });
-    });
-</script> -->
-<!-- 로그인/로그아웃 script 종료 -->
+window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않고 직접 접근했을 경우 예매 첫 페이지로 이동
+</script>  
+<%}%>
+<!-- E 로그인 세션 확인  -->
 
 </head>
 <body class="">
+
+<%
+	request.setCharacterEncoding("UTF-8");
+	
+	// 파라미터로 넘어온 JSON Parsing
+	Map<String, String[]> requestParams = request.getParameterMap();
+	Map<String, String> params = new HashMap<>();
+	
+	for(String key : requestParams.keySet()) {
+		System.out.println("======================= "+key+":"+request.getParameter(key));
+		params.put(key, request.getParameter(key));
+	} // end for
+%>
 
 	<div id="wrap">
 		<!-- S Header -->
@@ -156,9 +103,6 @@
 			<!-- Contents Area -->
 			<div id="contents" class style="padding-bottom: 0px;">
 				<!-- Contents Start -->
-				<input type="hidden" id="isOpenUserEmailYNPopup"
-					name="isOpenUserEmailYNPopup" value="False" />
-
 				<!-- 결제 본문 -->
 				<div class="popup payment" data-price="10000">
 				    <div class="section-pop-top">
@@ -170,7 +114,6 @@
 				        <img src="https://file.cineq.co.kr/i.aspx?movieid=20249318&amp;size=210" class="poster" alt="포스터">
 				
 				        <div class="title">
-				
 				
 				            <span class="rate-15">15</span>챌린저스
 				        </div>
