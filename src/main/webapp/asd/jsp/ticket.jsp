@@ -7,8 +7,9 @@
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" info="로그인 전 예매 첫 페이지"%>
+	pageEncoding="UTF-8" info="예매 첫 페이지" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -137,6 +138,10 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			    var screeningDate = params.get("screeningDate");
 			    var theaterName = $(this).text();
 			    
+			    if(screeningDate === null) {
+			    	screeningDate = $("#rsvcal").val();
+			    } // end if
+			    
 		        searchMovie(screeningDate, theaterName);
 			} // end else
 		});
@@ -151,6 +156,10 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		    var screeningDate = params.get("screeningDate");
 		    var theaterName = $(".theater.selected").text();
 		    var movieCode = li.find("input[type='radio']").attr("id");
+		    
+		    if(screeningDate === null) {
+		    	screeningDate = $("#rsvcal").val();
+		    } // end if
 		    
 		    $(".wrap-timetable > .title").remove();
 		    $(".wrap-timetable > .theater-info").remove();
@@ -183,6 +192,10 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
  		    var screeningCode = $(".wrap-timetable > .time.on").attr("id");
  		    var screeningTime = $(".wrap-timetable > .time.on").text();
  		    
+ 		    if(screeningDate === null) {
+		    	screeningDate = $("#rsvcal").val();
+		    } // end if
+ 		    
  		    // 유효성 검증
  		    if(theaterName=="") {
  		    	alert("영화관을 선택해주세요.");
@@ -198,6 +211,26 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
  		    	alert("영화 시간을 선택해주세요.");
  		    	return;
  		    } // end if
+ 		    
+ 		   	if(movieRate == "12") {
+ 		   		if(!confirm("12세 이상 등급\n\n본 영화는 12세 이상 관람 영화입니다.\n\n만 12세 미만 고객님(영, 유아포함)께서는 반드시 보호자(부모님 포함) 동반 하에 관람이 가능합니다.")){
+ 		   			return;
+ 		   		} // end if
+ 		   	} // end if
+
+ 		   	if(movieRate == "15") {
+ 		   		if(!confirm("15세 이상 등급\n\n본 영화는 15세 이상 관람 영화입니다.\n\n만 15세 미만 고객님(영, 유아포함)께서는 반드시 보호자(부모님 포함) 동반 하에 관람이 가능합니다.")){
+ 		   			return;
+ 		   		} // end if
+ 		   	} // end if
+ 		   	
+ 		   	if(movieRate == "18") {
+ 		   		if(!confirm("청소년 불가 등급\n\n본 영화는 청소년 관람 불가 영화입니다.\n\n"
+ 		   				+"만 19세 미만 고객님(영, 유아포함)께서는 반드시 보호자(부모님 포함)를 동반하여도 관람하실 수 없습니다.\n"
+ 		   				+"(만 19세가 되는 해의 1월1일을 맞이한 사람은 제외)\n\n영화 관람 시, 반드시 신분증을 지참해주세요.")){
+ 		   			return;
+ 		   		} // end if
+ 		   	} // end if
  		    
  		    // 다음 페이지 파라미터로 넘길 값들 JSON으로 변경 
  		    var params = {
@@ -227,6 +260,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
  		    
  		    document.body.appendChild(form);
  		    form.submit();	// 전송
+
  		});
 	}); // ready
 
@@ -280,7 +314,11 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		        label.setAttribute("style", "overflow:hidden; text-overflow: ellipsis; white-space: nowrap; scrollbar-gutter: stable;");
 	
 		        var movieRatingSpan = document.createElement("span");
-		        movieRatingSpan.className = "rate-"+ movieRating.toLowerCase();
+		        if(movieRating == "18") {
+		        	movieRatingSpan.className = "rate-x";
+		        } else {
+			        movieRatingSpan.className = "rate-"+ movieRating.toLowerCase();
+		        } // end else
 		        movieRatingSpan.textContent = movieRating; // 등급 값 설정
 		        label.appendChild(movieRatingSpan);
 		        label.appendChild(document.createTextNode(movieTitle));
@@ -337,6 +375,10 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		var divTimeTable = $(".wrap-timetable");
 		
 		for(var i = 0; i < object.length; i++) {
+			if(object[i].movieRating == "18") {
+				 object[i].movieRating = "x";
+	        } // end if
+
 			var divTitle = $("<div>").addClass("title");
 			var spanRate = $("<span>").addClass("rate-"+object[i].movieRating.toLowerCase());
 			var divTheaterInfo = $("<div>").addClass("theater-info");
