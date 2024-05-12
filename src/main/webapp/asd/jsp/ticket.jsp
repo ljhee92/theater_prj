@@ -360,8 +360,14 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			success: function(response) {
 				// 받은 JSON 데이터를 파싱하여 표시
 				var data = JSON.parse(response);
+				
 				$(".wrap-timetable > p").remove();
-				displayData(response);
+
+				if(data == "") { // 데이터가 현재시간 이전이라면
+					$(".wrap-timetable").append($("<p>").text("영화관과 영화를 선택하면 시간표가 나옵니다.").addClass("ready"));
+				} else {
+					displayData(response);
+				} // end else
 			},
 			error: function(xhr, status, error) {
 				console.error('Error', error);
