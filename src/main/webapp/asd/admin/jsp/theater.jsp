@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>명화관 관리자 페이지</title>
-<link rel="icon" href="http://localhost/movie_admin/favicon.ico">
+<link rel="icon" href="http://localhost/theater_prj/asd/favicon.ico">
 <!--bootstrap 시작-->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
