@@ -92,6 +92,7 @@ String id = (String)session.getAttribute("id");
 if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디렉션
 %>
 <script type="text/javascript">
+alert("예매는 로그인 후 가능합니다.");
 window.location.href = "login.jsp?prevPage=ticket.jsp";
 </script>  
 <%
