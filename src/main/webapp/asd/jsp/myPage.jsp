@@ -31,7 +31,7 @@
 
 <link rel="alternate" href="http://m.cgv.co.kr" />
 <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-<title id="ctl00_headerTitle">명화 그 이상의 감동. 띵화관</title>
+<title id="ctl00_headerTitle">마이페이지 | 명화 그 이상의 감동. 띵화관</title>
 
 <link rel="shortcut icon" type="image/x-icon"
 	href="https://img.cgv.co.kr/R2014/images/favicon.ico" />
