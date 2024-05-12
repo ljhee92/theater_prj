@@ -1,6 +1,6 @@
 <%@page import="java.util.List"%>
 <%@page import="admin.BoardVO"%>
-<%@page import="admin.BoardDAO"%>
+<%@page import="admin.DAO.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     info = "명화관 관리자 공지사항 상세보기" %>

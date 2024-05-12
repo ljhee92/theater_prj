@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import VO.ReservingVO;
 import user.DAO.ReservingDAO;
+import user.VO.ReservingVO;
 
 /**
  * Servlet implementation class MovieTimeServlet
