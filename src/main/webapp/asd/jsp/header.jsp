@@ -266,18 +266,18 @@
 					<ul class="nav_menu">
 						<li>
 							<h2>
-								<a href="/movies/?lt=1&ft=0">영화</a>
+								<a href="movieChart.jsp">영화</a>
 							</h2>
 							<dl class="nav_overMenu">
 								<dt>
 									<h2>
-										<a href="/movies/?lt=1&ft=0" tabindex="-1">영화</a>
+										<a href="movieChart.jsp" tabindex="-1">영화</a>
 									</h2>
 								</dt>
 
 								<dd>
 									<h3>
-										<a href="/movies/?lt=1&ft=0">무비차트</a>
+										<a href="movieChart.jsp">무비차트</a>
 									</h3>
 								</dd>
 							</dl>
@@ -306,48 +306,48 @@
 
 						<li>
 							<h2>
-								<a href="/culture-event/popcorn-store/">스토어</a>
+								<a href="#/">스토어</a>
 							</h2>
 
 							<dl class="nav_overMenu">
 								<dt>
 									<h2>
-										<a href="/culture-event/popcorn-store/" tabindex="-1">스토어</a>
+										<a href="#" tabindex="-1">스토어</a>
 									</h2>
 								</dt>
 
 								<dd>
 									<h3>
 										<a
-											href="/culture-event/popcorn-store/store-category.aspx?CategoryIdx=2">영화관람권</a>
+											href="#">영화관람권</a>
 									</h3>
 								</dd>
 
 								<dd>
 									<h3>
 										<a
-											href="/culture-event/popcorn-store/store-category.aspx?CategoryIdx=4">콤보</a>
+											href="#">콤보</a>
 									</h3>
 								</dd>
 
 								<dd>
 									<h3>
 										<a
-											href="/culture-event/popcorn-store/store-category.aspx?CategoryIdx=5">팝콘</a>
+											href="#">팝콘</a>
 									</h3>
 								</dd>
 
 								<dd>
 									<h3>
 										<a
-											href="/culture-event/popcorn-store/store-category.aspx?CategoryIdx=6">음료</a>
+											href="#">음료</a>
 									</h3>
 								</dd>
 
 								<dd>
 									<h3>
 										<a
-											href="/culture-event/popcorn-store/store-category.aspx?CategoryIdx=7">스낵</a>
+											href="#">스낵</a>
 									</h3>
 								</dd>
 
@@ -357,25 +357,25 @@
 
 						<li>
 							<h2>
-								<a href="/culture-event/event/defaultNew.aspx">커뮤니티</a>
+								<a href="#">커뮤니티</a>
 							</h2>
 							<dl class="nav_overMenu">
 								<dt>
 									<h2>
-										<a href="/culture-event/event/defaultNew.aspx?mCode=001"
+										<a href="#"
 											tabindex="-1">커뮤니티</a>
 									</h2>
 								</dt>
 
 								<dd>
 									<h3>
-										<a href="/culture-event/event/defaultNew.aspx?mCode=001">영화게시판</a>
+										<a href="#">영화게시판</a>
 									</h3>
 								</dd>
 
 								<dd>
 									<h3>
-										<a href="/culture-event/event/defaultNew.aspx?mCode=004">영화리뷰</a>
+										<a href="#">영화리뷰</a>
 									</h3>
 								</dd>
 
