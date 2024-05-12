@@ -30,7 +30,7 @@ public class UserDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		
-DbConnection dbCon = DbConnection.getInstance();
+		DbConnection dbCon = DbConnection.getInstance();
 		
 		try {
 			// 1. 데이터베이스 접속 정보
@@ -102,5 +102,51 @@ DbConnection dbCon = DbConnection.getInstance();
 		return returnId;
 		
 	}//selectDupId
+	
+	
+	///////////////////////아이디 찾기/////////////////////
+	public String selectUserId(UserVO uVO) throws SQLException {
+		String returnId = "";
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		DbConnection dbCon = DbConnection.getInstance();
+
+		try {
+			// 1. 데이터베이스 접속 정보
+			String id = "son";
+			String pass = "jimin";
+
+			// 2. 데이터베이스 연결
+			//3. Connection 얻기
+			con = dbCon.getConnection(id, pass);
+
+			//4. 쿼리문 생성객체 얻기
+			StringBuilder selectUser = new StringBuilder();
+			selectUser.append("	select user_id	")
+			.append("	from users	")
+			.append("	where user_name = ? and user_birthday = ? and user_phone = ?	");
+			
+			pstmt = con.prepareStatement(selectUser.toString());
+			//5. 바인드 변수에 값 설정
+			pstmt.setString(1, uVO.getUserName());
+			pstmt.setString(2, uVO.getUserBirthday());
+			pstmt.setString(3, uVO.getUserPhone());
+			//6. 쿼리문 수행 후 결과 얻기
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				returnId = rs.getString("user_id");
+			} // end if
+		} finally {
+			//7. 연결 끊기
+			dbCon.dbClose(rs, pstmt, con);
+		} // end finally
+
+		return returnId;
+
+	}//selectUserId
+	
 	
 }//class
