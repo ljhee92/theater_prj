@@ -36,15 +36,35 @@
 
 </style>
 <script type="text/javascript">
-	$(function() {
-		
-	});//ready
+
+//팝업이 닫히는 이벤트를 감지하는 함수
+function handlePopupClose() {
+    alert('팝업을 닫으려고 합니다. 계속하시겠습니까?');
+}
+
+// 팝업 창이 닫히는 이벤트를 감지하고 해당 함수를 호출하는 코드
+window.addEventListener('beforeunload', handlePopupClose);
+/*
+window.onbeforeunload = function() {
+	alert("dddd")
+	
+	  return false;
+	};
+//모든 요소 필수 입력 함수
+function chCheckBox() {
+	/* if($("#agreement1").is(":checked")) {
+		alert('회원 이용약관 동의는 필수 동의사항입니다');
+		flagInputArrAll = false;
+		return false;
+	} 
+	};*/
+
 </script>
 </head>
 <body>
 <div class="wrap">
 	<div class="title">
-		<h2>회원 이용약관 동의</h2>
+		<h2 style="font-weight: bold; margin-top: 40px; margin-bottom: 20px;">회원 이용약관 동의</h2>
 	</div>
 	
 	<form>
@@ -315,8 +335,10 @@
     1. (시행일) 이 약관은 2024년 5월 14일부터 시행합니다.
 
 			</textarea><br>
+			<!-- 체크박스
 			<input type="checkbox" id="agreement1" name="agreement1" value="agreement1" required="required">
 			<label>회원 이용약관 동의</label>
+			-->
 		</div>
 	</form>
 </div>

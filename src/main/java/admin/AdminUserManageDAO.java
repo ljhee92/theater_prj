@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.DbConnection;
 import util.DbcpDbConnection;
 
 public class AdminUserManageDAO {
@@ -31,13 +32,17 @@ public class AdminUserManageDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		DbcpDbConnection dbCon = DbcpDbConnection.getInstance();
+		DbConnection dbCon = DbConnection.getInstance();
 		
 		try {
-			//1. JDNI 사용객체 생성
-			//2. DBCP에서 DataSource 얻기
+			// 1. 데이터베이스 접속 정보
+			String id = "son";
+			String pass = "jimin";
+
+			// 2. 데이터베이스 연결
 			//3. Connection 얻기
-			con = dbCon.getCon();
+			con = dbCon.getConnection(id, pass);
+
 			//4. 쿼리문 생성 객체 얻기(Dynamic Query)
 			StringBuilder selectAll = new StringBuilder();
 			selectAll.
@@ -55,7 +60,7 @@ public class AdminUserManageDAO {
 				UserVO uVOBuilder = uVO.builder()
 						.userId(rs.getString("USER_ID"))
 						.userName(rs.getString("USER_NAME"))
-						.userBirthday(rs.getDate("USER_BIRTHDAY"))
+						.userBirthday(rs.getString("USER_BIRTHDAY"))
 						.userPhone(rs.getString("USER_PHONE"))
 						.build();				
 				list.add(uVOBuilder);
@@ -63,7 +68,7 @@ public class AdminUserManageDAO {
 			
 		}finally {
 			//7. 연결 끊기
-			dbCon.closeCon(rs, pstmt, con);
+			dbCon.dbClose(rs, pstmt, con);
 		}//end finally
 		return list;
 	}//selectAllUserList
