@@ -109,27 +109,15 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			location.href = "ticket.jsp"
 		});
 		
-		$(".cal-week").on("click", ".datelist", function(event){
+		//a 태그 클릭 시 이벤트 핸들러 등록
+		$(".selected").click(function(event) {
+		    // 클릭 이벤트를 기본 동작으로부터 중지합니다.
 		    event.preventDefault();
-		    
-		    if($(this).find("a").hasClass("disabled ")) {
-				return;
-		    }
-		    
-		    var clickedDate = $(this).find("a").attr("data-date");
-		    
-		    if($(this).hasClass("selected ")) {
-				$(this).removeClass("selected ");
-				$(".theater-box a.selected").removeClass("selected ");
-				$(".theater-box a.selected").removeClass("selected ");
-			} else {
-				$(".cal-week a.selected").removeClass("selected ");
-				$(".theater-box a.selected").removeClass("selected ");
-				$(this).find("a").addClass("selected ");
-			} // end else
-		})
+		});
 		
 		$(".cal-week").on("click", ".prev", function(event) {
+			event.preventDefault();
+			
 			var now = new Date();
 			var year = now.getFullYear();
 			var month = (now.getMonth() + 1).toString().padStart(2, '0');
@@ -174,25 +162,17 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 								.attr("data-date", formattedDate1)
 								.attr("data-selectdate", formattedDate2)
 								.css("margin", "0 2px 0 2px")
+								//.addClass("disabled")
 								.click(function() {
-									event.preventDefault();
-									 
-									if($(this).hasClass("disabled ")) {
-										return;
-								    } // end if
-								    
 									if($(this).hasClass("selected ")) {
 										$(this).removeClass("selected ");
 										$(".theater-box a.selected").removeClass("selected ");
 									} else {
 										$(".cal-week a.selected").removeClass("selected ");
-										$(".theater-box a.selected").removeClass("selected ");
 										$(this).addClass("selected ");
 									} // end else
 									return false;
 								});
-				
-				searchScreeningDate(formattedDate1);
 				
 				if(dayOfWeek === "토") {
 					link.addClass("sat ");
@@ -365,47 +345,6 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 
  		});
 	}); // ready
-	
-	// 현재 날짜 이후에 상영 중인 상영일자 구하기
-	function searchScreeningDate(formattedDate1) {
-		$.ajax({
-			type: 'POST',
-			url: '/theater_prj/ScreeningDateServlet',
-			success: function(response) {
-				// 받은 JSON 데이터를 파싱하여 표시
-				var data = JSON.parse(response);
-				
-				displayDisabled(response, formattedDate1);
-			},
-			error: function(xhr, status, error) {
-				console.error('Error', error);
-			}
-		});
-	} // searchScreeningDate
-	
-	function displayDisabled(response, formattedDate1) {
-	    var object = JSON.parse(response);
-	    
-	    formattedArray = formattedDate1.split(",");
-	    
-	    var deleteDate = "";
-	    object.forEach(function(item) {
-		    var flag = false+","+item.screeningDate;
-	        if (item.screeningDate.includes(formattedArray)) {
-	        	flag = true+","+item.screeningDate;
-	        	deleteDate = item.screeningDate;
-	        }
-	    });
-	    var deleteIndex = formattedArray.indexOf(deleteDate);
-	    
-	    if(deleteIndex !== -1) {
-	    	formattedArray.splice(deleteIndex, 1);
-	    }
-	    
-	    formattedArray.forEach(function(date) {
-		    $(".cal-week .datelist a[data-date='" + date + "']").addClass("disabled");
-	    })
-	} // displayDisabled
 
 	// 날짜를 클릭하고 상영관을 클릭하면 상영 중인 영화를 가져옴
 	function searchMovie(screeningDate, theaterName) {
@@ -519,6 +458,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 	// 시간표에 파싱한 데이터를 표시하는 함수
 	function displayData(response) {
 		var object = JSON.parse(response);
+		//console.log(object);
 		
 		var divTimeTable = $(".wrap-timetable");
 		
@@ -549,7 +489,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			divTime.attr("theaterNumber", object[i].theaterNumber);
 			divTimeTable.append(divTime);
 		} // end for
-	} // displayData
+	} // displayDate
 		
 </script>
 </head>
@@ -640,13 +580,13 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 								%>
 									<li class="datelist">
 										<a href="ticket.jsp?screeningDate=<%= dataDate %>" data-date="<%= dataDate %>"
-										data-selectdate="<%= selectDate %>" class="<%= classString %>" <%=isDisabled%> >
+										data-selectdate="<%= selectDate %>" class="<%= classString %>" <%=isDisabled%>>
 										<span class="day"><%= dayOfWeek %></span><%= dayOfMonth %></a>
 									</li>
 								<% classStringBuilder.delete(0, classStringBuilder.length());
 								} // end for
 								String dataDate2 = now.plusDays(10).format(dataDateFormat); %>
-								<li><a href="ticket.jsp?screeningDate=<%= dataDate2 %>" class="next viewDate" data-viewdate="" >다음</a></li>
+								<li><a href="ticket.jsp?screeningDate=<%= dataDate2 %>" class="next viewDate" data-viewdate="" onclick="return false;">다음</a></li>
 							</ul>
 						</div>
 						
