@@ -114,17 +114,22 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		    
 		    if($(this).find("a").hasClass("disabled ")) {
 				return;
-		    }
+		    } // end if
 		    
 		    var clickedDate = $(this).find("a").attr("data-date");
 		    
 		    if($(this).hasClass("selected ")) {
 				$(this).removeClass("selected ");
 				$(".theater-box a.selected").removeClass("selected ");
-				$(".theater-box a.selected").removeClass("selected ");
+				$("#movieList > li").remove();
+				$("#movieList > p").remove();
+				$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
 			} else {
 				$(".cal-week a.selected").removeClass("selected ");
 				$(".theater-box a.selected").removeClass("selected ");
+				$("#movieList > li").remove();
+				$("#movieList > p").remove();
+				$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
 				$(this).find("a").addClass("selected ");
 			} // end else
 		})
@@ -177,17 +182,23 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 								.click(function() {
 									event.preventDefault();
 									 
-									if($(this).hasClass("disabled ")) {
-										return;
+									if($(this).hasClass("disabled")) {
+										event.preventDefault();
 								    } // end if
 								    
-									if($(this).hasClass("selected ")) {
-										$(this).removeClass("selected ");
-										$(".theater-box a.selected").removeClass("selected ");
+									if($(this).hasClass("selected")) {
+										$(this).removeClass("selected");
+										$(".theater-box a.selected").removeClass("selected");
+										$("#movieList > li").remove();
+										$("#movieList > p").remove();
+										$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
 									} else {
-										$(".cal-week a.selected").removeClass("selected ");
-										$(".theater-box a.selected").removeClass("selected ");
-										$(this).addClass("selected ");
+										$(".cal-week a.selected").removeClass("selected");
+										$(".theater-box a.selected").removeClass("selected");
+										$("#movieList > li").remove();
+										$("#movieList > p").remove();
+										$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
+										$(this).addClass("selected");
 									} // end else
 									return false;
 								});
@@ -616,7 +627,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 									boolean isScreening = false;
 									String isDisabled = "";
 									
-									classStringBuilder.append(isToday ? "today " : ""); // 오늘 날짜인 경우 today 클래스 추가
+									classStringBuilder.append(isToday ? "today selected " : ""); // 오늘 날짜인 경우 today 클래스 추가
 									classStringBuilder.append(isSelected ? "selected " : ""); // 선택된 날짜인 경우 selected 클래스 추가
 									classStringBuilder.append(dayOfWeek.equals("토") ? "sat " : ""); // 토요일인 경우 sat 클래스 추가
 									classStringBuilder.append(dayOfWeek.equals("일") ? "sun " : ""); // 일요일인 경우 sun 클래스 추가
