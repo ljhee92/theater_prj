@@ -49,7 +49,7 @@ public class ReservingDAO {
 			.append("inner join movie m ")
 			.append("on s.movie_code = m.movie_code ")
 			.append("where m.movie_screening_status = 'Y' ")
-			.append("AND TO_TIMESTAMP(s.screening_date, 'YYYYMMDD') > TO_TIMESTAMP(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD')" )
+			//.append("AND TO_TIMESTAMP(s.screening_date, 'YYYYMMDD') > TO_TIMESTAMP(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD')" )
 			.append("order by s.screening_date asc ");
 
 			pstmt = con.prepareStatement(selectScreeningDate.toString());
