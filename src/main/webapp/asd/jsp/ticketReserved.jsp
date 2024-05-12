@@ -145,7 +145,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 				            </tr>
 				            <tr>
 				                <th>인원</th>
-				                <td class="number">${ params['selectedPerson'] }</td>
+				                <td class="number">${ params['selectedPerson'] }명</td>
 				            </tr>
 				            <tr>
 				                <th>좌석</th>
