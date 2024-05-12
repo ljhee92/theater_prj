@@ -1,13 +1,15 @@
+<%@page import="admin.UserDAO"%>
 <%@page import="user.VO.UserVO"%>
 <%@page import="admin.AdminVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
  pageEncoding="UTF-8" 
  info="" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>아이디 찾기</title>
+<title>회원가입</title>
 <!--bootstrap 시작-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -64,6 +66,10 @@
     <!-- 홈페이지 CSS 일원화로 인한 반영 20220721 -->
     <link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/resource_pc/css/cgv.min.css" />
     <script type="text/javascript" src="https://img.cgv.co.kr/resource_pc/js/cgvUi.js"></script>
+
+	<!-- datepicker -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
 
 <style type="text/css">
@@ -149,7 +155,16 @@
 .box-login.nomember .box-operationguide dd{ padding:5px 0 0 0; border-left:none; background:url('../images/common/bg/dot_horizontal.gif') 0 0 repeat-x;}
 .box-login.nomember .box-operationguide dt + dd{ padding-top:0; background:none;}
 
-
+#success, resultDupId, resultFailContent {
+	width: 597px;
+	margin: 0px auto;
+	display : flex;
+	align-items: center; /* 세로 중앙 정렬 */
+	justify-content: center; /* 가로 중앙 정렬 */
+    height: 40vh; /* 부모 요소의 높이를 화면의 높이의 40%로 설정 */
+	position: relative;
+	text-align: center;
+}
 
 html{
      /* 웹페이지 드래그 및 커서 깜빡임 방지 */
@@ -160,124 +175,22 @@ html{
      user-select: none;
 }
 
-	
-.wrap_findId {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 100px;
+ul{
+	font-size: 20px;
 }
 
-.form-control::placeholder {
-    color: gray;
+li{
+	margin-bottom: 10px;
 }
 
-#findId_name, #findId_birth, #findId_tel, #findId_btn {
-    height: 50px;
-    width: 400px;
-}
-
-#findId_btn {
-	margin-top: 40px;
-}
 
 
 </style>
 
 
 <script type="text/javascript">
-	$(document).ready(function() {
-    	$("#findId_btn").click(function() {
-    		var userName = document.findIdFrm.userName.value;
-    		var userBirthday = convertToDate();
-    		var userPhone = document.findIdFrm.userPhone.value;
-        	// 모든 요소 입력되었는지 확인 함수
-        	if (chkInputAll()) {
-        		var url = "findIdResult.jsp?userName="+userName+"&userBirthday="+userBirthday+"&userPhone="+userPhone;
-            	// 팝업 창 크기 설정
-            	var popupWidth = 600;
-            	var popupHeight = 400;
-            	// 팝업 창 가운데로 띄우기
-            	var left = (window.innerWidth - popupWidth) / 2;
-            	var top = (window.innerHeight - popupHeight) / 2;
-            	// 새로운 창 열기
-            	window.open(url,"_blank", "width=600,height=400,left=" + left + ",top=" + top);
-            	submit();
-        	}
-    	});
-	});
-    
-
-	// 모든 요소 필수 입력 함수
-	function chkInputAll() {
-	    let flagInputArrAll = true;
-	    let arrEssential = [$("#findId_name"), $("#findId_birth"), $("#findId_tel")];
-	    let arrLabel = ['이름', '생년월일', '전화번호'];
-
-	    for (let i = 0; i < arrEssential.length; i++) {
-	        if (!arrEssential[i].val()) {
-	            flagInputArrAll = false;
-	            alert(arrLabel[i] + "을(를) 입력하세요.");
-	            arrEssential[i].focus();
-	            break;
-	        }
-	        // 생년월일이 숫자로만 6자리인지 확인
-	        if (i === 1) {
-	            let birthValue = arrEssential[i].val();
-	            if (!/^\d{6}$/.test(birthValue)) {
-	                flagInputArrAll = false;
-	                alert("생년월일은 숫자 6자리로만 입력해주세요.");
-	                arrEssential[i].val(""); // 입력 필드를 비움
-	                arrEssential[i].focus();
-	                break;
-	            }
-	        }
-	        // 전화번호가 숫자로만 11자리인지 확인
-	        if (i === 2) {
-	            let telValue = arrEssential[i].val();
-	            if (!/^\d{11}$/.test(telValue)) {
-	                flagInputArrAll = false;
-	                alert("전화번호는 숫자 11자리로만 입력해주세요.");
-	                arrEssential[i].val(""); // 입력 필드를 비움
-	                arrEssential[i].focus();
-	                break;
-	            }
-	        }
-	    }
-	    return flagInputArrAll;
-	}
-	
-	//날짜 형식 바꾸기 함수
-	function convertToDate(userBirthday) {
-		var userBirthday = document.findIdFrm.userBirthday.value;
-		
-	    // 6자리 숫자로부터 연, 월, 일을 추출
-	    var year = userBirthday.substring(0, 2);
-	    var month = userBirthday.substring(2, 4);
-	    var day = userBirthday.substring(4, 6);
-
-	    // 현재 연도를 기준으로 2000년 이후와 2000년 이전의 구분
-	    var currentYear = new Date().getFullYear();
-	    var century = currentYear < 2000 ? "19" : "20";
-
-	    // YY 형식의 연도를 YYYY 형식으로 변환
-	    year = century + year;
-
-	    // 월과 일이 한 자리 숫자인 경우 앞에 0을 붙여줌
-	    if (month.charAt(0) === "0") {
-	        month = month.charAt(1);
-	    }
-	    if (day.charAt(0) === "0") {
-	        day = day.charAt(1);
-	    }
-
-	    // YYYY-MM-DD 형식으로 반환
-	    return year + "-" + month + "-" + day;
-	}
 
 
-	
 </script>
 </head>
 
@@ -287,24 +200,96 @@ html{
 	<!-- Header -->
 	<jsp:include page="header.jsp"></jsp:include>
 
-<div class="wrap_findId">
-    <h2 style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">아이디 찾기</h2>
-    <form name="findIdFrm" id="findIdFrm" action="findIdResult.jsp" method="post">
-        <div class="input-group mb-3 input-group-lg">
-            <input type="text" class="form-control" id="findId_name" name="userName" placeholder="이름을 입력하세요.">
-        </div>
-        <div class="input-group mb-3 input-group-lg">
-            <input type="text" class="form-control" id="findId_birth" name="userBirthday" placeholder="생년월일 6자리를 입력하세요.">
-        </div>
-        <div class="input-group mb-3 input-group-lg">
-            <input type="text" class="form-control" id="findId_tel" name="userPhone" placeholder="전화번호 11자리를 입력하세요. (숫자만)">
-        </div>
-        
-        <button type="button" class="btn btn-primary" id="findId_btn"
-        style="font-size: 20px;">아이디 찾기</button>
-        
-    </form>
-</div>
+	<div>
+		<%
+		request.setCharacterEncoding("UTF-8");
+		%>
+		<jsp:useBean id="uVO" class="admin.UserVO" scope="page" />
+		<jsp:setProperty property="*" name="uVO" />
+
+		<c:catch var="e">
+			<%
+			/*
+			//암호화 복호화
+			//정보의 중요도
+			//일방향 Hash ( 비번)
+			uVO.setUserPassword(DataEncrypt.messageDigest("MD5", uVO.getUserPassword()));
+			uVO.setPassword(DataEncrypt.messageDigest("MD5", uVO.getPassword()));
+			//복호화가능한 암호화 ( 이름, 전화번호, 이메일)
+			String key="gdyb21LQTcIANtvYMT7QVQ==";
+
+			DataEncrypt de=new DataEncrypt(key);
+			uVO.setName(de.encryption(uVO.getName()));
+			uVO.setCell(de.encryption(uVO.getCell()));
+			uVO.setEmail(de.encryption(uVO.getEmail()));
+
+			System.out.println(uVO.getCell());
+			*/
+
+			//DB Table 추가
+			UserDAO uDAO = UserDAO.getInstance();
+			//try{
+			//웹의 비 연결성으로 동시에 같은 값을 사용하는 경우에 
+			if (!"".equals(uDAO.selectDupId(uVO.getUserId()))) {//조회를 하여 같은 값이 있는지 판단하고 있다면
+			%>
+			<div id="resultDupId" style="display: flex; flex-direction: column; align-items: center;">
+				<h2 style="font-size: 25px; font-weight: bold; margin-bottom: 20px; margin-top: 100px; color: red">입력하신 아이디는 이미 사용중입니다. <br /></h2>
+				<h2 style="font-size: 20px; margin-bottom: 30px;">다른 아이디로 재 가입해주세요.<br></h2>
+				<button style="margin-bottom: 100px;" class="btn btn-primary btn-lg" onclick="history.back()">뒤로</button>
+			</div>
+			<%
+			} else {//그렇지 않다면 정상작업 진행		
+
+			uDAO.insertUserInfo(uVO);//웹의 비연결성에 대한 특성
+			%>
+			<div id="success">
+				<div id="result">
+					<h2 style="font-size: 25px; font-weight: bold; margin-bottom: 15px; color: blue">회원가입해주셔서 감사합니다.</h2>
+					<div id="resultSuccessContent">
+						<p>
+							<strong style="font-size: 23px;">${param.userName}</strong>
+								<span style="font-size: 20px;">님의 회원가입을 축하드립니다.<br> 
+								입력하신 정보는 아래와 같습니다.<br />
+								</span>
+						<p>
+					</div>
+					<div id="resultSuccessInfo" style="margin-top: 20px;">
+						<ul>
+							<li><strong>아이디 : </strong>
+							<c:out value="${ param.userId }" /></li>
+							<li><strong>생년월일 : </strong>
+							<c:out value="${ param.userBirthday }" /></li>
+							<li><strong>전화번호 : </strong>
+							<c:out value="${ param.userPhone }" /></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<%
+			} //end else
+			//}catch(SQLException se){
+			//se.printStackTrace();
+			//}
+			%>
+		</c:catch>
+		<!-- 에러상황 테스트 
+		<c:set var="errorOccurred" value="${1/0}" />
+		-->
+		<c:if test="${ not empty e }">
+			<!-- 다양한 경우의 문제의 에러상황 -->
+			<div id="resultFailContent" style="display: flex; flex-direction: column; align-items: center;">
+				<h2 style="font-size: 25px; font-weight: bold; margin-bottom: 50px; margin-top: 100px; color: red">
+					죄송합니다. 잠시 후 다시 시도해주세요.<br />
+				</h2>
+				<div style="display: flex; flex-direction: row; margin-bottom: 80px;">
+					<a href="index.jsp" class="btn btn-danger btn-lg" style="margin-right: 10px;">메인으로</a>
+					<button class="btn btn-primary btn-lg" onclick="history.back()">뒤로</button>
+				</div>
+			</div>
+		</c:if>
+
+	</div>
+
 
 	<!-- footer -->
 	<jsp:include page="footer.jsp"></jsp:include>
