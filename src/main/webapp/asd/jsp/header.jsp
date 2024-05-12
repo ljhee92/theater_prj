@@ -33,7 +33,7 @@
 							<img src="https://img.cgv.co.kr/R2014/images/common/ico/loginPassword.png" alt="로그인" />
 							<span>로그인</span></a></li>
 							
-						<li><a href="/user/join/"><img
+						<li><a href="join.jsp"><img
 								src="https://img.cgv.co.kr/R2014/images/common/ico/loginJoin.png"
 								alt="회원가입" /><span>회원가입</span></a></li>
 							
