@@ -260,7 +260,7 @@
 				<div class="contents">
 					<h1>
 						<a href="/" tabindex="-1"><img
-							src="../logo.png"
+							src="../logo_white.png"
 							alt="띵화관" /></a>
 					</h1>
 					<ul class="nav_menu">
