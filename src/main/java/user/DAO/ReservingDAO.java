@@ -179,6 +179,8 @@ public class ReservingDAO {
 			.append("inner join movie m ")
 			.append("on s.movie_code = m.movie_code ")
 			.append("where s.movie_code = ? and s.screening_date = ? and s.theater_name = ? ")
+			.append("AND TO_TIMESTAMP(s.screening_date || ' ' || SUBSTR(screening_time, 1, 5), 'YYYYMMDD HH24:MI') ")
+			.append("> TO_TIMESTAMP(TO_CHAR(SYSDATE, 'YYYYMMDD HH24:MI'), 'YYYYMMDD HH24:MI')")
 			.append("order by theater_number, screening_time ");
 
 			pstmt = con.prepareStatement(selectMovieTime.toString());
