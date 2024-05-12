@@ -101,7 +101,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 <jsp:useBean id="pVO" class="user.VO.PaymentVO" scope="page"/>
 <jsp:setProperty property="*" name="pVO"/>
 
-<%-- <c:catch var="e"> --%>
+<c:catch var="e">
 <%
 	// session에 정보 가져오기
 	Map<String, String> params = (Map)session.getAttribute("params");
@@ -139,19 +139,19 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 	
 	response.sendRedirect("ticketReserved.jsp?payMethod="+payMethod+"&maxRsvNum="+maxReservationNumber);
 %>
-<%-- </c:catch> --%>
+</c:catch>
 
 	<div id="wrap">
 		<!-- S Header -->
 		<jsp:include page="header.jsp"></jsp:include>
 		<!-- E Header -->
 		
-		<%-- <c:if test="${ not empty e }">
+		<c:if test="${ not empty e }">
 			alert("죄송합니다. 잠시 후 다시 시도해주시기 바랍니다.");
 			<%
 			response.sendRedirect("index.jsp");
 			%>
-		</c:if> --%>
+		</c:if>
 		
 		<!-- S footer_area -->
 		<jsp:include page="footer.jsp"></jsp:include>

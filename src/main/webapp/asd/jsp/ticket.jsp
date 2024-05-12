@@ -92,6 +92,7 @@ String id = (String)session.getAttribute("id");
 if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디렉션
 %>
 <script type="text/javascript">
+alert("예매는 로그인 후 가능합니다.");
 window.location.href = "login.jsp?prevPage=ticket.jsp";
 </script>  
 <%
@@ -360,8 +361,14 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			success: function(response) {
 				// 받은 JSON 데이터를 파싱하여 표시
 				var data = JSON.parse(response);
+				
 				$(".wrap-timetable > p").remove();
-				displayData(response);
+
+				if(data == "") { // 데이터가 현재시간 이전이라면
+					$(".wrap-timetable").append($("<p>").text("영화관과 영화를 선택하면 시간표가 나옵니다.").addClass("ready"));
+				} else {
+					displayData(response);
+				} // end else
 			},
 			error: function(xhr, status, error) {
 				console.error('Error', error);

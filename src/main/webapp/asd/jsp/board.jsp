@@ -35,7 +35,7 @@
 	content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png"></meta>
 <link rel="alternate" href="http://m.cgv.co.kr" />
 <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-<title id="ctl00_headerTitle">무비차트 &lt; 무비차트 | 영화 그 이상의 감동. CGV</title>
+<title id="ctl00_headerTitle">공지/뉴스, 자주찾는질문 | 명화 그 이상의 감동. 띵화관</title>
 <link rel="shortcut icon" type="image/x-icon"
 	href="https://img.cgv.co.kr/R2014/images/favicon.ico" />
 <link rel="stylesheet" media="all" type="text/css"
