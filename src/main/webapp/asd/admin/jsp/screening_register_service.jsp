@@ -20,12 +20,15 @@
     try {
         // 상영 정보 등록
         screeningDAO.insertScreening(theaterName, screeningRoom, movieName, openDate, screeningRound);
-
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"result\": \"success\"}");
         // 등록이 성공했음을 응답으로 전송
-        response.getWriter().write("success");
     } catch (SQLException e) {
         // 등록에 실패했을 경우 에러 응답 전송
-        response.getWriter().write("fail");
+       	response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"result\": \"fail\", \"error\": \"Invalid action\"}");
         e.printStackTrace();
     }
 %>
