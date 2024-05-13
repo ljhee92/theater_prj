@@ -37,7 +37,7 @@ public class ScreeningDateServlet extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	public String getJSON() throws SQLException {
 		ReservingDAO rsDAO = ReservingDAO.getInstance();
-		List<ReservingVO> screeningDates = rsDAO.selectScreeningDate();
+		List<ReservingVO> screeningDates = rsDAO.selectScreeningDate("Y");
 		
 		JSONArray jsonArr = new JSONArray();
 		
