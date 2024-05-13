@@ -6,13 +6,21 @@
     pageEncoding="UTF-8"
     info = "명화관 관리자 공지사항" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+
+<!-- S 로그인 세션 확인  -->
 <%
-	// 세션에 저장된 아이디가 없다면 login.jsp 페이지로 이동시키기
-	if(session.getAttribute("id") == null) {
-		response.sendRedirect("login.jsp");
-		return;
-	} // end if
+// 세션에서 로그인 여부 확인
+String id = (String) session.getAttribute("adminId");
+if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디렉션
 %>
+<script type="text/javascript">
+window.location.href = "login.jsp?prevPage=theater.jsp";
+</script>
+<%
+}
+%>
+<!-- E 로그인 세션 확인  -->
+    
 <!DOCTYPE html>
 <html>
 <head>
