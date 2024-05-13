@@ -152,7 +152,17 @@
 
 <script type="text/javascript">
     $(function() {
-
+    	//스틸컷 버튼 클릭시 스크롤 이동
+		$("#focuseStillCut").click(function(){
+			var offset = $("#focuseStillCut").offset();
+			$("html, body").animate({scrollTop: offset.top},400); 
+		})
+		
+    	//평점/리뷰 버튼 클릭시 스크롤 이동
+		$("#focuseStillCut").click(function(){
+			var offset = $("#focuseStillCut").offset();
+			$("html, body").animate({scrollTop: offset.top},400); 
+		})
     }); // ready
 </script>
 
@@ -160,8 +170,6 @@
 
 </head>
 <body class="">
-
-
 	<div class="skipnaiv">
 		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
 	</div>
@@ -233,12 +241,6 @@ if(screeningStatus.equals("Y")){
 							<div class="title">
 								<strong><%= title %></strong> <em class="<%=statusClass %>"><span><%=screeningStatus %></span></em>
 							</div>
-							<div class="score">
-								<strong class="percent">예매율&nbsp;<span>93.5%</span></strong>
-								<!-- 2020.05.07 개봉전 프리에그 노출, 개봉후 골든에그지수 노출변경 -->
-
-							</div>
-							<!-- 떨어지는 얘 이전 요소에 class=on을 넣는다 -->
 							<div class="spec">
 								<dl>
 									<dt>
@@ -270,8 +272,6 @@ if(screeningStatus.equals("Y")){
 							<span class="like"> <!-- 예매하기 --> <a
 								class="link-reservation"
 								href="/ticket/?MOVIE_CD=20035938&MOVIE_CD_GROUP=20035938">예매</a>
-								<a class="link-reservation"
-								href="/ticket/?MOVIE_CD=20035938&MOVIE_CD_GROUP=20035938">리뷰보기</a>
 							</span>
 
 						</div>
@@ -284,10 +284,8 @@ if(screeningStatus.equals("Y")){
 								<li class="on"><a title="현재 선택됨"
 									href="/movies/detail-view/?midx=88104#menu">주요정보 </a></li>
 								<li><a
-									href="/movies/detail-view/still-cut.aspx?midx=88104#menu">스틸컷</a></li>
+									href="#" id="focuseStillCut">스틸컷</a></li>
 								<li><a href="/movies/detail-view/?midx=88104#commentReg">평점/리뷰</a></li>
-								<li class="last"><a
-									href="/movies/detail-view/show-times.aspx?midx=88104#menu">상영시간표</a></li>
 							</ul>
 							<div class="sect-story-movie">
 								<%

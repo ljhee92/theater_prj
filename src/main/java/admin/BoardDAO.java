@@ -411,4 +411,195 @@ public class BoardDAO {
 			dbCon.dbClose(null, pstmt, con);
 		} // end finally
 	} // updateBoard
+	
+	
+	/////////////////////////////////자주찾는 질문///////////////////////////////////////
+	
+	
+	/**
+	 * 자주찾는질문의 카테고리명, 카테고리번호 구하기
+	 * @param sVO
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<BoardVO> selectQuestionCategory() throws SQLException {
+		List<BoardVO> categories = new ArrayList<BoardVO>();
+		BoardVO bVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder selectCategory = new StringBuilder();
+			selectCategory.append("select category_name, category_number ")
+			.append("from category ")
+			.append("where category_type_flag = 'Y' ")
+			.append("order by category_number");
+			
+			pstmt = con.prepareStatement(selectCategory.toString());
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				bVO = BoardVO.builder()
+					.categoryName(rs.getString("category_name"))
+					.categoryNumber(rs.getInt("category_number"))
+					.build();
+				categories.add(bVO);
+			} // end while
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		} // end finally
+		return categories;
+	} // selectNoticeCategory
+	
+	/**
+	 * 자주찾는질문 게시물 리스트 구하기
+	 * @param sVO
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<BoardVO> selectQuestionBoard(SearchVO sVO) throws SQLException {
+		List<BoardVO> boards = new ArrayList<BoardVO>();
+		BoardVO bVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder selectBoard = new StringBuilder();
+			selectBoard.append("select board_number, board_title, board_content, board_input_date, board_views, admin_id, category_name, rnum ")
+			.append("from( ")
+			.append("	select b.board_number, b.board_title, b.board_content, b.board_input_date, b.board_views, b.admin_id, c.category_name, ")
+			.append("	row_number() over(order by b.board_input_date desc) rnum ")
+			.append("	from board b ")
+			.append("	inner join category c ")
+			.append("	on c.category_number = b.category_number ")
+			.append("	where c.category_type_flag = 'Q' ");
+			
+			// Dynamic Query
+			if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() == null) { // 카테고리만 넣었을 때
+				selectBoard.append(" and c.category_name = ? ");
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 키워드만 넣었을 때
+				selectBoard.append(" and b.board_title like '%'||?||'%' ");
+			} else if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 둘 다 넣었을 때
+				selectBoard.append(" and c.category_name = ? ")
+				.append(" and b.board_title like '%'||?||'%' ");
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && "".equals(sVO.getKeyword())) { // 둘 다 안 넣었을 때
+			} // end else
+			
+			selectBoard.append(") ")
+			.append("where rnum between ? and ? ")
+			.append("order by board_number desc");
+			
+			pstmt = con.prepareStatement(selectBoard.toString());
+			int bindIndex = 0;
+			
+			// Dynamic Query
+			if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() == null) { // 카테고리만 넣었을 때
+				pstmt.setString(++bindIndex, sVO.getField());
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 키워드만 넣었을 때
+				pstmt.setString(++bindIndex, sVO.getKeyword());
+			}  else if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 둘 다 넣었을 때
+				pstmt.setString(++bindIndex, sVO.getField());
+				pstmt.setString(++bindIndex, sVO.getKeyword());
+			} // end else
+			
+			pstmt.setInt(++bindIndex, sVO.getStartNum());
+			pstmt.setInt(++bindIndex, sVO.getEndNum());
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				bVO = BoardVO.builder()
+						.rnum(rs.getInt("rnum"))
+						.boardNumber(rs.getInt("board_number"))
+						.boardTitle(rs.getString("board_title"))
+						.boardContent(rs.getString("board_content"))
+						.boardDate(rs.getDate("board_input_date"))
+						.boardViews(rs.getInt("board_views"))
+						.categoryName(rs.getString("category_name"))
+						.build();
+				boards.add(bVO);
+			} // end while
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		} // end finally
+		return boards;
+	} // selectNoticeBoard
+	
+	/**
+	 * 자주찾는질문 총 게시물 수 구하기
+	 * @param sVO
+	 * @return
+	 * @throws SQLException
+	 */
+	public int selectQuestionTotalCount(SearchVO sVO) throws SQLException {
+		int totalCnt = 0;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder selectTotalCnt = new StringBuilder();
+			selectTotalCnt.append("select count(*) cnt ")
+			.append("from board b ")
+			.append("inner join category c ")
+			.append("on c.category_number = b.category_number ")
+			.append("where c.category_type_flag = 'Q' ");
+			
+			// 카테고리 혹은 검색 키워드가 존재하면 해당하는 레코드 수만 검색
+			if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() == null) { // 카테고리만 넣었을 때
+				selectTotalCnt.append(" and c.category_name = ? ");
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 키워드만 넣었을 때
+				selectTotalCnt.append(" and b.board_title like '%'||?||'%' ");
+			} else if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 둘 다 넣었을 때
+				selectTotalCnt.append(" and c.category_name = ? ")
+				.append(" and b.board_title like '%'||?||'%' ");
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && "".equals(sVO.getKeyword())) { // 둘 다 안 넣었을 때
+				// 전체 검색!
+			} // end else
+			
+			pstmt = con.prepareStatement(selectTotalCnt.toString());
+			
+			if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() == null) { // 카테고리만 넣었을 때
+				pstmt.setString(1, sVO.getField());
+			} else if(sVO.getField() != null && sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 키워드만 넣었을 때
+				pstmt.setString(1, sVO.getKeyword());
+			}  else if(sVO.getField() != null && !sVO.getField().equals("NA") && sVO.getKeyword() != null && !sVO.getKeyword().isBlank()) { // 둘 다 넣었을 때
+				pstmt.setString(1, sVO.getField());
+				pstmt.setString(2, sVO.getKeyword());
+			} // end else
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				totalCnt = rs.getInt("cnt");
+			} // end if
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		} // end finally
+		return totalCnt;
+	} // selectTotalCount
+	
+	
+	
+	
+	
+	
 } // class
