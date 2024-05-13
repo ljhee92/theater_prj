@@ -31,6 +31,25 @@
 </head>
 <body id="page-top">
 
+	<!-- S 로그인 세션 확인  -->
+	<%
+	// 세션에서 로그인 여부 확인
+	String id = (String) session.getAttribute("adminId");
+	if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디렉션
+	%>
+	<script type="text/javascript">
+    window.location.href = "login.jsp?prevPage=dashboard.jsp";
+    </script>
+	<%
+	}
+	%>
+	<!-- E 로그인 세션 확인  -->
+
+
+
+
+
+
     <!-- Page Wrapper -->
     <div id="wrapper">
 

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" %>
 <%
-	String tbid = (String)session.getAttribute("id");
+	String tbid = (String)session.getAttribute("adminId");
 %>
 <!-- Topbar -->
        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -79,7 +79,7 @@
                 </div>
                 <div class="modal-body">"Logout" 버튼을 누르면 로그아웃됩니다.</div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary" href="http://localhost/theater_prj/asd/admin/jsp/login.jsp">Logout</a>
+                    <a class="btn btn-primary" href="logout.jsp">Logout</a>
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

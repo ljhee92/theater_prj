@@ -25,12 +25,123 @@
 	
 </style>
 <script type = "text/javascript">
-	$(function() {
-		$("#inputId").focus();
-	}); // ready
+$(function() {
+    $("#inputId").focus();
+    $("#inputId").on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault(); 
+            let id = $("#inputId").val();
+            if (id === "") {
+                alert("아이디를 입력해주세요.");
+            } else {
+                $("#inputPassword").focus();
+            }
+        }
+    });
+
+    $("#inputPassword").on('keypress', function(e) {
+        if (e.which === 13) { 
+            e.preventDefault(); 
+            let pw = $("#inputPassword").val();
+            if (pw === "") {
+                alert("비밀번호를 입력해주세요.");
+            } else {
+                $("#submit").click();
+            }
+        }
+    });
+}); // ready
+	
+	
+	
+	function checkNull(){
+
+		
+		//alert("클릭되었음")
+		let id = $("#inputId").val();
+		let pw = $("#inputPassword").val();
+
+		
+	    // ID나 비밀번호가 비어 있는지 확인
+	    if(id === "" && pw === "") {
+	        alert("ID와 비밀번호를 입력해주세요.");
+	        return false;
+	    } else if(id === "") {
+	        alert("ID를 입력해주세요.");
+	        $("#inputId").focus();
+	        return false; 
+	    } else if(pw === "") {
+	        alert("비밀번호를 입력해주세요.");
+	        $("#inputPassword").focus();
+	        
+	        return false; 
+	    }
+		
+
+		}
+	
+	
+	
+	
+	
+	
+	
+	
 </script>
+
+
+
+
+
+
+
 </head>
 <body class="bg-gradient-primary" style = "margin-top:200px; background-color:#fff;background-image: linear-gradient(180deg,#fff 10%,#fff 100%);" >
+<!-- S 로그인 세션 확인  -->
+<!-- prevPage에 값이 있다면 이전페이지 저장 -->
+<!-- 저장되어있지 않다면 기본값 dashboard.jsp로 저장 -->
+<script type="text/javascript">
+<%
+String prevPage ="";
+String id = (String)session.getAttribute("adminId");
+
+
+
+
+if (request.getParameter("prevPage")==null){
+	prevPage="dashboard.jsp";
+}else{
+	prevPage=request.getParameter("prevPage");
+}
+
+
+
+
+if (id != null) {%>
+
+var prevPage = "<%= prevPage %>";
+
+window.location.href = prevPage;
+
+<%}%>
+
+
+</script>
+<!-- E 로그인 세션 확인  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="container">
         <!-- Outer Row -->
         <div class="row justify-content-center">
@@ -47,7 +158,7 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Admin Page Login</h1>
                                     </div>
-                                    <form class="user" action="loginService.jsp" method="post">
+                                    <form class="user" action="loginService.jsp" method="post" onsubmit="return checkNull()">
 									    <div class="form-group">
 									        <input type="text" class="form-control form-control-user"
 									            id="inputId" name="inputId" aria-describedby="emailHelp"
@@ -55,11 +166,13 @@
 									    </div>
 									    <div class="form-group">
 									        <input type="password" class="form-control form-control-user"
-									            id="inputPassword" name="inputPassword" placeholder="Password">
+									            id="inputPassword" name="inputPassword"  placeholder="Password">
 									    </div>
-									    <button type="submit" class="btn btn-primary btn-user btn-block">
+									    <button type="submit" id="submit" class="btn btn-primary btn-user btn-block">
 									        Login
 									    </button>
+									    <a href = "../../jsp/index.html">영화관홈</a>
+									    <input type="hidden" id="prevPage" name="prevPage" required="required"  value=<%= prevPage %> >
 									</form>
 								</div>
 							</div>
