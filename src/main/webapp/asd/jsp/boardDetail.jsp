@@ -1,3 +1,8 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
+<%@page import="user.DAO.BoardDetailDAO"%>
+<%@page import="user.DAO.BoardDAO"%>
+<%@page import="VO.BoardVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     info = "" %>
@@ -126,75 +131,108 @@
 </style>
 <script type="text/javascript">
     $(function() {
-
+	
     }); // ready
 </script>
 <link rel="stylesheet" media="all" type="text/css" href="http://img.cgv.co.kr/R2014/css/customer.css" />
 
 </head>
-<body>
 <body class="">
-
-	<div class="skipnaiv">
-		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
-	</div>
-	<div id="cgvwrap">
-
-
 		
 	<!-- header start -->
 	 <jsp:include page="header.jsp" />
-		<!-- header end -->
+	<!-- header end -->
+
+	<div id="cgvwrap">
+
+		<%
+		String FAQS = request.getParameter("FAQS");
+		String bdNumber = request.getParameter("boardNumber");
+		
+		BoardDetailDAO bdDAO = BoardDetailDAO.getInstance();
+		
+		//FAQS에 따른 공지뉴스/자주찾는질문 변수설정
+		String qaChg = FAQS.equals("Q") ? "on" : "";
+		String noticeChg = FAQS.equals("N") ? "on" : "";
+		String faqsTitle = FAQS.equals("Q") ? "자주찾는 질문" : "공지/뉴스";
+		String faqsContent = "";
+		if(faqsTitle.equals("자주찾는 질문")){
+			faqsContent = "회원님들께서 가장 자주하시는 질문입니다.";
+		}else{
+			faqsContent ="명화관의 공지사항입니다.";
+		}
+		
+		
+		int intBoardNumber = Integer.parseInt(bdNumber);
+		
+		// 현재
+		BoardVO bVO = bdDAO.selectBoardInfo(FAQS, intBoardNumber, 0);
+		// 이전
+		BoardVO prevbVO = bdDAO.selectBoardInfo(FAQS, intBoardNumber, -1);
+		// 다음
+		BoardVO newtbVO = bdDAO.selectBoardInfo(FAQS, intBoardNumber, 1);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String date = "";
+
+		String currentCategoryName = bVO.getCategoryName();
+		String currentBoardNumber = bVO.getBoardNumber();
+		String currentBoardTitle = bVO.getBoardTitle();
+		String currentBoardContent = bVO.getBoardContent();
+		String currentInputDate = sdf.format(bVO.getBoardInputDate());
+		String currentAdminId = bVO.getAdminId();
+		int currentBoardViews = bVO.getBoardViews();
+
+		String prevBoardNumber = prevbVO.getBoardNumber();
+		String prevBoardTitle = prevbVO.getBoardTitle();
+		String prevInputDate = sdf.format(prevbVO.getBoardInputDate());
+
+		String nextBoardNumber = newtbVO.getBoardNumber();
+		String nextBoardTitle = newtbVO.getBoardTitle();
+		String nextInputDate = sdf.format(newtbVO.getBoardInputDate());
+		
+		
+		%>
+		<!-- BoardVO 빈에 등록 -->
+		
 		<!-- Contaniner -->
 		<div id="contaniner" class="">
 			<!-- 벽돌 배경이미지 사용 시 class="bg-bricks" 적용 / 배경이미지가 없을 경우 class 삭제  -->
-
-
 			<!-- Contents Area -->
 			<div id="contents" class="">
-
-
 				<!-- Contents Start -->
-
 				<!-- Contents Area -->
 				<div id="contents">
 					<!-- Contents Start -->
 					<div class="cols-content">
-
 						<div class="col-aside">
 							<h2>고객센터 메뉴</h2>
 							<div class="snb">
 								<ul>
-									<li class='on'><a href="/support/faq/default.aspx"
-										title="현재선택">자주찾는 질문<i></i></a></li>
-									<li class=''><a href="/support/news/default.aspx">공지/뉴스<i></i></a></li>
-								</ul>
+								<li class='<%=qaChg%>'><a
+									href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=Q">자주찾는
+										질문<i></i>
+								</a></li>
+								<li class='<%=noticeChg%>'><a
+									href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=N">공지/뉴스<i></i></a></li>
+							</ul>
 							</div>
-
 						</div>
-
 						<div class="col-detail">
 							<div class="customer_top">
-								<h2 class="tit">자주찾는 질문</h2>
-								<p class="stit">
-									회원님들께서 가장 자주하시는 질문을 모았습니다. <br />궁금하신 내용에 대해 검색해보세요.
-								</p>
+								<h2 class="tit"><%=faqsTitle %></h2>
+								<p class="stit"><%=faqsContent %></p>
 							</div>
 							<div class="board_view_area">
 								<ul class="top_title_faq">
-									<li class="title">[홈페이지] 인터넷 예매 후 CGV 현장에서 환불&#40;예매
-										취소&#41;이 가능한가요?</li>
+									<li class="title"><%=currentBoardTitle %></li>
 									<li class="stit_area"><span>등록일<em
-											class="regist_day">2018.11.09</em></span> <span
-										class="check_tit_area">조회수<em class="check_num">394024</em></span>
+											class="regist_day"><%=currentInputDate%></em></span> <span
+										class="check_tit_area">조회수<em class="check_num"><%=currentBoardViews%></em></span>
 									</li>
 								</ul>
 								<div class="view_area">
-									<p>
-										인터넷 예매하신 부분은 상영시간 전까지는 CGV 현장에서 환불 가능합니다.<br /> 단, 부분 환불은 되지
-										않습니다.<br /> <br /> - 신용카드 환불의 경우 익일에 승인 취소를 확인하실 수 있습니다.<br />
-										- 예매일과 취소일이 다른 경우에 취소 확인 시까지 시일이 소요될 수 있습니다.
-									</p>
+									<p><%=currentBoardContent%></p>
 								</div>
 								<div class="customer_btn">
 									<button type="button" class="round inblack" id="btn_list">
@@ -206,16 +244,16 @@
 									<ul class="line_sup_next">
 										<li class="stit">이전글</li>
 										<li class="name"><a
-											href='/support/faq/detail-view.aspx?idx=990&type=245&page=1&searchtext='
-											class="txt">포토플레이 취소 및 환불 규정은 어떻게 되나요?</a></li>
-										<li class="check_writ_area">등록일<span class="check_num">2021.03.09</span></li>
+											href="boardDetail.jsp?FAQS=<%=FAQS%>&boardNumber=<%=prevBoardNumber %>"
+											class="txt"><%=prevBoardTitle %></a></li>
+										<li class="check_writ_area">등록일<span class="check_num"><%=prevInputDate %></span></li>
 									</ul>
 									<ul class="line_sup_prev">
 										<li class="stit">다음글</li>
 										<li class="name"><a
-											href='/support/faq/detail-view.aspx?idx=950&type=245&page=1&searchtext='
-											class="txt">인터넷 예매 후 예매 내용 확인은 어떻게 하나요?</a></li>
-										<li class="check_writ_area">등록일<span class="check_num">2018.11.09</span></li>
+											href='boardDetail.jsp?FAQS=<%=FAQS%>&boardNumber=<%=nextBoardNumber %>'
+											class="txt"><%=nextBoardTitle %></a></li>
+										<li class="check_writ_area">등록일<span class="check_num"><%=nextInputDate %></span></li>
 									</ul>
 								</div>
 								<!-- 이전글,다음글 (e) -->
@@ -225,49 +263,28 @@
 					<!-- //Contents End -->
 				</div>
 				<!-- //Contents Area -->
-				<script type="text/javascript">
-
-//<![CDATA[
-
-    (function ($) {
-        $(function () {
-            $('#btn_list').on('click', function () {
-                Search();
-            });
-
-            function Search() {
-                location.href = "/support/faq/default.aspx?searchtext=" + escape("") + "&page=1" + "&type=245";
-                return false;
-            }
-        });
-    })(jQuery);
-
-//]]>
-</script>
-
 
 				<!--/ Contents End -->
 			</div>
 			<!-- /Contents Area -->
 		</div>
 		<!-- E Contaniner -->
-		
-										<!-- S 예매하기 및 TOP Fixed 버튼 --><div
-									 class="fixedBtn_wrap">
+
+		<!-- S 예매하기 및 TOP Fixed 버튼 -->
+		<div class="fixedBtn_wrap">
 
 			<a href="/ticket/" class="btn_fixedTicketing">예매하기</a> <a
 				href="#none" class="btn_gotoTop"><img
 				src="https://img.cgv.co.kr/R2014/images/common/btn/gotoTop.png"
 				alt="최상단으로 이동" /></a>
 		</div>
-
 		<!-- E 예매하기 및 TOP Fixed 버튼 -->
 
-			<!-- S Footer -->
-	<jsp:include page="footer.jsp">
+
+	<!-- S Footer -->
+	<jsp:include page="footer.jsp"/>
 	<!-- S Footer -->
 
 	</div>
-</body>
 </body>
 </html>

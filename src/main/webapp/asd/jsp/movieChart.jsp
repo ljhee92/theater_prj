@@ -56,7 +56,6 @@
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.init.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.dotdotdot.min.js"></script>
 <script src="https://img.cgv.co.kr/R2014/js/slick/slick.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" src="/common/js/extraTheaters.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/icheck/login.timer.js"></script>
 <script src="https://img.cgv.co.kr/R2014/js/icheck/icheck.min.js" type="text/javascript" charset="utf-8"></script>
@@ -65,28 +64,120 @@
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/giftstore/commonstore.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/resource_pc/js/cgvUi.js"></script>
 
-<script>
-    $(function(){
-        // 현재 상영중 영화 체크박스 클릭시
-        $("#chk_nowshow").click(function(){
-            var isChecked = $(this).prop("checked"); // 체크박스의 상태 확인
-
-        });
+<script type="text/javascript">
+$(function(){
+    // 현재 상영중 영화 체크박스 클릭시
+    $("#chk_nowshow").click(function(){
+        var isChecked = $(this).prop("checked"); // 체크박스의 상태 확인
+  		if(isChecked == true){
+  			 $.ajax({
+  	            url: "/theater_prj/MovieChartSerlvet",
+  	            type: "POST",
+  	            data: {
+  	                checkStauts: "Y"
+  	            },
+  	            success: function(response) {
+  	            	updateMovieChart(response);
+  	            },
+  	            error: function(xhr, status, error) {
+  	            }
+  	        });
+  			 
+  		}else{
+  			 $.ajax({
+  	            url: "/theater_prj/MovieChartSerlvet",
+  	            type: "POST",
+  	          success: function(response) {
+	            	updateMovieChart(response);
+	            },
+	            error: function(xhr, status, error) {
+	            }
+  	        });
+  		}
+        
     });
     
+    
+});
+
+function updateMovieChart(response) {
+	
+    // 서버로부터 받은 JSON 데이터 파싱
+    var data = JSON.parse(response);
+
+    // 영화 목록이 담긴 배열 가져오기
+    var movieList = data.movieList;
+
+    // 영화 목록을 기존의 DOM 요소에서 제거
+    $('.sect-movie-chart ol').empty();
+
+    var rank = 0;
+    // 각 영화 정보를 순회하면서 화면에 표시
+    movieList.forEach(function(movie) {
+    	// 오늘 날짜를 가져옴
+    	var today = new Date();
+
+    	// 영화 개봉일을 yyyy-mm-dd 형식으로 변환하여 가져옴
+    	var movieReleaseDate = new Date(movie.movieReleaseDate);
+
+    	// 오늘부터 영화 개봉일까지의 차이를 계산하여 일 수로 반환
+    	var dDay = 0;
+    	
+    	if(today.getTime() < movieReleaseDate.getTime()){
+    	var timeDiff = Math.abs(movieReleaseDate.getTime() - today.getTime());
+    	var dDay = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    	}
+    	
+    	
+        var listItem = $('<li>');
+		rank++;
+        // 영화 정보를 이용하여 DOM 생성
+        listItem.append($('<div>').addClass('box-image').append(
+            $('<strong>').addClass('rank').text('No.' + rank),
+            $('<form>').attr('action', 'movieDetail.jsp').attr('method', 'get').append(
+                $('<input>').attr('type', 'hidden').attr('name', 'midx').val(movie.movieCode),
+                $('<button>').attr('type', 'submit').addClass('image-button').append(
+                    $('<span>').addClass('thumb-image').append(
+                        $('<img>').attr('src', '../images/movie/' + movie.moviePosterPath),
+                        $('<i>').addClass('cgvIcon etc age' + movie.movieRating).text(movie.movieRating)
+                    )
+                )
+            ),
+            $('<span>').addClass('screentype').append(
+                $('<a>').addClass('imax').attr('href', '#').attr('title', 'IMAX 상세정보 바로가기').attr('data-regioncode', '07').text('IMAX'),
+                $('<a>').addClass('forDX').attr('href', '#').attr('title', '4DX 상세정보 바로가기').attr('data-regioncode', '4D14').text('4DX')
+            )
+        ));
+
+        listItem.append($('<div>').addClass('box-contents').append(
+            $('<a>').attr('href', '/movies/detail-view/?midx=' + movie.movieCode).append(
+                $('<strong>').addClass('title').text(movie.movieTitle)
+            ),
+            $('<span>').addClass('txt-info').append(
+                $('<strong>').text(movie.movieReleaseDate + ' 개봉'),
+                $('<em>').addClass('dday').append(
+                    $('<i>').addClass('cgvIcon etc ageDay').attr('data-before-text', 'D - ' + dDay).text('DDay')
+                )
+            ),
+            $('<span>').addClass('like').append(
+                $('<a>').addClass('link-reservation').attr('href', '/ticket/?MOVIE_CD=' + movie.movieCode + '&MOVIE_CD_GROUP=' + movie.movieCode).text('예매')
+            )
+        ));
+
+        // 생성한 DOM 요소를 영화 목록에 추가
+        $('.sect-movie-chart ol').append(listItem);
+        // rank 증가
+    });
+}
  
 
-    </script>
+  </script>
 
 </head>
 
-<body>
 
 <body class="">
 
-	<div class="skipnaiv">
-		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
-	</div>
 	<div id="cgvwrap">
 		<!-- header start -->
 		<jsp:include page="header.jsp" />
@@ -217,6 +308,5 @@
 		<!-- S Footer -->
 
 	</div>
-</body>
 </body>
 </html>

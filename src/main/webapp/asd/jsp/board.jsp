@@ -1,12 +1,11 @@
-<%@page import="java.io.Console"%>
-<%@page import="oracle.net.aso.b"%>
-<%@page import="oracle.net.aso.q"%>
-<%@page import="VO.BoardVO"%>
-<%@page import="java.util.List"%>
-<%@page import="user.DAO.BoardDAO"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" info=""%>
+<%@page import="java.io.Console"%> 
+<%@page import="oracle.net.aso.b"%> 
+<%@page import="oracle.net.aso.q"%> 
+<%@page import="VO.BoardVO"%> 
+<%@page import="java.util.List"%> 
+<%@page import="user.DAO.BoardDAO"%> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" info=""%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,22 +16,13 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Cache-Control" content="No-Cache" />
 <meta http-equiv="imagetoolbar" content="no" />
-<meta id="ctl00_og_title" property="og:title"
-	content="무비차트 &lt; 무비차트 | 영화 그 이상의 감동. CGV"></meta>
-
+<meta id="ctl00_og_title" property="og:title" content="무비차트 &lt; 무비차트 | 영화 그 이상의 감동. CGV"></meta>
 <!-- 24.02 네이버 웹 검색 연관 채널 방식 수정 -->
-<script type="text/javascript" nonce="098ccc562cfd47e3818f4632ea5"
-	src="//local.adguard.org?ts=1713490445734&amp;type=content-script&amp;dmn=www.cgv.co.kr&amp;url=http%3A%2F%2Fwww.cgv.co.kr%2Fmovies%2F%3Flt%3D1%26ft%3D0&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
-<script type="text/javascript" nonce="098ccc562cfd47e3818f4632ea5"
-	src="//local.adguard.org?ts=1713490445734&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
-
-
+<script type="text/javascript" nonce="098ccc562cfd47e3818f4632ea5" src="//local.adguard.org?ts=1713490445734&amp;type=content-script&amp;dmn=www.cgv.co.kr&amp;url=http%3A%2F%2Fwww.cgv.co.kr%2Fmovies%2F%3Flt%3D1%26ft%3D0&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
+<script type="text/javascript" nonce="098ccc562cfd47e3818f4632ea5" src="//local.adguard.org?ts=1713490445734&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
 <!-- 공지사항 css -->
 <link rel="stylesheet" type="text/css" href="../css/notice.css">
-
-
-<meta id="ctl00_og_image" property="og:image"
-	content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png"></meta>
+<meta id="ctl00_og_image" property="og:image" content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png"></meta>
 <link rel="alternate" href="http://m.cgv.co.kr" />
 <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
 <title id="ctl00_headerTitle">공지/뉴스, 자주찾는질문 | 명화 그 이상의 감동. 띵화관</title>
@@ -57,85 +47,71 @@
 	href="https://img.cgv.co.kr/R2014/css/print.css" />
 <link rel="stylesheet" type="text/css"
 	href="https://img.cgv.co.kr/R2014/js/jquery.ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
+<title id="ctl00_headerTitle">공지/뉴스, 자주찾는질문 | 명화 그 이상의 감동. 띵화관</title>
+<link rel="shortcut icon" type="image/x-icon"
+	href="https://img.cgv.co.kr/R2014/images/favicon.ico" />
+<link rel="stylesheet" media="all" type="text/css"
+	href="https://img.cgv.co.kr/R2014/css/webfont.css" />
+<link rel="stylesheet" media="all" type="text/css"
+	href="https://img.cgv.co.kr/R2014/css/reset.css" />
+<link rel="stylesheet" media="all" type="text/css"
+	href="https://img.cgv.co.kr/R2014/css/layout.css" />
+<link rel="stylesheet" media="all" type="text/css"
+	href="https://img.cgv.co.kr/R2014/css/module.css?20211209" />
+<link rel="stylesheet" media="all" type="text/css"
+	href="https://img.cgv.co.kr/R2014/css/content.css" />
+<link rel="stylesheet" media="all" type="text/css"
+	href="https://img.cgv.co.kr/R2014/css/common.css" />
 
+<link rel="stylesheet" media="all" type="text/css"
+	href="https://img.cgv.co.kr/R2014/css/eggupdate.css" />
+<link rel="stylesheet" media="print" type="text/css"
+	href="https://img.cgv.co.kr/R2014/css/print.css" />
+<link rel="stylesheet" type="text/css"
+	href="https://img.cgv.co.kr/R2014/js/jquery.ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
+
+>>>>>>> 0ee5f127b09161a0f32b26dbe496c1c1526504ea
 <script type="text/javascript" src="/common/js/extraTheaters.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.tmpl.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.validate.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.paging.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.ui/jquery-ui-1.10.4.custom.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.utils.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/app.utils.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.utils.pageing.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/app.init.js"></script>
-
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.tmpl.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.validate.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.paging.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.ui/jquery-ui-1.10.4.custom.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.utils.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.utils.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.utils.pageing.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.init.js"></script>
 <!--[if lte IE 9]><script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.placeholder.js"></script><![endif]-->
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.dotdotdot.min.js"></script>
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/silverlight_link.js"></script>
-<script src="https://img.cgv.co.kr/R2014/js/slick/slick.js"
-	type="text/javascript" charset="utf-8"></script>
-
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/phototicket/phototicket.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/slick.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/slick-theme-custom.css" />
-
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/R2014/js/icheck/login.timer.js"></script>
-<script src="https://img.cgv.co.kr/R2014/js/icheck/icheck.min.js"
-	type="text/javascript" charset="utf-8"></script>
-<link rel="stylesheet" type="text/css"
-	href="https://img.cgv.co.kr/R2014/js/icheck/iCheck.css" />
-
-
-
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.dotdotdot.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/silverlight_link.js"></script>
+<script src="https://img.cgv.co.kr/R2014/js/slick/slick.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/phototicket/phototicket.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/slick.css" />
+<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/slick-theme-custom.css" />
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/icheck/login.timer.js"></script>
+<script src="https://img.cgv.co.kr/R2014/js/icheck/icheck.min.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/R2014/js/icheck/iCheck.css" />
 <!-- 홈페이지 CSS 일원화로 인한 반영 20220721 -->
-<link rel="stylesheet" type="text/css"
-	href="https://img.cgv.co.kr/resource_pc/css/cgv.min.css" />
-<script type="text/javascript"
-	src="https://img.cgv.co.kr/resource_pc/js/cgvUi.js"></script>
-
+<link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/resource_pc/css/cgv.min.css" />
+<script type="text/javascript" src="https://img.cgv.co.kr/resource_pc/js/cgvUi.js"></script>
 <!-- 각페이지 Header Start-->
-
 <!--jQuery CDN ����-->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <!--jQuery CDN ��-->
 <style type="text/css">
 </style>
-
-<link rel="stylesheet" media="all" type="text/css"
-	href="http://img.cgv.co.kr/R2014/css/customer.css" />
-<script type="text/javascript">
-</script>
+<link rel="stylesheet" media="all" type="text/css" href="http://img.cgv.co.kr/R2014/css/customer.css" />
 </head>
 
 <body class="">
 
-	<div class="skipnaiv">
-		<a href="#contents" id="skipHeader">메인 컨텐츠 바로가기</a>
-	</div>
-	<div id="cgvwrap">
-
-
 		<!-- header start -->
 		<jsp:include page="header.jsp" />
 		<!-- header end -->
+
+	<div id="cgvwrap">
+
 
 		<!-- SearchVO 빈에 등록 -->
 		<jsp:useBean id="sVO" class="VO.SearchVO" scope="page" />
@@ -146,7 +122,13 @@
 		String qaChg = FAQS.equals("Q") ? "on" : "";
 		String noticeChg = FAQS.equals("N") ? "on" : "";
 		String faqsTitle = FAQS.equals("Q") ? "자주찾는 질문" : "공지/뉴스";
-
+		String faqsContent = "";
+		if(faqsTitle.equals("자주찾는 질문")){
+			faqsContent = "회원님들께서 가장 자주하시는 질문을 모았습니다. <br />궁금하신 내용에 대해 검색해보세요.";
+		}else{
+			faqsContent ="명화관의 공지사항들을 모았습니다. <br />궁금하신 내용에 대해 검색해보세요.";
+		}
+		
 		BoardDAO bDAO = BoardDAO.getInstance();
 
 		//카테고리의 리스트
@@ -205,9 +187,7 @@
 					<div class="col-detail">
 						<div class="customer_top">
 							<h2 class="tit"><%=faqsTitle%></h2>
-							<p class="stit">
-								회원님들께서 가장 자주하시는 질문을 모았습니다. <br />궁금하신 내용에 대해 검색해보세요.
-							</p>
+							<p class="stit"><%=faqsContent %></p>
 						</div>
 						<div class="search_area">
 							<legend>
@@ -279,7 +259,7 @@
 										<tr>
 											<td><c:out value="${board.boardNumber}" /></td>
 											<td>${board.categoryName}</td>
-											<td id="title0" class="txt"><a href="#">${board.boardTitle }</a></td>
+											<td id="title0" class="txt"><a href="boardDetail.jsp?FAQS=<%=FAQS%>&boardNumber=${board.boardNumber}">${board.boardTitle }</a></td>
 											<td>${board.boardInputDate}</td>
 											<td class="num">${board.boardViews}</td>
 										</tr>
@@ -380,11 +360,14 @@
 		table.innerHTML= "";	
 		
 		var object = JSON.parse(response);
-
+		var url = "";
 		var result = object.result;
 		for(var i=0 ; i < result.length; i++){
-			   var row = table.insertRow(i); // 행 추가
-
+			
+			var row = table.insertRow(i); // 행 추가
+				//a태그 링크 생성
+				url = "boardDetail.jsp?FAQS=" +object.FAQS + "&boardNumber=" + result[i].boardNumber;
+				
 		        // 각 속성에 대한 열 추가
 		        var cell1 = row.insertCell(0);
 		        var cell2 = row.insertCell(1);
@@ -395,7 +378,7 @@
 		        // 각 열에 데이터 입력
 		        cell1.innerHTML = result[i].boardNumber;
 		        cell2.innerHTML = result[i].categoryName;
-		        cell3.innerHTML = '<a href="#">' + result[i].boardTitle + '</a>';
+		        cell3.innerHTML = '<a href="' + url + '">' + result[i].boardTitle + '</a>';
 		        cell4.innerHTML = result[i].boardInputDate;
 		        cell5.innerHTML = result[i].boardViews;
 			

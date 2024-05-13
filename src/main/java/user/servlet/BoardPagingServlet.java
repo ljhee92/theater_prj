@@ -14,8 +14,8 @@ import VO.BoardVO;
 import user.DAO.BoardDAO;
 
 
-@WebServlet("/BoardSearchServlet")
-public class BoardSearchServlet extends HttpServlet {
+@WebServlet("/BoardPagingServlet")
+public class BoardPagingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -67,7 +67,7 @@
             
             <!-- Nav Item - 자주찾는질문 -->
             <li class="nav-item">
-                <a class="nav-link" href="http://localhost/theater_prj/asd/admin/jsp/faq.jsp">
+                <a class="nav-link" href="http://localhost/theater_prj/asd/admin/jsp/question.jsp">
                     <i class="fas fa-fw fa-table"></i>
                     <span>자주찾는질문</span></a>
             </li>
