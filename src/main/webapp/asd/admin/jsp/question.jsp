@@ -1,5 +1,5 @@
+<%@page import="admin.DAO.BoardDAO"%>
 <%@page import="java.util.List"%>
-<%@page import="admin.BoardDAO"%>
 <%@page import="admin.BoardVO"%>
 <%@page import="java.sql.SQLException"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -101,7 +101,7 @@
 	                    <h1 class="h3 mb-0 text-gray-800">자주찾는 질문</h1>
 	                </div>
 	                
-	                <form action="notice.jsp" name="frmSearch" id="frmSearch">
+	                <form action="question.jsp" name="frmSearch" id="frmSearch">
 	                <div style = "display: flex;">
 	                	<select name="field" id="field" class = "form-control form-control-user" style = "width: 150px; margin-right: 20px;">
 	                		<option value = "NA">구분 선택</option>
@@ -159,7 +159,7 @@
 							<% for(int i = 1; i <= totalPage; i++) { %>
 								<input type="button" class="btn btn-primary btn-user btn-block"
 									style="width: 40px; height: 40px; margin-right: 10px; margin-bottom: 10px;"
-									value="<%= i %>" onclick="location.href='notice.jsp?currentPage=<%= i %>${ link }${ link2 }'">
+									value="<%= i %>" onclick="location.href='question.jsp?currentPage=<%= i %>${ link }${ link2 }'">
 							<% } // end for %>
 						</span>
 						<span style="align-self: flex-end;">

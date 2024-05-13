@@ -173,8 +173,7 @@
 		BoardVO newtbVO = bdDAO.selectBoardInfo(FAQS, intBoardNumber, 1);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String date = "";
-
+		
 		String currentCategoryName = bVO.getCategoryName();
 		String currentBoardNumber = bVO.getBoardNumber();
 		String currentBoardTitle = bVO.getBoardTitle();
@@ -182,16 +181,8 @@
 		String currentInputDate = sdf.format(bVO.getBoardInputDate());
 		String currentAdminId = bVO.getAdminId();
 		int currentBoardViews = bVO.getBoardViews();
-
-		String prevBoardNumber = prevbVO.getBoardNumber();
-		String prevBoardTitle = prevbVO.getBoardTitle();
-		String prevInputDate = sdf.format(prevbVO.getBoardInputDate());
-
-		String nextBoardNumber = newtbVO.getBoardNumber();
-		String nextBoardTitle = newtbVO.getBoardTitle();
-		String nextInputDate = sdf.format(newtbVO.getBoardInputDate());
-		
-		
+	
+			
 		%>
 		<!-- BoardVO 빈에 등록 -->
 		
@@ -240,22 +231,7 @@
 									</button>
 								</div>
 								<!-- 이전글,다음글 (s) -->
-								<div class="btm_sup_list">
-									<ul class="line_sup_next">
-										<li class="stit">이전글</li>
-										<li class="name"><a
-											href="boardDetail.jsp?FAQS=<%=FAQS%>&boardNumber=<%=prevBoardNumber %>"
-											class="txt"><%=prevBoardTitle %></a></li>
-										<li class="check_writ_area">등록일<span class="check_num"><%=prevInputDate %></span></li>
-									</ul>
-									<ul class="line_sup_prev">
-										<li class="stit">다음글</li>
-										<li class="name"><a
-											href='boardDetail.jsp?FAQS=<%=FAQS%>&boardNumber=<%=nextBoardNumber %>'
-											class="txt"><%=nextBoardTitle %></a></li>
-										<li class="check_writ_area">등록일<span class="check_num"><%=nextInputDate %></span></li>
-									</ul>
-								</div>
+								
 								<!-- 이전글,다음글 (e) -->
 							</div>
 						</div>

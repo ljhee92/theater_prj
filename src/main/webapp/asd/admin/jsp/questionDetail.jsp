@@ -1,6 +1,6 @@
+<%@page import="admin.DAO.BoardDAO"%>
 <%@page import="java.util.List"%>
 <%@page import="admin.BoardVO"%>
-<%@page import="admin.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     info = "명화관 관리자 공지사항 상세보기" %>
@@ -69,7 +69,7 @@
                 	List<BoardVO> categories = bDAO.selectQuestionCategory();
                 	pageContext.setAttribute("categories", categories);
 	                
-	                BoardVO selectedBVO = bDAO.selectOneQaBoard(boardNumber);
+	                BoardVO selectedBVO = bDAO.selectOneBoard(boardNumber);
 	                
 	                // 조회수 +1
 	                selectedBVO.setBoardViews(selectedBVO.getBoardViews()+1);

@@ -1,7 +1,7 @@
+<%@page import="admin.DAO.BoardDAO"%>
 <%@page import="admin.BoardVO"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.util.List"%>
-<%@page import="admin.BoardDAO"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -58,7 +58,7 @@
                 <div class="container-fluid">
 	                <!-- Page Heading -->
 	                <div class="d-sm-flex align-items-center mb-4" style = "display: flex;">
-	                    <h1 class="h3 mb-0 text-gray-800">공지사항관리&nbsp;</h1>
+	                    <h1 class="h3 mb-0 text-gray-800">자주찾는 질문&nbsp;</h1>
 	                    <h5 class="h5 mb-0 text-gray-800"> - 글쓰기</h5>
 	                </div>
 	                
@@ -72,14 +72,14 @@
 	            	BoardDAO bDAO = BoardDAO.getInstance();
 
 	            	// 카테고리명 얻기
-                	List<BoardVO> categories = bDAO.selectNoticeCategory();
+                	List<BoardVO> categories = bDAO.selectQuestionCategory();
                 	pageContext.setAttribute("categories", categories);
                 	
                 	// 게시판 중 가장 마지막 번호 얻고 그 다음 번호 지정
                 	int newBoardNumber = bDAO.selectMaxBoardNumber()+1;
 	                %>
 	                
-	                <form name="frm" action="noticeWriteProcess.jsp" method="post">
+	                <form name="frm" action="questionWriteProcess.jsp" method="post">
 	                <div style = "height: 610px;">
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">번호</label>
@@ -134,11 +134,7 @@
 
         </div>
         <!-- End of Content Wrapper -->
-        
-    <!-- noticeWrite page css, script -->
-	<style type = "text/css">
-		
-	</style>
+       
 	<script type = "text/javascript">
 		$(document).ready(function() {
 			$("#title").focus();
