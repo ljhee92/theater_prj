@@ -163,6 +163,10 @@
 			var offset = $("#focuseStillCut").offset();
 			$("html, body").animate({scrollTop: offset.top},400); 
 		})
+		$("#focuseReview").click(function(){
+			var offset = $("#reviewTime").offset();
+			$("html, body").animate({scrollTop: offset.top},400); 
+		})
     }); // ready
 </script>
 
@@ -183,6 +187,7 @@
 //받은 영화코드 파라미터 저장
 String movieCode = request.getParameter("midx");
 MovieDetailDAO mdDAO = MovieDetailDAO.getInstance();
+
 MovieVO mVO = mdDAO.selectMovieDetail(movieCode);
 
 String title = mVO.getMovieTitle();
@@ -270,8 +275,7 @@ if(screeningStatus.equals("Y")){
 								</dl>
 							</div>
 							<span class="like"> <!-- 예매하기 --> <a
-								class="link-reservation"
-								href="/ticket/?MOVIE_CD=20035938&MOVIE_CD_GROUP=20035938">예매</a>
+								class="link-reservation" href="ticket.jsp">예매</a>
 							</span>
 
 						</div>
@@ -281,11 +285,9 @@ if(screeningStatus.equals("Y")){
 						<div class="col-detail">
 							<!-- 메뉴가 선택되면 a 에 title="선택" 이라고 넣는다 -->
 							<ul class="tab-menu">
-								<li class="on"><a title="현재 선택됨"
-									href="/movies/detail-view/?midx=88104#menu">주요정보 </a></li>
 								<li><a
 									href="#" id="focuseStillCut">스틸컷</a></li>
-								<li><a href="/movies/detail-view/?midx=88104#commentReg">평점/리뷰</a></li>
+								<li><a href="#" id="focuseReview">평점/리뷰</a></li>
 							</ul>
 							<div class="sect-story-movie">
 								<%
@@ -549,7 +551,4 @@ var commentOptions;
 	</div>
 </body>
 </html>
-
-</div>
-</body>
 </html>
