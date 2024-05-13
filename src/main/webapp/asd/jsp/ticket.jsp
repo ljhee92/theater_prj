@@ -170,7 +170,6 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		    } // end if
 		    
 		    if($(this).hasClass("selected")) {
-				$(this).removeClass("selected");
 				$(".theater-box a.selected").removeClass("selected");
 				resetMovieList();
 				resetMovieTime();
@@ -238,7 +237,6 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 									} // end if
 									 
 									if($(this).hasClass("selected")) {
-										$(this).removeClass("selected");
 										$(".theater-box a.selected").removeClass("selected");
 										resetMovieList();
 										resetMovieTime();
