@@ -162,27 +162,24 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			location.href = "ticket.jsp"
 		});
 		
-		$(".cal-week").on("click", ".datelist", function(event){
+		$(".cal-week").on("click", ".datelist > a", function(event){
 		    event.preventDefault();
 		    
-		    if($(this).find("a").hasClass("disabled")) {
+		    if($(this).hasClass("disabled")) {
 				return;
 		    } // end if
-		    
-		    var clickedDate = $(this).find("a").attr("data-date");
 		    
 		    if($(this).hasClass("selected")) {
 				$(this).removeClass("selected");
 				$(".theater-box a.selected").removeClass("selected");
 				resetMovieList();
 				resetMovieTime();
-				
 			} else {
 				$(".cal-week a.selected").removeClass("selected");
 				$(".theater-box a.selected").removeClass("selected");
 				resetMovieList();
 				resetMovieTime();
-				$(this).find("a").addClass("selected");
+				$(this).addClass("selected");
 			} // end else
 		})
 		
@@ -233,10 +230,13 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 								.attr("data-selectdate", formattedDate2)
 								.addClass("disabled")
 								.css("margin", "0 2px 0 2px")
-								.click(function() {
+								.click(function(event) {
 									event.preventDefault();
+
+									if($(this).hasClass("disabled")) {
+										return false;
+									} // end if
 									 
-								    
 									if($(this).hasClass("selected")) {
 										$(this).removeClass("selected");
 										$(".theater-box a.selected").removeClass("selected");
@@ -247,13 +247,9 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 										$(".theater-box a.selected").removeClass("selected");
 										resetMovieList();
 										resetMovieTime();
-										
 										$(this).addClass("selected");
 									} // end else
 										
-									if($(this).hasClass("disabled")) {
-										$(this).removeClass("selected");
-								    } // end if
 									return false;
 								});
 				
