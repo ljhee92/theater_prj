@@ -17,9 +17,6 @@
 <meta http-equiv="Cache-Control" content="No-Cache" />
 <meta http-equiv="imagetoolbar" content="no" />
 <meta id="ctl00_og_title" property="og:title" content="무비차트 &lt; 무비차트 | 영화 그 이상의 감동. CGV"></meta>
-<!-- 24.02 네이버 웹 검색 연관 채널 방식 수정 -->
-<script type="text/javascript" nonce="098ccc562cfd47e3818f4632ea5" src="//local.adguard.org?ts=1713490445734&amp;type=content-script&amp;dmn=www.cgv.co.kr&amp;url=http%3A%2F%2Fwww.cgv.co.kr%2Fmovies%2F%3Flt%3D1%26ft%3D0&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
-<script type="text/javascript" nonce="098ccc562cfd47e3818f4632ea5" src="//local.adguard.org?ts=1713490445734&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
 <!-- 공지사항 css -->
 <link rel="stylesheet" type="text/css" href="../css/notice.css">
 <meta id="ctl00_og_image" property="og:image" content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png"></meta>
@@ -70,12 +67,11 @@
 <link rel="stylesheet" type="text/css"
 	href="https://img.cgv.co.kr/R2014/js/jquery.ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
 
-<script type="text/javascript" src="/common/js/extraTheaters.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.tmpl.min.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.validate.js"></script>
-<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.plugin/jquery.paging.min.js"></script>
+<script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquerlocal.adguardy.plugin/jquery.paging.min.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.ui/jquery-ui-1.10.4.custom.min.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery.utils.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.utils.js"></script>
