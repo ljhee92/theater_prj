@@ -45,7 +45,7 @@ public class MovieDAO {
 			con = dbcon.getConnection(id, pass);
 
 			// 3. SQL 쿼리 준비
-			String selectQuery = "SELECT  MOVIE_CODE, MOVIE_TITLE, MOVIE_RELEASE_DATE, MOVIE_RATING, MOVIE_POSTER_PATH FROM MOVIE";
+			String selectQuery = "SELECT  MOVIE_CODE, MOVIE_TITLE, MOVIE_RELEASE_DATE, MOVIE_RATING, MOVIE_POSTER_PATH FROM MOVIE where MOVIE_SCREENING_STATUS ='Y' ";
 			pstmt = con.prepareStatement(selectQuery);
 
 			// 4. 쿼리 실행 및 결과 처리

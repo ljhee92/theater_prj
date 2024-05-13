@@ -11,6 +11,9 @@ import util.DbConnection;
 @Getter
 public class AdminLoginDao {
 	private static AdminLoginDao alDAO;
+	
+	private AdminLoginDao(){}
+	
 	public static AdminLoginDao getInstance() {
 		if (alDAO == null) {
 			alDAO = new AdminLoginDao();
