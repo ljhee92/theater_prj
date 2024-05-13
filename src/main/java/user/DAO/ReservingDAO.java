@@ -26,11 +26,11 @@ public class ReservingDAO {
 	} // getInstance
 	
 	/**
-	 * 현재날짜 이후로 영화의 상태가 상영 중인 상영일자만 가져오기
+	 * 영화의 상태가 상영 중인 상영일자만 가져오기
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<ReservingVO> selectScreeningDate() throws SQLException {
+	public List<ReservingVO> selectScreeningDate(String afterTodayFlag) throws SQLException {
 		List<ReservingVO> screeningDates = new ArrayList<ReservingVO>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -48,9 +48,13 @@ public class ReservingDAO {
 			.append("from screening s ")
 			.append("inner join movie m ")
 			.append("on s.movie_code = m.movie_code ")
-			.append("where m.movie_screening_status = 'Y' ")
-			//.append("AND TO_TIMESTAMP(s.screening_date, 'YYYYMMDD') > TO_TIMESTAMP(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD')" )
-			.append("order by s.screening_date asc ");
+			.append("where m.movie_screening_status = 'Y' ");
+			
+			if(afterTodayFlag.equals("Y")) {
+				selectScreeningDate.append("AND TO_TIMESTAMP(s.screening_date, 'YYYYMMDD') > TO_TIMESTAMP(TO_CHAR(SYSDATE, 'YYYYMMDD'), 'YYYYMMDD')" );
+			} // end if
+			
+			selectScreeningDate.append("order by s.screening_date asc ");
 
 			pstmt = con.prepareStatement(selectScreeningDate.toString());
 			
