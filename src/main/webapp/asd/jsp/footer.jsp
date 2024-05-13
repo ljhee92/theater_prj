@@ -18,6 +18,7 @@
 				<li><a href="http://www.cgv.co.kr/rules/privacy.aspx"><strong>개인정보처리방침</strong></a></li>
 				<li><a href="http://www.cgv.co.kr/rules/disclaimer.aspx">법적고지</a></li>
 				<li><a href="http://www.cgv.co.kr/rules/emreject.aspx">이메일주소무단수집거부</a></li>
+				<li><a href="../admin/jsp/dashboard.jsp">관리자 로그인</a></li>
 			</ul>
 			<article class="company_info_wrap">
 				<section class="company_info">
