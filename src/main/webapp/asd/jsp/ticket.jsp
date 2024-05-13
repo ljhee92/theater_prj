@@ -139,9 +139,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 	    var deleteDate = "";
 	    
 	    object.forEach(function(item) {
-		    var flag = false+","+item.screeningDate;
 	        if (item.screeningDate.includes(formattedArray)) {
-	        	flag = true+","+item.screeningDate;
 	        	deleteDate = item.screeningDate;
 	        } // end if
 	    });
@@ -167,7 +165,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		$(".cal-week").on("click", ".datelist", function(event){
 		    event.preventDefault();
 		    
-		    if($(this).find("a").hasClass("disabled ")) {
+		    if($(this).find("a").hasClass("disabled")) {
 				return;
 		    } // end if
 		    
@@ -195,9 +193,10 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			var day = now.getDate().toString().padStart(2, '0');
 			
 			var formattedDate = year + month + day;
-			// 오늘이 아닐 때만 클릭 가능하도록 설정
-			if(formattedDate != $(".today").attr("data-date")) {
-				alert("오늘이 아니면 이전 클릭");
+			
+			// 오늘이면 클릭이벤트 중지
+			if(formattedDate == $(".today").attr("data-date")) {
+			    event.preventDefault();
 			} // end if
 		});
 		
@@ -237,9 +236,6 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 								.click(function() {
 									event.preventDefault();
 									 
-									if($(this).hasClass("disabled")) {
-										event.preventDefault();
-								    } // end if
 								    
 									if($(this).hasClass("selected")) {
 										$(this).removeClass("selected");
@@ -254,6 +250,10 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 										
 										$(this).addClass("selected");
 									} // end else
+										
+									if($(this).hasClass("disabled")) {
+										$(this).removeClass("selected");
+								    } // end if
 									return false;
 								});
 				
@@ -280,7 +280,6 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		});
 		
 		$(".theater-box").on("click", ".theater", function(event) {
-			// a Tag 클릭 이벤트를 기본 동작으로부터 중지
 		    event.preventDefault();
 			
 			var clickedId = $(this).attr("id");
