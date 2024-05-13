@@ -440,7 +440,7 @@ public class BoardDAO {
 			StringBuilder selectCategory = new StringBuilder();
 			selectCategory.append("select category_name, category_number ")
 			.append("from category ")
-			.append("where category_type_flag = 'Y' ")
+			.append("where category_type_flag = 'Q' ")
 			.append("order by category_number");
 			
 			pstmt = con.prepareStatement(selectCategory.toString());

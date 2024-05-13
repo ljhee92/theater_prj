@@ -70,7 +70,6 @@
 <link rel="stylesheet" type="text/css"
 	href="https://img.cgv.co.kr/R2014/js/jquery.ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
 
->>>>>>> 0ee5f127b09161a0f32b26dbe496c1c1526504ea
 <script type="text/javascript" src="/common/js/extraTheaters.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/app.config.js"></script>
 <script type="text/javascript" src="https://img.cgv.co.kr/R2014/js/jquery-1.10.2.min.js"></script>
@@ -167,7 +166,6 @@
 
 		List<BoardVO> list = bDAO.selectBoard(startNum, endNum, FAQS);
 		pageContext.setAttribute("list", list);
-		pageContext.setAttribute("FAQS", FAQS);
 		%>
 		<!-- Contaniner -->
 		<div id="contaniner" class="">
@@ -252,20 +250,18 @@
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col">번호</th>
 										<th scope="col">구분</th>
-										<th scope="col" class="tit">제목</th>
 										<th scope="col">등록일</th>
+										<th scope="col" class="tit" style="text-align: center">제목</th>
 										<th scope="col">조회수</th>
 									</tr>
 								</thead>
 								<tbody id="boardTable">
 									<c:forEach var="board" items="${list}">
 										<tr>
-											<td><c:out value="${board.boardNumber}" /></td>
 											<td>${board.categoryName}</td>
-											<td id="title0" class="txt"><a href="boardDetail.jsp?FAQS=<%=FAQS%>&boardNumber=${board.boardNumber}">${board.boardTitle }</a></td>
 											<td>${board.boardInputDate}</td>
+											<td id="title0"  style="text-align: center" class="txt"><a href="boardDetail.jsp?FAQS=<%=FAQS%>&boardNumber=${board.boardNumber}">${board.boardTitle }</a></td>
 											<td class="num">${board.boardViews}</td>
 										</tr>
 									</c:forEach>
