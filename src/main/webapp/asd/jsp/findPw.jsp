@@ -187,18 +187,96 @@ html{
 
 
 <script type="text/javascript">
-    //페이지가 완전히 로드 된 후에 JavaScript 코드 실행
-    window.onload = function() {
-        document.getElementById("findPwBtn").addEventListener("click", function() {
+$(document).ready(function() {
+    $("#findPwBtn").click(function() {
+        var userId = $("#findPwId").val();
+        var userBirthday = $("#findPwBirth").val();
+        var userPhone = $("#findPwTel").val();
+
+        // 모든 요소 입력되었는지 확인 함수
+        if (chkInputAll()) {
+            var url = "findPwResult.jsp?userId=" + userId + "&userBirthday=" + userBirthday + "&userPhone=" + userPhone;
             // 팝업 창 크기 설정
             var popupWidth = 600;
             var popupHeight = 400;
             // 팝업 창 가운데로 띄우기
             var left = (window.innerWidth - popupWidth) / 2;
             var top = (window.innerHeight - popupHeight) / 2;
-            window.open("findPwResult.jsp", "_blank", "width=600,height=400,left=" + left + ",top=" + top);
-        });
-    };
+            // 새로운 창 열기
+            window.open(url, "_blank", "width=600,height=400,left=" + left + ",top=" + top);
+            submit();
+        }
+    });
+});
+	
+	// 모든 요소 필수 입력 함수
+	function chkInputAll() {
+	    let flagInputArrAll = true;
+	    let arrEssential = [$("#findPwId"), $("#findPwBirth"), $("#findPwTel")];
+	    let arrLabel = ['아이디', '생년월일', '전화번호'];
+
+	    for (let i = 0; i < arrEssential.length; i++) {
+	        if (!arrEssential[i].val()) {
+	            flagInputArrAll = false;
+	            alert(arrLabel[i] + "을(를) 입력하세요.");
+	            arrEssential[i].focus();
+	            break;
+	        }
+	        // 생년월일이 숫자로만 6자리인지 확인
+	        if (i === 1) {
+	            let birthValue = arrEssential[i].val();
+	            if (!/^\d{6}$/.test(birthValue)) {
+	                flagInputArrAll = false;
+	                alert("생년월일은 숫자 6자리로만 입력해주세요.");
+	                arrEssential[i].val(""); // 입력 필드를 비움
+	                arrEssential[i].focus();
+	                break;
+	            }
+	        }
+	        // 전화번호가 숫자로만 11자리인지 확인
+	        if (i === 2) {
+	            let telValue = arrEssential[i].val();
+	            if (!/^\d{11}$/.test(telValue)) {
+	                flagInputArrAll = false;
+	                alert("전화번호는 숫자 11자리로만 입력해주세요.");
+	                arrEssential[i].val(""); // 입력 필드를 비움
+	                arrEssential[i].focus();
+	                break;
+	            }
+	        }
+	    }
+	    return flagInputArrAll;
+	}//chkInputAll
+	
+	
+	//날짜 형식 바꾸기 함수
+	function convertToDate(userBirthday) {
+		var userBirthday = document.findPwFrm.userBirthday.value;
+		
+	    // 6자리 숫자로부터 연, 월, 일을 추출
+	    var year = userBirthday.substring(0, 2);
+	    var month = userBirthday.substring(2, 4);
+	    var day = userBirthday.substring(4, 6);
+
+	    // 현재 연도를 기준으로 2000년 이후와 2000년 이전의 구분
+	    var currentYear = new Date().getFullYear();
+	    var century = currentYear < 2000 ? "19" : "20";
+
+	    // YY 형식의 연도를 YYYY 형식으로 변환
+	    year = century + year;
+
+	    // 월과 일이 한 자리 숫자인 경우 앞에 0을 붙여줌
+	    if (month.charAt(0) === "0") {
+	        month = month.charAt(1);
+	    }
+	    if (day.charAt(0) === "0") {
+	        day = day.charAt(1);
+	    }
+
+	    // YYYY-MM-DD 형식으로 반환
+	    return year + "-" + month + "-" + day;
+	}
+	
 </script>
 </head>
 
@@ -213,17 +291,16 @@ html{
     <h2 style="font-size: 20px; margin-bottom: 20px;">임시 비밀번호 발급</h2>
     <form>
         <div class="input-group mb-3 input-group-lg">
-            <input type="text" class="form-control" id="findPwId" placeholder="아이디를 입력하세요.">
+            <input type="text" class="form-control" id="findPwId" name="userId" placeholder="아이디를 입력하세요.">
         </div>
         <div class="input-group mb-3 input-group-lg">
-            <input type="text" class="form-control" id="findPwBirth" placeholder="생년월일 6자리를 입력하세요.">
+            <input type="text" class="form-control" id="findPwBirth" name="userBirthday" placeholder="생년월일 6자리를 입력하세요.">
         </div>
         <div class="input-group mb-3 input-group-lg">
-            <input type="text" class="form-control" id="findPwTel" placeholder="전화번호 11자리를 입력하세요. (숫자만)">
+            <input type="text" class="form-control" id="findPwTel" name="userPhone" placeholder="전화번호 11자리를 입력하세요. (숫자만)">
         </div>
         
-        <button type="button" class="btn btn-primary" id="findPwBtn"
-        style="font-size: 20px;">임시 비밀번호 발급</button>
+        <button type="button" class="btn btn-primary" id="findPwBtn" style="font-size: 20px;">임시 비밀번호 발급</button>
         
     </form>
 </div>

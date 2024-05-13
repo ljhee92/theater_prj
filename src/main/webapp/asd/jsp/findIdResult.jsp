@@ -82,6 +82,12 @@ function closePopupAndReturn() {
     window.opener.location.href = 'findId.jsp';
 }
 
+//팝업 창 닫고 메인 화면으로
+function closePopupAndMoveMain() {
+    window.close();
+    window.opener.location.href = 'index.jsp';
+}
+
 </script>
 
 </head>
@@ -152,8 +158,8 @@ function closePopupAndReturn() {
 					죄송합니다. 잠시 후 다시 시도해주세요.<br />
 				</h2>
 				<div style="display: flex; flex-direction: row; margin-bottom: 80px;">
-					<a href="index.jsp" class="btn btn-danger btn-lg" style="margin-right: 10px;">메인으로</a>
-					<button class="btn btn-primary btn-lg" onclick="history.back()">뒤로</button>
+					<button class="btn btn-danger btn-lg" style="margin-right: 10px" onclick="closePopupAndMoveMain()">메인으로</button>
+					<button class="btn btn-primary btn-lg" onclick="closePopupAndReturn()">뒤로</button>
 				</div>
 			</div>
 		</c:if>

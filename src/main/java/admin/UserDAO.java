@@ -149,4 +149,86 @@ public class UserDAO {
 	}//selectUserId
 	
 	
+	///////////////////////비밀번호 찾기/////////////////////
+	public String selectPwforTempPw(UserVO uVO) throws SQLException {
+		String returnId="";
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			// 1. 데이터베이스 접속 정보
+			String id = "son";
+			String pass = "jimin";
+
+			// 2. 데이터베이스 연결
+			//3. Connection 얻기
+			con = dbCon.getConnection(id, pass);
+			
+		//4. 쿼리문 생성객체 얻기
+			StringBuilder selectId = new StringBuilder();
+			selectId.append("	select user_id	")
+			.append("	from users	")
+			.append("	where user_id=? and user_birthday=? and user_phone=?	");
+			
+			pstmt = con.prepareStatement(selectId.toString());
+			//5. 바인드 변수에 값 설정
+			pstmt.setString(1, uVO.getUserId());
+			pstmt.setString(2, uVO.getUserBirthday());
+			pstmt.setString(3, uVO.getUserPhone());
+			//6. 쿼리문 수행 후 결과 얻기
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				returnId = rs.getString("user_id");
+			} // end if
+		} finally {
+			//7. 연결 끊기
+			dbCon.dbClose(rs, pstmt, con);
+		} // end finally
+
+		return returnId;
+	}//selectPwforTempPw
+	
+	
+	///////////////////////임시비밀번호로 수정///////////////////////////
+	public int updatePw(UserVO uVO) throws SQLException {
+		int cnt = 0;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		DbConnection dbCon = DbConnection.getInstance();
+
+		try {
+			// 1. 데이터베이스 접속 정보
+			String id = "son";
+			String pass = "jimin";
+
+			// 2. 데이터베이스 연결
+			//3. Connection 얻기
+			con = dbCon.getConnection(id, pass);
+
+			//4. 쿼리문 생성 객체 얻기
+			StringBuilder insertUser = new StringBuilder();
+			insertUser.append("	update users	")
+						.append("	set user_password=?, user_temporary_flag='Y'	")
+						.append("	where user_id=?	");
+			
+			pstmt = con.prepareStatement(insertUser.toString());
+			//5. 바인드 변수에 값 설정
+			pstmt.setString(1, uVO.getUserPassword());
+			pstmt.setString(2, uVO.getUserId());
+
+			//6. 쿼리문 수행 후 결과 얻기
+			cnt = pstmt.executeUpdate();
+		} finally {
+			//7. 연결 끊기
+			dbCon.dbClose(null, pstmt, con);
+		} // end finally
+
+		return cnt;
+	}//updatePw
+	
 }//class
