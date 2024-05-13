@@ -1,4 +1,4 @@
-package admin;
+package admin.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import oracle.jdbc.proxy.annotation.Pre;
+import admin.BoardVO;
+import admin.SearchVO;
 import util.DbConnection;
 
 public class BoardDAO {

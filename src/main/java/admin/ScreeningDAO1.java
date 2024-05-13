@@ -176,6 +176,7 @@ public class ScreeningDAO1 {
 	        // 상영 코드 생성
 	        String screeningCode = getScreeningCode();
 	        String movieCode = getMovieCode(movieName);
+	        System.out.println("insertScreening메서드 실행중 screeningCode : " + screeningCode+" movieCode : "+movieCode + "theaterName : " +theaterName);
 
 	        pstmt.setString(1, screeningCode); // 상영 코드 설정
 	        pstmt.setString(2, theaterName);

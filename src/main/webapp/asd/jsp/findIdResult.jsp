@@ -1,3 +1,5 @@
+<%@page import="admin.UserVO"%>
+<%@page import="admin.UserDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     info=""%>
@@ -74,29 +76,89 @@ function closePopupAndMoveLogin() {
     window.opener.location.href = 'login.jsp';
 }
 
+//팝업 창 닫고 다시 아이디찾기 화면으로
+function closePopupAndReturn() {
+    window.close();
+    window.opener.location.href = 'findId.jsp';
+}
+
 </script>
 
 </head>
 <body>
+
 <div class="wrap">
+	<div>
+		<%
+		request.setCharacterEncoding("UTF-8");
+		%>
+		<jsp:useBean id="uVO" class="admin.UserVO" scope="page" />
+		<jsp:setProperty property="*" name="uVO" />
+
+		<c:catch var="e">
+		
+		<%
+		//DB Table 추가
+		UserDAO uDAO = UserDAO.getInstance();
+		
+		String existingUserId = uDAO.selectUserId((uVO));
+		
+
+		if(existingUserId == null || existingUserId.equals("")) {
+		%>
+		<div class="title">
+			<h2 style="font-weight: bold;">아이디 확인</h2>
+		</div>
+	
+			<div class="wrap_findIdResult">
+				<hr>
+				<label style="font-size: 20px; font-weight: bold; color: red; margin-top: 70px;">입력하신 정보와 일치하는 아이디가 없습니다.</label>
+				<div class="returnBtn">
+					<button type="button" class="btn btn-primary btn-lg" onclick="closePopupAndReturn()" style="margin-top: 80px;">돌아가기</button>
+				</div>
+			</div>
+		<% } else { %>
+		
+		
 	<div class="title">
-		<h2>아이디 확인</h2>
+		<h2 style="font-weight: bold;">아이디 확인</h2>
 	</div>
 	
-	<form>
 		<div class="wrap_findIdResult">
 			<label>입력하신 정보와 일치하는 아이디는 다음과 같습니다.</label>
 			<hr>
 			<div class="findResultLabel">
-				<label class="labelId" id="labelId1">일단 누구님의 아이디는</label><br>
-				<label class="labelId" id="labelId2">nugu 입니다.</label><br>
+				<label class="labelId" id="labelId1"><strong>${param.userName}</strong>님의 아이디는</label><br>
+				<label class="labelId" id="labelId2"><strong><%=uDAO.selectUserId(uVO) %></strong>입니다.</label><br>
 			</div>
 			<div class="findResultBtn">
 				<button type="button" class="btn btn-primary" onclick="closePopupAndMoveFindPw()">비밀번호 찾기</button>
 				<button type="button" class="btn btn-secondary" onclick="closePopupAndMoveLogin()">로그인</button>
 			</div>
 		</div>
-	</form>
+		
+		<%
+		}
+		%>
+		
+		</c:catch>
+				<!-- 에러상황 테스트 
+		<c:set var="errorOccurred" value="${1/0}" />
+		-->
+		<c:if test="${ not empty e }">
+			<!-- 다양한 경우의 문제의 에러상황 -->
+			<div id="resultFailContent" style="display: flex; flex-direction: column; align-items: center;">
+				<h2 style="font-size: 25px; font-weight: bold; margin-bottom: 50px; margin-top: 100px; color: red">
+					죄송합니다. 잠시 후 다시 시도해주세요.<br />
+				</h2>
+				<div style="display: flex; flex-direction: row; margin-bottom: 80px;">
+					<a href="index.jsp" class="btn btn-danger btn-lg" style="margin-right: 10px;">메인으로</a>
+					<button class="btn btn-primary btn-lg" onclick="history.back()">뒤로</button>
+				</div>
+			</div>
+		</c:if>
+
+	</div>
 </div>
 </body>
 </html>

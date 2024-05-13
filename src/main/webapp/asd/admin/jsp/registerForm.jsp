@@ -30,7 +30,7 @@ $(function(){
 	        type: "post",
 	        data: param,
 	        success: function(response) {
-	            alert("성공적으로 저장");
+	            alert(response);
 	        },
 	        error: function(xhr, status, error) {
 	            alert("오류 발생: " + error);

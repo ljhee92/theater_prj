@@ -19,12 +19,12 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="http://localhost/theater_prj/asd/admin/jsp/dashboard.jsp">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>대시보드</span></a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="http://localhost/theater_prj/asd/admin/jsp/movie.jsp">
                     <i class="fas fa-fw fa-table"></i>
                     <span>영화관리</span></a>

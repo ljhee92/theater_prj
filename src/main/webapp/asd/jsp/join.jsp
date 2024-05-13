@@ -7,7 +7,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원가입</title>
 <!--bootstrap 시작-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -17,8 +16,8 @@
 <!--jQeury CDN 끝-->
     <meta id="ctl00_og_image" property="og:image" content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png"></meta>
     <link rel="alternate" href="http://m.cgv.co.kr" />
-    <link rel="shortcut icon" href="https://img.cgv.co.kr/theater_img/favicon.ico" type="image/x-icon" />
-    <title id="ctl00_headerTitle">로그인 &lt; 회원서비스 | 영화 그 이상의 감동. CGV</title>
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <title id="ctl00_headerTitle">회원가입 | 명화 그 이상의 감동. 띵화관</title>
     <link rel="shortcut icon" type="image/x-icon" href="https://img.cgv.co.kr/R2014/images/favicon.ico" />
     <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/webfont.css" />
 	<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/reset.css" />
@@ -64,6 +63,10 @@
     <!-- 홈페이지 CSS 일원화로 인한 반영 20220721 -->
     <link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/resource_pc/css/cgv.min.css" />
     <script type="text/javascript" src="https://img.cgv.co.kr/resource_pc/js/cgvUi.js"></script>
+
+	<!-- datepicker -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
 
 <style type="text/css">
@@ -165,7 +168,7 @@ html{
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 100px;
+    padding: 70px;
 }
 
 #wrap_id {
@@ -221,7 +224,7 @@ html{
 
 .input-group-text {
     width: 100px;
-    height: 58px;
+    height: 70px;
     text-align: center;
     display: flex; /* 플렉스 컨테이너로 설정 */
     justify-content: center; /* 수평 가운데 정렬 */
@@ -229,27 +232,34 @@ html{
 
 .form-select{
 	width: 100px;
-    height: 58px;
+    height: 70px;
+}
+
+#term1, #term2 {
+    font-size: 17px;
 }
 	
 </style>
 
 
 <script type="text/javascript">
-    window.onload = function() {
-        // 회원 이용약관 내용 보기 링크
-        document.getElementById("term1_link").addEventListener("click", function(event) {
-            event.preventDefault(); // 링크의 기본 동작 중지
-            openPopup("join_term1.jsp");
-        });
 
-        // 개인정보처리방침 내용 보기 링크
-        document.getElementById("term2_link").addEventListener("click", function(event) {
-            event.preventDefault(); // 링크의 기본 동작 중지
-            openPopup("join_term2.jsp");
-        });
-    };
+	//datepicker 사용
+	$(function() {
+		// 기본 사용
+		//$( "#datepicker" ).datepicker();
 
+		// 옵션 부여
+		$("#datepicker").datepicker(
+				{
+					dayNamesMin : [ "일", "월", "화", "수", "목", "금", "토" ],
+					dateFormat : "yy-mm-dd",
+					monthNames : [ "1월", "2월", "3월", "4월", "5월", "6월", "7월",
+							"8월", "9월", "10월", "11월", "12월" ],
+					showMonthAfterYear : true
+				});
+	});
+	
     // 팝업 창 가운데로 띄우는 함수
     function openPopup(url) {
         var popupWidth = 800;
@@ -258,6 +268,95 @@ html{
         var top = (window.innerHeight - popupHeight) / 2;
         window.open(url, '_blank', 'width=800, height=600, left=' + left + ', top=' + top);
     }
+	
+	document.addEventListener('DOMContentLoaded', function() {
+	    //idChk버튼이 클릭되면 idChkDupWin 함수 호출
+	    document.getElementById('idChk').addEventListener('click', idChkDupWin);
+	    
+	    // 회원 이용약관 내용 보기 링크
+	    document.getElementById("term1_link").addEventListener("click",
+	            function(event) {
+	                event.preventDefault(); // 링크의 기본 동작 중지
+	                openPopup("join_term1.jsp");
+	            });
+	    
+	    // 개인정보처리방침 내용 보기 링크
+	    document.getElementById("term2_link").addEventListener("click",
+	            function(event) {
+	                event.preventDefault(); // 링크의 기본 동작 중지
+	                openPopup("join_term2.jsp");
+	    });
+	});
+	
+	// 중복확인 버튼 클릭 시 실행되는 함수
+	function idChkDupWin() {
+	    // 입력된 아이디 가져오기
+	    var userId = document.getElementById('userId').value;
+	    
+	    // 팝업창 열기
+	    var popupUrl = 'idChk_dup.jsp?userId=' + userId;
+	    var popupWidth = 1000;
+		var popupHeight = 600;
+		var left = (window.innerWidth - popupWidth) / 2;
+		var top = (window.innerHeight - popupHeight) / 2;
+	    var popupOptions = 'width=600, height=400, left=' + left
+		+ ', top=' + top;
+	    window.open(popupUrl, 'idChkDup', popupOptions);
+	}
+	
+	$(function() {
+	    $("#reUserPassword").focusout(function() {
+	        //비밀번호 확인 함수 호출
+	        chkCorrectPw();
+	    }); // focusout
+
+	    $("#btnSubmit").click(function() {
+	        //모든 요소 입력되었는지 확인 함수
+	        chkInputAll();
+	    }); // click
+	});
+
+	//비밀번호 확인 함수
+	function chkCorrectPw() {
+	    if($("#userPassword").val() != $("#reUserPassword").val()) {
+	        alert('비밀번호가 다릅니다');
+	        $("#userPassword").val('');
+	        $("#reUserPassword").val('');
+	        $("#userPassword").focus();
+	    } // end if
+	} // chkCorrectPw
+	
+	//모든 요소 필수 입력 함수
+	function chkInputAll() {
+    let flagInputArrAll = true;
+    let arrEssential = [ $("#userId"), $("#userPassword"), $("#reUserPassword"), $("#userName"), $("#datepicker"),
+            $("#userPhone"), $("[name='terms'][value='회원 이용약관']"),
+            $("[name='terms'][value='개인정보처리방침']") ];
+    let arrLabel = [ '아이디', '비밀번호', '비밀번호 확인', '이름', '생년월일', '전화번호', '회원 이용약관',
+            '개인정보처리방침' ];
+
+    // 폼 객체 가져오기
+    let joinForm = document.forms["joinFrm"];
+
+    $.each(arrEssential, function(index, value) {
+        if (index < 6 && $(value).val() == "") {
+            alert(arrLabel[index] + '는 필수 입력입니다');
+            flagInputArrAll = false;
+            return false;
+        } else if (index >= 6 && !$(value).is(":checked")) {
+            alert(arrLabel[index] + '는 필수 동의사항입니다');
+            flagInputArrAll = false;
+            return false;
+        }
+    });
+
+    if (flagInputArrAll) {
+        joinForm.submit();
+    }
+}
+	
+	
+	
 </script>
 </head>
 
@@ -269,25 +368,27 @@ html{
 
 	<div class="wrap_join">
 	
-		<h2 style="font-size: 24px; margin-bottom: 20px;">회원가입</h2>
+		<h2 style="font-size: 28px; font-weight: bold; margin-bottom: 40px;">회원가입</h2>
 	
-		<form>
+		<form name="joinFrm" id="joinFrm" action="join_process.jsp" method="post">
 			<div id="wrap_id">
 				<div class="input-group mb-3">
 					<span class="input-group-text">아이디</span>
 					<div class="form-floating">
-						<input type="text" class="form-control" id="id" placeholder="아이디" required="required"> 
+						<input type="text" class="form-control" id="userId" name="userId" placeholder="아이디" required="required" style="height:70px;"> 
 						<label for="id">아이디</label>
 					</div>
+				<button type="button" class="btn btn-outline-primary" id="idChk" style="width: 100px; height: 70px; font-size : 20px;">중복확인</button>
 				</div>
+			
 			</div>
 			
 			<div id="wrap_password">
 				<div class="input-group mb-3">
 					<span class="input-group-text">비밀번호</span>
-					<div class="form-floating">
-						<input type="password" class="form-control" id="pw" placeholder="비밀번호" required="required"> 
-						<label for="id">비밀번호</label>
+					<div class="form-floating" style="height: 70px;">
+						<input type="password" class="form-control" id="userPassword" name="userPassword" placeholder="비밀번호" required="required" style="height:70px;"> 
+						<label for="userPassword">비밀번호</label>
 					</div>
 				</div>
 			</div>
@@ -296,8 +397,8 @@ html{
 				<div class="input-group mb-3">
 					<span class="input-group-text">비밀번호<br>확인</span>
 					<div class="form-floating">
-						<input type="password" class="form-control" id="repw" placeholder="비밀번호확인" required="required"> 
-						<label for="id">비밀번호 확인</label>
+						<input type="password" class="form-control" id="reUserPassword" name="reUserPassword" placeholder="비밀번호확인" required="required" style="height:70px;"> 
+						<label for="reUserPassword">비밀번호 확인</label>
 					</div>
 				</div>
 			</div>
@@ -306,21 +407,36 @@ html{
 				<div class="input-group mb-3">
 					<span class="input-group-text">이름</span>
 					<div class="form-floating">
-						<input type="text" class="form-control" id="name" placeholder="이름" required="required"> 
-						<label for="id">이름</label>
+						<input type="text" class="form-control" id="userName" name="userName" placeholder="이름" required="required" style="height:70px;"> 
+						<label for="userName">이름</label>
 					</div>
 				</div>
 			</div>
-
+			
 			<div id="wrap_birth">
-				<label>생년월일</label> 
-				<select class="form-select" name="year">
+				<div class="input-group mb-3">
+					<span class="input-group-text">생년월일</span>
+					<div class="form-floating">
+						<input type="text" class="form-control" name="userBirthday" id="datepicker" placeholder="생년월일" required="required" style="height:70px;">
+						<span id="CalregistdateIcon">
+						</span>
+						<label for="userBirthday">생년월일</label>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 생년월일 ver1.
+			<div id="wrap_birth" style="margin-left: 5px">
+			<div style="display: flex;">
+				<label style="align-self: center; margin-right: 10px; font-size: 20px; font-weight: bold;">생년월일</label>
+				<select class="form-select" name="year" id="year">
 					<option selected="selected">선택</option>
 					<% for (int i = 2024; i > 1953; i--) { %>
 					<option value="<%=i%>"><%=i%></option>
 					<% } %>
 				</select> 
-				<label>년</label>
+				<label for="year" style="align-self: center; margin-right: 15px; font-size: 20px;">년</label>
+			
 				 
 				<select class="form-select" name="month">
 					<option selected="selected">선택</option>
@@ -328,7 +444,7 @@ html{
 					<option value="<%=i%>"><%=i%></option>
 					<% } %>
 				</select> 
-				<label>월</label> 
+				<label style="align-self: center; margin-right: 15px; font-size: 20px;">월</label> 
 				
 				<select class="form-select" name="day">
 					<option selected="selected">선택</option>
@@ -336,14 +452,16 @@ html{
 					<option value="<%=i%>"><%=i%></option>
 					<% } %>
 				</select> 
-				<label>일</label><br>
+				<label style="align-self: center; margin-right: 15px; font-size: 20px;">일</label><br>
 			</div>
-
+			</div>
+			-->
+			
 			<div id="wrap_tel">
 				<div class="input-group mb-3">
 					<span class="input-group-text">전화번호</span>
 					<div class="form-floating">
-						<input type="text" class="form-control" id="tel" placeholder="전화번호" required="required"> 
+						<input type="text" class="form-control" id="userPhone" name="userPhone" placeholder="전화번호" required="required" style="height:70px;"> 
 						<label for="id">전화번호</label>
 					</div>
 				</div>
@@ -351,19 +469,21 @@ html{
 
 			<div id="wrap_terms">
 				<div id="term_label">
-					<label>약관 동의</label>
+					<label style="font-size: 20px; font-weight: bold">약관 동의</label>
 				</div>
 				<div id="term1">
-					<input type="checkbox" name="terms" value="회원 이용약관">회원 이용약관 동의 
+					<input class="form-check-input" type="checkbox" name="terms" value="회원 이용약관" style="font-size: 20px;">
+					회원 이용약관 동의 
 					<a id="term1_link" href="join_term1.jsp">내용보기</a>
 				</div>
 				<div id="term2">
-					<input type="checkbox" name="terms" value="개인정보처리방침">개인정보처리방침 동의 
+					<input class="form-check-input" type="checkbox" name="terms" value="개인정보처리방침" style="font-size: 20px;">
+					개인정보처리방침 동의 
 					<a id="term2_link" href="join_term2.jsp">내용보기</a>
 				</div>
 			</div>
 			
-			<button type="button" class="btn btn-danger">회원가입</button>
+			<button type="button" class="btn btn-danger" id="btnSubmit" style="width: 130px; height: 50px; font-size : 20px;">회원가입</button>
 			
 		</form>
 	

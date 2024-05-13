@@ -28,7 +28,7 @@
 <meta id="ctl00_og_image" property="og:image" content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png">
 <link rel="alternate" href="http://m.cgv.co.kr" />
 <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-<title id="ctl00_headerTitle">무비차트 &lt; 무비차트 | 영화 그 이상의 감동. CGV</title>
+<title id="ctl00_headerTitle">무비차트 | 명화 그 이상의 감동. 띵화관</title>
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/webfont.css" />
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/reset.css" />
 <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/layout.css" />
@@ -197,7 +197,7 @@ function updateMovieChart(response) {
 
 						<div class="submenu">
 							<ul>
-								<li class="on"><a href="/movies/" title="선택">무비차트</a></li>
+								<li class="on"><a href="movieChart.jsp" title="선택">무비차트</a></li>
 							</ul>
 						</div>
 					</div>
@@ -272,7 +272,7 @@ function updateMovieChart(response) {
  											%></em>
 									</strong>
 									</span> <span class="like"> <a class="link-reservation"
-										href="/ticket/?MOVIE_CD=20035938&MOVIE_CD_GROUP=20035938">예매</a>
+										href="ticket.jsp">예매</a>
 									</span>
 								</div>
 							</li>
@@ -296,7 +296,7 @@ function updateMovieChart(response) {
 		<!-- S 예매하기 및 TOP Fixed 버튼 -->
 		<div class="fixedBtn_wrap">
 
-			<a href="/ticket/" class="btn_fixedTicketing">예매하기</a> <a
+			<a href="ticket.jsp" class="btn_fixedTicketing">예매하기</a> <a
 				href="#none" class="btn_gotoTop"><img
 				src="https://img.cgv.co.kr/R2014/images/common/btn/gotoTop.png"
 				alt="최상단으로 이동" /></a>

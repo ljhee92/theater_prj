@@ -1,5 +1,5 @@
 <%@page import="java.util.ArrayList"%>
-<%@page import="VO.ReservingVO"%>
+<%@page import="user.VO.ReservingVO"%>
 <%@page import="java.util.List"%>
 <%@page import="user.DAO.ReservingDAO"%>
 <%@page import="java.util.Locale"%>
@@ -92,12 +92,70 @@ String id = (String)session.getAttribute("id");
 if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디렉션
 %>
 <script type="text/javascript">
+alert("예매는 로그인 후 가능합니다.");
 window.location.href = "login.jsp?prevPage=ticket.jsp";
 </script>  
-<%}%>
+<%
+  }
+  %>
 <!-- E 로그인 세션 확인  -->
 
 <script type="text/javascript">
+	function resetMovieList() {
+		$("#movieList > li").remove();
+		$("#movieList > p").remove();
+		$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
+	} // resetMovieList
+
+	function resetMovieTime() {
+		$(".wrap-timetable > .title").remove();
+		$(".wrap-timetable > .theater-info").remove();
+		$(".wrap-timetable > .time").remove();
+		$(".wrap-timetable > p").remove();
+		$(".wrap-timetable").append($("<p>").text("영화관과 영화를 선택하면 시간표가 나옵니다.").addClass("ready"));
+	} // resetMovieTime
+
+	// 현재 날짜 이후에 상영 중인 상영일자 구하기
+	function searchScreeningDate(formattedDate1) {
+		$.ajax({
+			type: 'POST',
+			url: '/theater_prj/ScreeningDateServlet',
+			success: function(response) {
+				// 받은 JSON 데이터를 파싱하여 표시
+				var data = JSON.parse(response);
+				
+				displayDisabled(response, formattedDate1);
+			},
+			error: function(xhr, status, error) {
+				console.error('Error', error);
+			}
+		});
+	} // searchScreeningDate
+	
+	function displayDisabled(response, formattedDate1) {
+	    var object = JSON.parse(response);
+	    
+	    formattedArray = formattedDate1.split(",");
+	    var deleteDate = "";
+	    
+	    object.forEach(function(item) {
+		    var flag = false+","+item.screeningDate;
+	        if (item.screeningDate.includes(formattedArray)) {
+	        	flag = true+","+item.screeningDate;
+	        	deleteDate = item.screeningDate;
+	        } // end if
+	    });
+	    var deleteIndex = formattedArray.indexOf(deleteDate);
+	    
+	    if(deleteIndex === -1) {
+	    	formattedArray.splice(deleteIndex, 1);
+	    } // end if
+	    
+	    formattedArray.forEach(function(date) {
+		    $(".cal-week .datelist a[data-date='" + date + "']").removeClass("disabled");
+	    })
+	} // displayDisabled
+
 	$(function() {
 		$("div.section-pop-top", "div.popup").on("click", "a.btn-rsv-reset", function() {
 			if (confirm("모든 선택정보가 사라집니다. 계속하시겠습니까?") == false) {
@@ -106,10 +164,119 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			location.href = "ticket.jsp"
 		});
 		
-		//a 태그 클릭 시 이벤트 핸들러 등록
-		$(".selected").click(function(event) {
-		    // 클릭 이벤트를 기본 동작으로부터 중지합니다.
+		$(".cal-week").on("click", ".datelist", function(event){
 		    event.preventDefault();
+		    
+		    if($(this).find("a").hasClass("disabled ")) {
+				return;
+		    } // end if
+		    
+		    var clickedDate = $(this).find("a").attr("data-date");
+		    
+		    if($(this).hasClass("selected")) {
+				$(this).removeClass("selected");
+				$(".theater-box a.selected").removeClass("selected");
+				resetMovieList();
+				resetMovieTime();
+				
+			} else {
+				$(".cal-week a.selected").removeClass("selected");
+				$(".theater-box a.selected").removeClass("selected");
+				resetMovieList();
+				resetMovieTime();
+				$(this).find("a").addClass("selected");
+			} // end else
+		})
+		
+		$(".cal-week").on("click", ".prev", function(event) {
+			var now = new Date();
+			var year = now.getFullYear();
+			var month = (now.getMonth() + 1).toString().padStart(2, '0');
+			var day = now.getDate().toString().padStart(2, '0');
+			
+			var formattedDate = year + month + day;
+			// 오늘이 아닐 때만 클릭 가능하도록 설정
+			if(formattedDate != $(".today").attr("data-date")) {
+				alert("오늘이 아니면 이전 클릭");
+			} // end if
+		});
+		
+		$(".cal-week").on("click", ".next", function(event) {
+			event.preventDefault();
+			
+			// 기존 달력 지우고
+			$(".cal-week").remove();
+			
+			// 새로 만들기
+			var ul = $("<ul>").addClass("cal-week");
+			
+			var prevListItem = $("<li>").append($("<a>").attr("href", "ticket.jsp")
+							.addClass("prev viewDate").attr("data-viewdate", "").text("이전"));
+			ul.append(prevListItem);
+			
+			var daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+
+			for(var i=10; i<20; i++) {
+				var now = new Date();
+				now.setDate(now.getDate() + i);
+				
+				var year = now.getFullYear();
+				var month = (now.getMonth() + 1).toString().padStart(2, "0");
+				var day = now.getDate().toString().padStart(2, "0");
+				var day2 = now.getDate().toString().padStart(2, "");
+				var dayOfWeek = daysOfWeek[now.getDay()];
+				var formattedDate1 = year + month + day;
+				var formattedDate2 = year + "-" + month + "-" + day;
+				
+				var listItem = $("<li>").addClass("datelist");
+				var link = $("<a>").attr("href", "ticket.jsp?screeningDate=" + formattedDate1)
+								.attr("data-date", formattedDate1)
+								.attr("data-selectdate", formattedDate2)
+								.addClass("disabled")
+								.css("margin", "0 2px 0 2px")
+								.click(function() {
+									event.preventDefault();
+									 
+									if($(this).hasClass("disabled")) {
+										event.preventDefault();
+								    } // end if
+								    
+									if($(this).hasClass("selected")) {
+										$(this).removeClass("selected");
+										$(".theater-box a.selected").removeClass("selected");
+										resetMovieList();
+										resetMovieTime();
+									} else {
+										$(".cal-week a.selected").removeClass("selected");
+										$(".theater-box a.selected").removeClass("selected");
+										resetMovieList();
+										resetMovieTime();
+										
+										$(this).addClass("selected");
+									} // end else
+									return false;
+								});
+				
+				searchScreeningDate(formattedDate1);
+				
+				if(dayOfWeek === "토") {
+					link.addClass("sat ");
+				} else if(dayOfWeek === "일") {
+					link.addClass("sun ");
+				} // end else if
+				
+				var spanDay = $("<span>").addClass("day").text(dayOfWeek);
+				
+				link.append(spanDay, day2);
+				listItem.append(link);
+				ul.append(listItem);
+			} // end for
+			
+			var nextListItem = $("<li>").append($("<a>").attr("href", "#").css("margin", "0 2px 0 2px")
+							.addClass("next viewDate").attr("data-viewdate", "").text("다음"));
+			ul.append(nextListItem);
+			
+			$(".wrap-date").append(ul);
 		});
 		
 		$(".theater-box").on("click", ".theater", function(event) {
@@ -120,18 +287,11 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			
 			if($("#"+clickedId).hasClass("selected")) {
 				$(".theater-box .theater.selected").removeClass("selected");
-				$("#movieList > li").remove();
-				$("#movieList > p").remove();
-				$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
+				resetMovieList();
 		    } else {
 				$(".theater-box .theater.selected").removeClass("selected");
 				$("#"+clickedId).addClass("selected");
-				
-				$(".wrap-timetable > .title").remove();
-				$(".wrap-timetable > .theater-info").remove();
-			 	$(".wrap-timetable > .time").remove();
-			  	$(".wrap-timetable > p").remove();
-				$(".wrap-timetable").append($("<p>").text("영화관과 영화를 선택하면 시간표가 나옵니다.").addClass("ready"));
+				resetMovieTime();
 
 				var url = new URL(window.location.href);
 			    var params = url.searchParams;
@@ -139,7 +299,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			    var theaterName = $(this).text();
 			    
 			    if(screeningDate === null) {
-			    	screeningDate = $("#rsvcal").val();
+			    	screeningDate = $(".datelist > .selected").attr("data-date");
 			    } // end if
 			    
 		        searchMovie(screeningDate, theaterName);
@@ -158,7 +318,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		    var movieCode = li.find("input[type='radio']").attr("id");
 		    
 		    if(screeningDate === null) {
-		    	screeningDate = $("#rsvcal").val();
+		    	screeningDate = $(".datelist > .selected").attr("data-date");
 		    } // end if
 		    
 		    $(".wrap-timetable > .title").remove();
@@ -193,7 +353,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
  		    var screeningTime = $(".wrap-timetable > .time.on").text();
  		    
  		    if(screeningDate === null) {
-		    	screeningDate = $("#rsvcal").val();
+		    	screeningDate = $(".datelist > .selected").attr("data-date");
 		    } // end if
  		    
  		    // 유효성 검증
@@ -260,7 +420,6 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
  		    
  		    document.body.appendChild(form);
  		    form.submit();	// 전송
-
  		});
 	}); // ready
 
@@ -358,8 +517,14 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			success: function(response) {
 				// 받은 JSON 데이터를 파싱하여 표시
 				var data = JSON.parse(response);
+				
 				$(".wrap-timetable > p").remove();
-				displayData(response);
+
+				if(data == "") { // 데이터가 현재시간 이전이라면
+					$(".wrap-timetable").append($("<p>").text("영화관과 영화를 선택하면 시간표가 나옵니다.").addClass("ready"));
+				} else {
+					displayData(response);
+				} // end else
 			},
 			error: function(xhr, status, error) {
 				console.error('Error', error);
@@ -370,7 +535,6 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 	// 시간표에 파싱한 데이터를 표시하는 함수
 	function displayData(response) {
 		var object = JSON.parse(response);
-		//console.log(object);
 		
 		var divTimeTable = $(".wrap-timetable");
 		
@@ -401,7 +565,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			divTime.attr("theaterNumber", object[i].theaterNumber);
 			divTimeTable.append(divTime);
 		} // end for
-	} // displayDate
+	} // displayData
 		
 </script>
 </head>
@@ -412,7 +576,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		<jsp:include page="header.jsp"></jsp:include>
 		<!-- E Header -->
 
-        <jsp:useBean id="rsVO" class="VO.ReservingVO" scope="page"/>
+        <jsp:useBean id="rsVO" class="user.VO.ReservingVO" scope="page"/>
         <jsp:setProperty property="*" name="rsVO"/>
 		<%
 		LocalDateTime now = LocalDateTime.now();
@@ -424,13 +588,12 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		
 		ReservingDAO rsDAO = ReservingDAO.getInstance();
 		List<ReservingVO> screeningDates = new ArrayList<>();
-		screeningDates = rsDAO.selectScreeningDate();
+		screeningDates = rsDAO.selectScreeningDate("N");
 		pageContext.setAttribute("screeningDates", screeningDates);
 		
 		List<ReservingVO> theaters = new ArrayList<>();
 		theaters = rsDAO.selectAllTheater();
 		pageContext.setAttribute("theaters", theaters);
-		
 		%>
 
 		<!-- Contaniner -->
@@ -452,7 +615,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 							<input type="hidden" name="cal" id="rsvcal" class="input-cal hasDatepicker"
 								value="${ today }" style="display: none;">
 							<ul class="cal-week">
-								<li><a href="#" class="prev viewDate" data-viewdate="" onclick="alert('기능구현중')">이전</a></li>
+								<li><a href="#" class="prev viewDate" data-viewdate="">이전</a></li>
 								
 								<%
 								StringBuilder classStringBuilder = new StringBuilder();
@@ -469,7 +632,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 									boolean isScreening = false;
 									String isDisabled = "";
 									
-									classStringBuilder.append(isToday ? "today " : ""); // 오늘 날짜인 경우 today 클래스 추가
+									classStringBuilder.append(isToday ? "today selected " : ""); // 오늘 날짜인 경우 today 클래스 추가
 									classStringBuilder.append(isSelected ? "selected " : ""); // 선택된 날짜인 경우 selected 클래스 추가
 									classStringBuilder.append(dayOfWeek.equals("토") ? "sat " : ""); // 토요일인 경우 sat 클래스 추가
 									classStringBuilder.append(dayOfWeek.equals("일") ? "sun " : ""); // 일요일인 경우 sun 클래스 추가
@@ -493,12 +656,13 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 								%>
 									<li class="datelist">
 										<a href="ticket.jsp?screeningDate=<%= dataDate %>" data-date="<%= dataDate %>"
-										data-selectdate="<%= selectDate %>" class="<%= classString %>" <%=isDisabled%>>
+										data-selectdate="<%= selectDate %>" class="<%= classString %>" <%=isDisabled%> >
 										<span class="day"><%= dayOfWeek %></span><%= dayOfMonth %></a>
 									</li>
 								<% classStringBuilder.delete(0, classStringBuilder.length());
-								} // end for %>
-								<li><a href="#" class="next viewDate" data-viewdate="" onclick="alert('기능구현중')">다음</a></li>
+								} // end for
+								String dataDate2 = now.plusDays(10).format(dataDateFormat); %>
+								<li><a href="ticket.jsp?screeningDate=<%= dataDate2 %>" class="next viewDate" data-viewdate="" >다음</a></li>
 							</ul>
 						</div>
 						

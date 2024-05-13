@@ -1,12 +1,15 @@
+<%@page import="admin.UserDAO"%>
 <%@page import="user.VO.UserVO"%>
 <%@page import="admin.AdminVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
  pageEncoding="UTF-8" 
  info="" %>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<title>회원가입</title>
 <!--bootstrap 시작-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -16,8 +19,8 @@
 <!--jQeury CDN 끝-->
     <meta id="ctl00_og_image" property="og:image" content="https://img.cgv.co.kr/WebApp/images/common/logo_new_kakao_prevw.png"></meta>
     <link rel="alternate" href="http://m.cgv.co.kr" />
-	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-    <title id="ctl00_headerTitle">로그인 | 명화 그 이상의 감동. 띵화관</title>
+    <link rel="shortcut icon" href="https://img.cgv.co.kr/theater_img/favicon.ico" type="image/x-icon" />
+    <title id="ctl00_headerTitle">로그인 &lt; 회원서비스 | 영화 그 이상의 감동. CGV</title>
     <link rel="shortcut icon" type="image/x-icon" href="https://img.cgv.co.kr/R2014/images/favicon.ico" />
     <link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/webfont.css" />
 	<link rel="stylesheet" media="all" type="text/css" href="https://img.cgv.co.kr/R2014/css/reset.css" />
@@ -64,9 +67,12 @@
     <link rel="stylesheet" type="text/css" href="https://img.cgv.co.kr/resource_pc/css/cgv.min.css" />
     <script type="text/javascript" src="https://img.cgv.co.kr/resource_pc/js/cgvUi.js"></script>
 
+	<!-- datepicker -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
 
 <style type="text/css">
-
 
 
 /* 로그인 */
@@ -149,198 +155,143 @@
 .box-login.nomember .box-operationguide dd{ padding:5px 0 0 0; border-left:none; background:url('../images/common/bg/dot_horizontal.gif') 0 0 repeat-x;}
 .box-login.nomember .box-operationguide dt + dd{ padding-top:0; background:none;}
 
-	
-	
-	
+#success, resultDupId, resultFailContent {
+	width: 597px;
+	margin: 0px auto;
+	display : flex;
+	align-items: center; /* 세로 중앙 정렬 */
+	justify-content: center; /* 가로 중앙 정렬 */
+    height: 40vh; /* 부모 요소의 높이를 화면의 높이의 40%로 설정 */
+	position: relative;
+	text-align: center;
+}
+
+html{
+     /* 웹페이지 드래그 및 커서 깜빡임 방지 */
+     -ms-user-select: none;
+     -moz-user-select: -moz-none;
+     -webkit-user-select: none;
+     -khtml-user-select: none;
+     user-select: none;
+}
+
+ul{
+	font-size: 20px;
+}
+
+li{
+	margin-bottom: 10px;
+}
+
+
 
 </style>
+
+
 <script type="text/javascript">
-	
-	
-	
-$(function(){
-
-	
-
-	
-	
-	
-	
-
-    $("#txtUserId").on('keypress', function(e) {
-        if(e.which === 13) {
-            e.preventDefault(); 
-            let id = $("#txtUserId").val();
-            if(id === "") {
-                alert("아이디를 입력해주세요.");
-            } else {
-                $("#txtPassword").focus();
-            }
-        }
-    });
 
 
-    $("#txtPassword").on('keypress', function(e) {
-        if(e.which === 13) { 
-            e.preventDefault(); 
-            let pw = $("#txtPassword").val();
-            if(pw === "") {
-                alert("비밀번호를 입력해주세요.");
-            } else {
-                $("#submit").click();
-            }
-        }
-    });
-
-
-
-});
-	
-	function checkNull(){
-
-		
-	//alert("클릭되었음")
-	let id = $("#txtUserId").val();
-	let pw = $("#txtPassword").val();
-	
-   // alert(id)
-   // alert(pw);
-	
-    // ID나 비밀번호가 비어 있는지 확인
-    if(id === "" && pw === "") {
-        alert("ID와 비밀번호를 입력해주세요.");
-        return false;
-    } else if(id === "") {
-        alert("ID를 입력해주세요.");
-        return false; 
-    } else if(pw === "") {
-        alert("비밀번호를 입력해주세요.");
-        return false; 
-    }
-	
-
-	}
-
-
-	
-	
 </script>
 </head>
 
 
 
 <body>
-
-
-
-
-
-
-
-
-
-<!-- 실컨텐츠 시작 -->
-
-
-	<!-- S Header -->
+	<!-- Header -->
 	<jsp:include page="header.jsp"></jsp:include>
-	<!-- E Header -->
+
+	<div>
+		<%
+		request.setCharacterEncoding("UTF-8");
+		%>
+		<jsp:useBean id="uVO" class="admin.UserVO" scope="page" />
+		<jsp:setProperty property="*" name="uVO" />
+
+		<c:catch var="e">
+			<%
+			/*
+			//암호화 복호화
+			//정보의 중요도
+			//일방향 Hash ( 비번)
+			uVO.setUserPassword(DataEncrypt.messageDigest("MD5", uVO.getUserPassword()));
+			uVO.setPassword(DataEncrypt.messageDigest("MD5", uVO.getPassword()));
+			//복호화가능한 암호화 ( 이름, 전화번호, 이메일)
+			String key="gdyb21LQTcIANtvYMT7QVQ==";
+
+			DataEncrypt de=new DataEncrypt(key);
+			uVO.setName(de.encryption(uVO.getName()));
+			uVO.setCell(de.encryption(uVO.getCell()));
+			uVO.setEmail(de.encryption(uVO.getEmail()));
+
+			System.out.println(uVO.getCell());
+			*/
+
+			//DB Table 추가
+			UserDAO uDAO = UserDAO.getInstance();
+			//try{
+			//웹의 비 연결성으로 동시에 같은 값을 사용하는 경우에 
+			if (!"".equals(uDAO.selectDupId(uVO.getUserId()))) {//조회를 하여 같은 값이 있는지 판단하고 있다면
+			%>
+			<div id="resultDupId" style="display: flex; flex-direction: column; align-items: center;">
+				<h2 style="font-size: 25px; font-weight: bold; margin-bottom: 20px; margin-top: 100px; color: red">입력하신 아이디는 이미 사용중입니다. <br /></h2>
+				<h2 style="font-size: 20px; margin-bottom: 30px;">다른 아이디로 재 가입해주세요.<br></h2>
+				<button style="margin-bottom: 100px;" class="btn btn-primary btn-lg" onclick="history.back()">뒤로</button>
+			</div>
+			<%
+			} else {//그렇지 않다면 정상작업 진행		
+
+			uDAO.insertUserInfo(uVO);//웹의 비연결성에 대한 특성
+			%>
+			<div id="success">
+				<div id="result">
+					<h2 style="font-size: 25px; font-weight: bold; margin-bottom: 15px; color: blue">회원가입해주셔서 감사합니다.</h2>
+					<div id="resultSuccessContent">
+						<p>
+							<strong style="font-size: 23px;">${param.userName}</strong>
+								<span style="font-size: 20px;">님의 회원가입을 축하드립니다.<br> 
+								입력하신 정보는 아래와 같습니다.<br />
+								</span>
+						<p>
+					</div>
+					<div id="resultSuccessInfo" style="margin-top: 20px;">
+						<ul>
+							<li><strong>아이디 : </strong>
+							<c:out value="${ param.userId }" /></li>
+							<li><strong>생년월일 : </strong>
+							<c:out value="${ param.userBirthday }" /></li>
+							<li><strong>전화번호 : </strong>
+							<c:out value="${ param.userPhone }" /></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<%
+			} //end else
+			//}catch(SQLException se){
+			//se.printStackTrace();
+			//}
+			%>
+		</c:catch>
+		<!-- 에러상황 테스트 
+		<c:set var="errorOccurred" value="${1/0}" />
+		-->
+		<c:if test="${ not empty e }">
+			<!-- 다양한 경우의 문제의 에러상황 -->
+			<div id="resultFailContent" style="display: flex; flex-direction: column; align-items: center;">
+				<h2 style="font-size: 25px; font-weight: bold; margin-bottom: 50px; margin-top: 100px; color: red">
+					죄송합니다. 잠시 후 다시 시도해주세요.<br />
+				</h2>
+				<div style="display: flex; flex-direction: row; margin-bottom: 80px;">
+					<a href="index.jsp" class="btn btn-danger btn-lg" style="margin-right: 10px;">메인으로</a>
+					<button class="btn btn-primary btn-lg" onclick="history.back()">뒤로</button>
+				</div>
+			</div>
+		</c:if>
+
+	</div>
 
 
-
-
-<!-- S 로그인 세션 확인  -->
-<!-- prevPage에 값이 있다면 이전페이지 저장 -->
-<!-- 저장되어있지 않다면 기본값 index.html로 저장 -->
-<script type="text/javascript">
-<%
-String prevPage ="";
-String id = (String)session.getAttribute("id");
-
-
-
-
-if (request.getParameter("prevPage")==null){
-	prevPage="index.html";
-}else{
-	prevPage=request.getParameter("prevPage");
-}
-
-
-
-
-if (id != null) {%>
-
-var prevPage = "<%= prevPage %>";
-
-window.location.href = prevPage;
-
-<%}%>
-
-
-</script>
-<!-- E 로그인 세션 확인  -->
-
-
-
-	<!-- Contaniner -->
-	<div id="contaniner"  class=""><!-- 벽돌 배경이미지 사용 시 class="bg-bricks" 적용 / 배경이미지가 없을 경우 class 삭제  -->
-
-<div class="wrap-login" style="margin: 0px auto;">
-    <div class="sect-login" style="margin: 0px auto;">
-        <ul class="tab-menu-round">
-
-
-        </ul>
-        <div class="box-login">
-            <h3 class="hidden">회원 로그인</h3>
-            <form id="form1" method="post" action="loginAction.jsp" novalidate="novalidate" onsubmit="return checkNull()" >
-            <fieldset>
-                <legend>회원 로그인</legend>
-                <p>로그인</p>
-                <div class="login">
-                    <input type="text" title="아이디" id="txtUserId" name="txtUserId" data-title="아이디를 " data-message="입력하세요." required="required" />
-                    <input type="password" title="패스워드" id="txtPassword" name="txtPassword" data-title="패스워드를 " data-message="입력하세요." required="required" />
-                </div>
-
-              
-                <button type="submit" id="submit" title="로그인"><span>로그인</span></button>
-                <input type="hidden" id="prevPage" name="prevPage" value=<%= prevPage %> >
-                <div class="login-option">
-                     
-                    <a style="cursor:pointer;" onclick="alert('아이디 찾기 클릭')"  target="_blank">아이디 찾기</a>
-                    <a style="cursor:pointer;" onclick="alert('비번 찾기 클릭')" target="_blank">비밀번호 찾기</a>
-                   
-                </div>
-            </fieldset>
-            </form>  
-        </div>
-    </div>    
-    <div class="sect-loginguide">
-    </div>
-
-	
-
-		<!-- S 예매하기 및 TOP Fixed 버튼 -->
-	<jsp:include page="sideTicketingAndTop.jsp"/>
-		<!-- E 예매하기 및 TOP Fixed 버튼 -->
-
-
-
-
-
-
-
-</div>
-<!-- 실컨텐츠 끝 --> 
-<!-- E Contaniner -->
-</div>
-
-		<!-- S footer_area -->
-		
+	<!-- footer -->
 	<jsp:include page="footer.jsp"></jsp:include>
-		<!-- E footer_area -->
-
-
 </body>
 </html>

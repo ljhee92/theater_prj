@@ -44,7 +44,7 @@
 <body>
 <div class="wrap">
 	<div class="title">
-		<h2>개인정보처리방침</h2>
+		<h2 style="font-weight: bold; margin-top: 40px; margin-bottom: 20px;">개인정보처리방침</h2>
 	</div>
 	
 	<form>
@@ -288,8 +288,10 @@
 공고일자 : 2024-05-14 / 시행일자 : 2024-05-14
 
 			</textarea><br>
+			<!-- 체크박스
 			<input type="checkbox" id="agreement2" name="agreement2" value="agreement2" required="required">
 			<label>개인정보처리방침 동의</label>
+			-->
 		</div>
 	</form>
 </div>

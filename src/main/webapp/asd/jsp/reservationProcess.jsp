@@ -1,3 +1,8 @@
+<%@page import="user.DAO.PaymentDAO"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="user.DAO.ReservationDAO"%>
 <%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info="예매완료 안내" trimDirectiveWhitespaces="true" %>
@@ -77,119 +82,80 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 </script>  
 <%}%>
 <!-- E 로그인 세션 확인  -->
-		
-<script type="text/javascript">
-    $(function () {
-        $("#confirmRes").click(function () {
-            location.href="myPage.jsp";
-        });
-    })
-</script>
 
+<style type = "text/css">
+	
+</style>
+<script type = "text/javascript">
+	$(function() {
+
+	}); // ready
+</script>
 </head>
-<body class="">
+<body>
 <%
 	request.setCharacterEncoding("UTF-8");
-	
+%>
+<jsp:useBean id="rvtVO" class="user.VO.ReservationVO" scope="page"/>
+<jsp:setProperty property="*" name="rvtVO"/>
+<jsp:useBean id="pVO" class="user.VO.PaymentVO" scope="page"/>
+<jsp:setProperty property="*" name="pVO"/>
+
+<c:catch var="e">
+<%
 	// session에 정보 가져오기
 	Map<String, String> params = (Map)session.getAttribute("params");
 	String outputDate = (String)session.getAttribute("ouputDate");
 	
-	// 결제방법, 예매번호 parameter로 가져오기
+	// 결제방법 parameter로 가져오기
 	String payMethod = request.getParameter("payMethod");
-	String maxRsvNum = request.getParameter("maxRsvNum");
 	
-	pageContext.setAttribute("payMethod", payMethod);
-	pageContext.setAttribute("maxRsvNum", maxRsvNum);
+	// 마지막 예매번호+1 가져오기
+	ReservationDAO rvtDAO = ReservationDAO.getInstance();
+	String maxReservationNumber = rvtDAO.selectMaxReservationNumber();
+	
+	// 넘어온 데이터 예약 VO에 넣기
+	rvtVO.setReservationNumber(maxReservationNumber);
+	rvtVO.setUserId((String)session.getAttribute("id"));
+	rvtVO.setScreeningCode(params.get("screeningCode"));
+	rvtVO.setSeat(params.get("checkedSeats"));
+	rvtVO.setTheaterName(params.get("theaterName"));
+	rvtVO.setTheaterNumber(params.get("theaterNumber"));
+	
+	rvtDAO.insertReservation(rvtVO);
+	rvtDAO.insertSeats(rvtVO);
+	
+	// 마지막 결제번호+1 가져오기
+	PaymentDAO pDAO = PaymentDAO.getInstance();
+	String maxPaymentNumber = pDAO.selectMaxPaymentNumber();
+	
+	// 넘어온 데이터 결제 VO에 넣기
+	pVO.setPaymentNumber(maxPaymentNumber);
+	pVO.setReservationNumber(maxReservationNumber);
+	pVO.setTotalPrice(params.get("price").replaceAll(",", ""));
+	pVO.setPaymentMethod(payMethod);
+	
+	pDAO.insertPayment(pVO);
+	
+	response.sendRedirect("ticketReserved.jsp?payMethod="+payMethod+"&maxRsvNum="+maxReservationNumber);
 %>
+</c:catch>
+
 	<div id="wrap">
 		<!-- S Header -->
 		<jsp:include page="header.jsp"></jsp:include>
 		<!-- E Header -->
-
-		<!-- Contaniner -->
-		<div id="container" class>
-			<!-- Contents Area -->
-			<div id="contents" class style="padding-bottom: 0px;">
-				<!-- Contents Start -->
-				<!-- 예매 완료 본문 -->
-				<div class="popup paymentPrint" data-settleid="97f8057ea8f9eceff5132fae6c7e8379aa834a32515c52e07177e1b08f44229f">
-				    <div class="section-pop-top">
-				        <h3 class="title">결제</h3>
-				    </div>
-				
-				    <div class="section-pop-movie">
-				        <img src="../images/movie/${ params['movieCode'] }.jpg" class="poster" alt="포스터">
-				
-				        <div class="title" style="white-space:normal; overflow:visible; margin:15px 20px 5px 20px;">
-				            <span class="rate-${fn:toLowerCase(params['movieRate'] == '18' ? 'x' : params['movieRate'])}">
-				            ${ params['movieRate'] }</span>${ params['movieTitle'] }
-				        </div>
-				        <table class="table-movie-info" style="margin-left:15px; margin-top:20px; width:220px;">
-				            <tbody><tr>
-				                <th>영화관</th>
-				                <td>${ params['theaterName'] }</td>
-				            </tr>
-				            <tr>
-				                <th>상영관</th>
-				                <td>${ params['theaterNumber'] }</td>
-				            </tr>
-				            <tr>
-				                <th>날짜</th>
-				                <td>${ outputDate }</td>
-				            </tr>
-				
-				            <tr>
-				                <th>시간</th>
-				                <td class="time">${ params['screeningTime'] }</td>
-				            </tr>
-				            <tr>
-				                <th>인원</th>
-				                <td class="number">${ params['selectedPerson'] }명</td>
-				            </tr>
-				            <tr>
-				                <th>좌석</th>
-				                <td class="seats">${ params['checkedSeats'] }</td>
-				            </tr>
-				        </tbody></table>
-				    </div><!--.section-pop-movie-->
-				
-				    <div class="section-pop-payment-done">
-				
-				        <div class="desc" style="margin: 52px auto 24px;"><span>결제가 완료</span>되었습니다.</div>
-				
-				        <ul class="list-result">
-				            <li><span class="head">예매번호</span> <span class="num rsv">${ maxRsvNum }</span></li>
-				            <li><span class="head">결제수단</span> <span class="">${ payMethod == "bank" ? "무통장입금" : "카드결제" }</span></li>
-				            <li><span class="head">결제금액</span> <span class="num total">${ params['price'] }</span> 원</li>
-				        </ul>
-				
-				    </div><!--.section-pop-payment-->
-				
-				    <div class="section-pop-bottom white">
-				        <a href="#" class="btn-rsv-done" id="confirmRes">확인</a>
-				    </div><!--.section-pop-bottom3-->
-				
-				</div>
-
-				<!--/ Contents End -->
-			</div>
-			<!-- /Contents Area -->
-		</div>
-		<!-- E Contaniner -->
-
-		<!-- S 예매하기 및 TOP Fixed 버튼 -->
-		<div class="fixedBtn_wrap">
-
-			<a href="#none" class="btn_gotoTop"><img
-				src="https://img.cgv.co.kr/R2014/images/common/btn/gotoTop.png"
-				alt="최상단으로 이동" /></a>
-		</div>
-		<!-- E 예매하기 및 TOP Fixed 버튼 -->
-
+		
+		<c:if test="${ not empty e }">
+			alert("죄송합니다. 잠시 후 다시 시도해주시기 바랍니다.");
+			<%
+			response.sendRedirect("index.jsp");
+			%>
+		</c:if>
+		
 		<!-- S footer_area -->
 		<jsp:include page="footer.jsp"></jsp:include>
 		<!-- E footer_area -->
-		</div>
+	</div>
 </body>
 </html>
