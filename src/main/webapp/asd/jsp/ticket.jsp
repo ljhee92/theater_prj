@@ -101,6 +101,61 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 <!-- E 로그인 세션 확인  -->
 
 <script type="text/javascript">
+	function resetMovieList() {
+		$("#movieList > li").remove();
+		$("#movieList > p").remove();
+		$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
+	} // resetMovieList
+
+	function resetMovieTime() {
+		$(".wrap-timetable > .title").remove();
+		$(".wrap-timetable > .theater-info").remove();
+		$(".wrap-timetable > .time").remove();
+		$(".wrap-timetable > p").remove();
+		$(".wrap-timetable").append($("<p>").text("영화관과 영화를 선택하면 시간표가 나옵니다.").addClass("ready"));
+	} // resetMovieTime
+
+	// 현재 날짜 이후에 상영 중인 상영일자 구하기
+	function searchScreeningDate(formattedDate1) {
+		$.ajax({
+			type: 'POST',
+			url: '/theater_prj/ScreeningDateServlet',
+			success: function(response) {
+				// 받은 JSON 데이터를 파싱하여 표시
+				var data = JSON.parse(response);
+				
+				displayDisabled(response, formattedDate1);
+			},
+			error: function(xhr, status, error) {
+				console.error('Error', error);
+			}
+		});
+	} // searchScreeningDate
+	
+	function displayDisabled(response, formattedDate1) {
+	    var object = JSON.parse(response);
+	    
+	    formattedArray = formattedDate1.split(",");
+	    var deleteDate = "";
+	    
+	    object.forEach(function(item) {
+		    var flag = false+","+item.screeningDate;
+	        if (item.screeningDate.includes(formattedArray)) {
+	        	flag = true+","+item.screeningDate;
+	        	deleteDate = item.screeningDate;
+	        } // end if
+	    });
+	    var deleteIndex = formattedArray.indexOf(deleteDate);
+	    
+	    if(deleteIndex === -1) {
+	    	formattedArray.splice(deleteIndex, 1);
+	    } // end if
+	    
+	    formattedArray.forEach(function(date) {
+		    $(".cal-week .datelist a[data-date='" + date + "']").removeClass("disabled");
+	    })
+	} // displayDisabled
+
 	$(function() {
 		$("div.section-pop-top", "div.popup").on("click", "a.btn-rsv-reset", function() {
 			if (confirm("모든 선택정보가 사라집니다. 계속하시겠습니까?") == false) {
@@ -118,19 +173,18 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		    
 		    var clickedDate = $(this).find("a").attr("data-date");
 		    
-		    if($(this).hasClass("selected ")) {
-				$(this).removeClass("selected ");
-				$(".theater-box a.selected").removeClass("selected ");
-				$("#movieList > li").remove();
-				$("#movieList > p").remove();
-				$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
+		    if($(this).hasClass("selected")) {
+				$(this).removeClass("selected");
+				$(".theater-box a.selected").removeClass("selected");
+				resetMovieList();
+				resetMovieTime();
+				
 			} else {
-				$(".cal-week a.selected").removeClass("selected ");
-				$(".theater-box a.selected").removeClass("selected ");
-				$("#movieList > li").remove();
-				$("#movieList > p").remove();
-				$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
-				$(this).find("a").addClass("selected ");
+				$(".cal-week a.selected").removeClass("selected");
+				$(".theater-box a.selected").removeClass("selected");
+				resetMovieList();
+				resetMovieTime();
+				$(this).find("a").addClass("selected");
 			} // end else
 		})
 		
@@ -178,6 +232,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 				var link = $("<a>").attr("href", "ticket.jsp?screeningDate=" + formattedDate1)
 								.attr("data-date", formattedDate1)
 								.attr("data-selectdate", formattedDate2)
+								.addClass("disabled")
 								.css("margin", "0 2px 0 2px")
 								.click(function() {
 									event.preventDefault();
@@ -189,15 +244,14 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 									if($(this).hasClass("selected")) {
 										$(this).removeClass("selected");
 										$(".theater-box a.selected").removeClass("selected");
-										$("#movieList > li").remove();
-										$("#movieList > p").remove();
-										$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
+										resetMovieList();
+										resetMovieTime();
 									} else {
 										$(".cal-week a.selected").removeClass("selected");
 										$(".theater-box a.selected").removeClass("selected");
-										$("#movieList > li").remove();
-										$("#movieList > p").remove();
-										$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
+										resetMovieList();
+										resetMovieTime();
+										
 										$(this).addClass("selected");
 									} // end else
 									return false;
@@ -233,18 +287,11 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 			
 			if($("#"+clickedId).hasClass("selected")) {
 				$(".theater-box .theater.selected").removeClass("selected");
-				$("#movieList > li").remove();
-				$("#movieList > p").remove();
-				$("#movieList").append($("<p>").text("날짜와 영화관을 선택하면 영화가 나옵니다.").css({"color":"#7d7d7d", "text-align":"center", "margin-top":"30%"}));
+				resetMovieList();
 		    } else {
 				$(".theater-box .theater.selected").removeClass("selected");
 				$("#"+clickedId).addClass("selected");
-				
-				$(".wrap-timetable > .title").remove();
-				$(".wrap-timetable > .theater-info").remove();
-			 	$(".wrap-timetable > .time").remove();
-			  	$(".wrap-timetable > p").remove();
-				$(".wrap-timetable").append($("<p>").text("영화관과 영화를 선택하면 시간표가 나옵니다.").addClass("ready"));
+				resetMovieTime();
 
 				var url = new URL(window.location.href);
 			    var params = url.searchParams;
@@ -373,50 +420,8 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
  		    
  		    document.body.appendChild(form);
  		    form.submit();	// 전송
-
  		});
 	}); // ready
-	
-	// 현재 날짜 이후에 상영 중인 상영일자 구하기
-	function searchScreeningDate(formattedDate1) {
-		$.ajax({
-			type: 'POST',
-			url: '/theater_prj/ScreeningDateServlet',
-			success: function(response) {
-				// 받은 JSON 데이터를 파싱하여 표시
-				var data = JSON.parse(response);
-				
-				displayDisabled(response, formattedDate1);
-			},
-			error: function(xhr, status, error) {
-				console.error('Error', error);
-			}
-		});
-	} // searchScreeningDate
-	
-	function displayDisabled(response, formattedDate1) {
-	    var object = JSON.parse(response);
-	    
-	    formattedArray = formattedDate1.split(",");
-	    
-	    var deleteDate = "";
-	    object.forEach(function(item) {
-		    var flag = false+","+item.screeningDate;
-	        if (item.screeningDate.includes(formattedArray)) {
-	        	flag = true+","+item.screeningDate;
-	        	deleteDate = item.screeningDate;
-	        }
-	    });
-	    var deleteIndex = formattedArray.indexOf(deleteDate);
-	    
-	    if(deleteIndex !== -1) {
-	    	formattedArray.splice(deleteIndex, 1);
-	    }
-	    
-	    formattedArray.forEach(function(date) {
-		    $(".cal-week .datelist a[data-date='" + date + "']").addClass("disabled");
-	    })
-	} // displayDisabled
 
 	// 날짜를 클릭하고 상영관을 클릭하면 상영 중인 영화를 가져옴
 	function searchMovie(screeningDate, theaterName) {
@@ -583,7 +588,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		
 		ReservingDAO rsDAO = ReservingDAO.getInstance();
 		List<ReservingVO> screeningDates = new ArrayList<>();
-		screeningDates = rsDAO.selectScreeningDate();
+		screeningDates = rsDAO.selectScreeningDate("N");
 		pageContext.setAttribute("screeningDates", screeningDates);
 		
 		List<ReservingVO> theaters = new ArrayList<>();
