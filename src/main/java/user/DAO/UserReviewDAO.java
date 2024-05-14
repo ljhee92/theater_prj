@@ -96,7 +96,7 @@ public class UserReviewDAO {
 					   .reviewContent(rs.getString("REVIEW_CONTENT"))
 					   .build();
 				
-				System.out.println(rVO);
+				
 				
 				list.add(rVO);
 			}
