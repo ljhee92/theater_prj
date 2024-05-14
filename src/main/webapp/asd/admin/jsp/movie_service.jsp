@@ -1,6 +1,7 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="VO.AdminMovieVO"%>
+<%@page import="admin.AdminMovieDAO"%>
 <%@page import="java.util.List"%>
 <%@page import="admin.ScreeningDAO1"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -26,12 +27,12 @@
 <!-- Custom styles for this template-->
 <link href="../css/sb-admin-2.css" rel="stylesheet">
 <style type = "text/css">
-	
+    
 </style>
 <script>
 
     $(document).ready(function() {
-    	
+        
 
         // 검색 버튼 클릭 이벤트 핸들러
         $("#searchButton").click(searchButtonClick);
@@ -83,19 +84,14 @@
             $("#table-content").show();
         });
 
- 
-            
-           
-            });
-
-        function clickTable(mCode) {
+        function clickTable(movieCode) {
             // 클릭한 테이블의 정보를 가져오는 코드
             $("#registerForm").hide();
             $("#table-content").hide();
             $("#editForm").show();
             
             var param = {
-                    tableMovieCode: mCode,
+                    tableMovieCode: movieCode,
                     action: "table"
                 };
                 alert(JSON.stringify(param));
@@ -107,18 +103,18 @@
                     dataType: "JSON",
                     success: function(jsonArr) {
                         // 검색 결과를 테이블에 반영
-                    	$("#movie_title_edit").val(jsonArr.movieTitle);
-                    	$("#movie_genre_edit").val(jsonArr.movieGenre);
-                    	$("#movie_director_edit").val(jsonArr.movieDirector);
-                    	$("#movie_main_actor_edit").val(jsonArr.movieMainActor);
-                    	$("#movie_sub_actor_edit").val(jsonArr.movieSubActor);
-                    	$("#movie_releaseDate_edit").val(jsonArr.editMovieReleaseDate);
-                    	$("#movie_rating_edit").val(jsonArr.movieRating);
-                    	$("#movie_distributor_edit").val(jsonArr.movieDistributor);
-                    	$("#movie_runningTime_edit").val(jsonArr.movieRunningTime);
-                    	$("#movie_description_edit").val(jsonArr.movieDescription);
-                    	$("#movie_poster_path_edit").val(jsonArr.moviePosterPath);
-                    	$("#movie_status_edit").val(jsonArr.movieScreeningStatus);
+                        $("#movie_title_edit").val(jsonArr.movieTitle);
+                        $("#movie_genre_edit").val(jsonArr.movieGenre);
+                        $("#movie_director_edit").val(jsonArr.movieDirector);
+                        $("#movie_main_actor_edit").val(jsonArr.movieMainActor);
+                        $("#movie_sub_actor_edit").val(jsonArr.movieSubActor);
+                        $("#movie_releaseDate_edit").val(jsonArr.editMovieReleaseDate);
+                        $("#movie_rating_edit").val(jsonArr.movieRating);
+                        $("#movie_distributor_edit").val(jsonArr.movieDistributor);
+                        $("#movie_runningTime_edit").val(jsonArr.movieRunningTime);
+                        $("#movie_description_edit").val(jsonArr.movieDescription);
+                        $("#movie_poster_path_edit").val(jsonArr.moviePosterPath);
+                        $("#movie_status_edit").val(jsonArr.movieScreeningStatus);
                         console.log(jsonArr.movieTitle);
                         
                     },
@@ -130,7 +126,7 @@
            
            
         function updateTable(jsonArr) {
-        	alert("updateTable 메서드 실행");
+            alert("updateTable 메서드 실행");
             // id="content"를 삭제하고
             $("#contentBoard").empty();
             // jsonArr를 반복하고, jsonObject을 parsing하여
@@ -145,7 +141,7 @@
                 } else {
                     status = "<span style=\"color: blue;\">상영완료</span>";
                 }
-                var newRow = "<tr onclick=\"clickTable('" + movie.movieCode + "', '" + movie.movieTitle + "','" + movie.movieGenre + "','" + movie.movieDistributor + "', '" + movie.movieDirector + "','" + movie.movieRunningTime + "','" + movie.movieMainActor + "','" + movie.movieSubActor + "','" + movie.movieDescription + "','" + movie.moviePosterPath + "','" + movie.movieReleaseDate + "','" + movie.movieRating + "','" + movie.movieScreeningStatus + "')\">" +
+                var newRow = "<tr onclick=\"clickTable('" + movie.movieCode + "')\">" +
                     "<td>" + movie.movieCode + "</td>" + // 결과 번호를 표시합니다.
                     "<td>" + movie.movieTitle + "</td>" +
                     "<td>" + status + "</td>" +
@@ -177,84 +173,84 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-	                <!-- Page Heading -->
-	                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-	                    <h1 class="h3 mb-0 text-gray-800">영화관리</h1>
-	                </div>
-	                <!-- 영화관리 밑 컨텐츠 -->
-				    <div id="table-content" class="table-responsive">
-				    <!-- 검색 폼 -->
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">영화관리</h1>
+                    </div>
+                    <!-- 영화관리 밑 컨텐츠 -->
+                    <div id="table-content" class="table-responsive">
+                    <!-- 검색 폼 -->
                     <form id="searchForm" method="post" action="movie_service.jsp" class="row align-items-center">
-					    <!-- 지점 드롭다운 메뉴 -->
-					    <select id="searchType" class="form-select form-select-sm col-sm-1" aria-label="Large select example">
-					        <option value="movie_title">영화명</option>
-					        <option value="movie_genre">장르</option>
-					    </select>
-					    <input type="text" id="searchText" class="form-control col-sm-1">
-					    <button type="button" id="searchButton" class="btn btn-info col-sm-1">검색</button>
-					</form>
+                        <!-- 지점 드롭다운 메뉴 -->
+                        <select id="searchType" class="form-select form-select-sm col-sm-1" aria-label="Large select example">
+                            <option value="movie_title">영화명</option>
+                            <option value="movie_genre">장르</option>
+                        </select>
+                        <input type="text" id="searchText" class="form-control col-sm-1" onkeyup="enterkey()">
+                        <button type="button" id="searchButton" class="btn btn-info col-sm-1">검색</button>
+                    </form>
 
 
-					
-				    <button id="registerButton" class="btn btn-info float-right">등록</button>
-				        <table class="table table-striped table-hover">
-						    <thead>
-						        <tr>
-						            <th>코드</th>
-						            <th>영화명</th>
-						            <th>상영상태</th>
-						            <th>장르</th>
-						        </tr>
-						    </thead>
-						    <tbody id="contentBoard">
-							   <%
-							   try {
-							       AdminMovieDAO movieDAO = AdminMovieDAO.getInstance();
-							       List<AdminMovieVO> movieList = movieDAO.selectMovieList();
-							       for (AdminMovieVO movie : movieList) {
-							           String status = ""; // 상영 상태
-							           if (movie.getMovieScreeningStatus().equals("Y")) {
-							               if (movie.getMovieReleaseDate().compareTo(new Date()) > 0) {
-							                   // 상영예정 releast날짜가 현재 날짜보다 뒤일 때
-							                   status = "<span style=\"color: red;\">상영예정</span>";
-							               } else {
-							                   // 상영중 현재 날짜보다 앞일 때
-							                   status = "상영중";
-							               }
-							           } else {
-							               // 상영예정 'N'
-							               status = "<span style=\"color: blue;\">상영완료</span>";
-							           }
-							   %>
-							   <tr onClick="clickTable('<%=movie.getMovieCode()%>', '<%=movie.getMovieTitle()%>','<%=movie.getMovieGenre()%>', '<%=movie.getMovieDistributor()%>', '<%=movie.getMovieDirector()%>', '<%=movie.getMovieRunningTime()%>', '<%=movie.getMovieMainActor()%>', '<%=movie.getMovieSubActor()%>', '<%=movie.getMovieDescription()%>', '<%=movie.getMoviePosterPath()%>', '<%=movie.getMovieReleaseDate()%>', '<%=movie.getMovieRating()%>', '<%=movie.getMovieScreeningStatus()%>')">
-							       <td><%=movie.getMovieCode()%></td>
-							       <td><%=movie.getMovieTitle()%></td>
-							       <td><%=status%></td>
-							       <td><%=movie.getMovieGenre()%></td>
-							   </tr>
-							   <%
-							       }
-							   } catch (SQLException e) {
-							       e.printStackTrace();
-							   }
-							   %>
-							</tbody>
+                    
+                    <button id="registerButton" class="btn btn-info float-right">등록</button>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>코드</th>
+                                    <th>영화명</th>
+                                    <th>상영상태</th>
+                                    <th>장르</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contentBoard">
+                               <%
+                               try {
+                                   AdminMovieDAO movieDAO = AdminMovieDAO.getInstance();
+                                   List<AdminMovieVO> movieList = movieDAO.selectMovieList();
+                                   for (AdminMovieVO movie : movieList) {
+                                       String status = ""; // 상영 상태
+                                       if (movie.getMovieScreeningStatus().equals("Y")) {
+                                           if (movie.getMovieReleaseDate().compareTo(new Date()) > 0) {
+                                               // 상영예정 releast날짜가 현재 날짜보다 뒤일 때
+                                               status = "<span style=\"color: red;\">상영예정</span>";
+                                           } else {
+                                               // 상영중 현재 날짜보다 앞일 때
+                                               status = "상영중";
+                                           }
+                                       } else {
+                                           // 상영예정 'N'
+                                           status = "<span style=\"color: blue;\">상영완료</span>";
+                                       }
+                               %>
+                               <tr onClick="clickTable('<%=movie.getMovieCode()%>')">
+                                   <td><%=movie.getMovieCode()%></td>
+                                   <td><%=movie.getMovieTitle()%></td>
+                                   <td><%=status%></td>
+                                   <td><%=movie.getMovieGenre()%></td>
+                               </tr>
+                               <%
+                                   }
+                               } catch (SQLException e) {
+                                   e.printStackTrace();
+                               }
+                               %>
+                            </tbody>
 
-						</table>
-				    </div>
-				    <!-- 영화관리 밑 컨텐츠 -->
-				    <div id="registerForm" style="display:none;">
-				    <%@ include file = "movie_registerForm.jsp" %>
-				    </div>
-				    <div id="editForm" style="display:none;">
-				    <%-- <%@ include file = "screening_edit_form.jsp" %> --%>
-				    <c:import url="movie_edit_form.jsp"/>
-				    </div>
-				</div>
-				
-				<div></br><button id="toBack" class="btn btn-warning">뒤로</button></div>
+                        </table>
+                    </div>
+                    <!-- 영화관리 밑 컨텐츠 -->
+                    <div id="registerForm" style="display:none;">
+                    <%@ include file = "movie_registerForm.jsp" %>
+                    </div>
+                    <div id="editForm" style="display:none;">
+                    <%-- <%@ include file = "screening_edit_form.jsp" %> --%>
+                    <c:import url="movie_edit_form.jsp"/>
+                    </div>
+                </div>
+                
+                <div></br><button id="toBack" class="btn btn-warning">뒤로</button></div>
                 <!-- /.container-fluid -->
-				
+                
             </div>
             <!-- End of Main Content -->
 
