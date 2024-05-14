@@ -9,15 +9,15 @@ import java.util.List;
 
 import util.DbConnection;
 
-public class AdminUserManageDAO {
+public class AdminReserveManageDAO {
 
-    private static AdminUserManageDAO instance = new AdminUserManageDAO();
+    private static AdminReserveManageDAO instance = new AdminReserveManageDAO();
 
-    public static AdminUserManageDAO getInstance() {
+    public static AdminReserveManageDAO getInstance() {
         return instance;
     }
 
-    private AdminUserManageDAO() {}
+    private AdminReserveManageDAO() {}
 
     // 데이터베이스 연결 메소드
     public Connection getConnection(String id, String pass) throws SQLException {
@@ -31,8 +31,8 @@ public class AdminUserManageDAO {
     }
 
     ///////////////////////////검색결과 리스트//////////////////////////////
-    public List<UserVO> selectUser(String userId) throws SQLException {
-        List<UserVO> list = new ArrayList<UserVO>();
+    public List<AdminReserveManageVO> selectAllReserve(String userId) throws SQLException {
+        List<AdminReserveManageVO> list = new ArrayList<AdminReserveManageVO>();
 
         Connection con = null;
         PreparedStatement pstmt = null;
