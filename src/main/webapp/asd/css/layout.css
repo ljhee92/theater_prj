@@ -122,23 +122,23 @@
 		.nav .contents{position:relative}
 		.nav .contents h1{display:none}
 			.nav_menu{display:inline-flex}
-			.nav_menu > li{width:162px; padding:20px 0}
+			.nav_menu > li{width:162px; padding:20px}
 			.nav_menu > li:first-child{width:137px;}
 			.nav_menu > li:first-child .nav_overMenu{padding-left:0}
 			.nav_menu > li:first-child .nav_overMenu:before{content:none}
 			.nav_menu > li:last-child{width:195px}
-			.nav_menu > li:nth-child(2) > h2{left:80px}
+			/*.nav_menu > li:nth-child(2) > h2{left:80px}
 			.nav_menu > li:nth-child(3) > h2{left:160px}
 			.nav_menu > li:nth-child(4) > h2{left:240px}
 			.nav_menu > li:nth-child(5) > h2{left:335px}
-			.nav_menu > li:last-child > h2{left:430px}
+			.nav_menu > li:last-child > h2{left:430px}*/
 
 			.nav_menu > li > h2{position:absolute; top:7px}
 			.nav_menu > li > h2 > a{font-weight:500; font-size:16px; color:#222; line-height:1.500em}
 			/* .nav_menu > li > h2 > a:hover{text-decoration:underline} */
 			.nav_menu > li > h2 > a strong{font-weight:700; color:#fb4357}
 				.nav_overMenu{display:none; position:relative; margin-bottom:8px; padding:25px 0 0 25px}
-				.nav_overMenu:before{content:''; position:absolute; left:0; top:45px; display:block; width:1px; height:200px; background-color:#eee; opacity:0.8}
+				.nav_overMenu:before{content:''; position:absolute; left:0; top:45px; display:block; width:1px; height:80px; background-color:#eee; opacity:0.8}
 				.nav_overMenu h3{height:auto; margin:0; line-height:1em; text-align:left; background-image:none}
 				.nav_overMenu a:hover{text-decoration:underline}
 				.nav_overMenu dt{padding-top:18px}
