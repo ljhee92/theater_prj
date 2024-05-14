@@ -12,10 +12,10 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-public class MovieVO {
+public class AdminMovieVO {
 	private String movieCode;
 	private String movieTitle;
-	private String movieReleaseDate;
+	private Date movieReleaseDate;
 	private String movieGenre;
 	private String movieRating;
 	private String movieDirector;
@@ -26,6 +26,6 @@ public class MovieVO {
 	private String movieDescription;
 	private String moviePosterPath;
 	private String movieScreeningStatus;
-	private String movieInputDate;
+	private Date movieInputDate;
 	private String movieScore;
 }
