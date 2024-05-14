@@ -168,10 +168,14 @@ window.location.href = prevPage;
 									        <input type="password" class="form-control form-control-user"
 									            id="inputPassword" name="inputPassword"  placeholder="Password">
 									    </div>
+									    <div>
 									    <button type="submit" id="submit" class="btn btn-primary btn-user btn-block">
 									        Login
 									    </button>
-									    <a href = "../../jsp/index.html">영화관홈</a>
+									    </div>
+									    <div style="display: flex;">
+									    <a href = "../../jsp/index.html" style="font-size: 13px; margin: 0px auto; margin-top: 10px;">영화관홈</a>
+									    </div>
 									    <input type="hidden" id="prevPage" name="prevPage" required="required"  value=<%= prevPage %> >
 									</form>
 								</div>
