@@ -1,4 +1,4 @@
-package admin.servlet;
+package user.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -72,7 +72,7 @@ public class SelectReservationServlet extends HttpServlet {
             e.printStackTrace();
             result.append("false}");
         }
-        //System.out.println(result);
+       // System.out.println(result);
         return result.toString();
     }
 }
