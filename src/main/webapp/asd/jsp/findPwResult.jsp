@@ -1,3 +1,5 @@
+<%@page import="admin.UserVO"%>
+<%@page import="admin.UserDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     info=""%>
@@ -50,37 +52,118 @@
 </style>
 
 
-<script>
-function closePopupAndRedirect() {
-    // 팝업 창 닫기
+<script type="text/javascript">
+
+//팝업 창 닫고 다시 비밀번호찾기 화면으로
+function closePopupAndReturn() {
+	//팝업창 닫기
     window.close();
-    
-    // 부모창으로부터 자식창으로의 접근
+ 	// 부모창으로부터 자식창으로의 접근
+    window.opener.location.href = 'findPw.jsp';
+}
+
+//팝업 창 닫고 로그인 화면으로
+function closePopupAndMoveLogin() {
+    window.close();
     window.opener.location.href = 'login.jsp';
 }
+
+//팝업 창 닫고 메인 화면으로
+function closePopupAndMoveMain() {
+    window.close();
+    window.opener.location.href = 'index.jsp';
+}
+
 </script>
 
 
 </head>
 <body>
 <div class="wrap">
-	<div class="title">
-		<h2>비밀번호 확인</h2>
-	</div>
+	<div>
+		<%
+		request.setCharacterEncoding("UTF-8");
+		%>
+		<jsp:useBean id="uVO" class="admin.UserVO" scope="page" />
+		<jsp:setProperty property="*" name="uVO" />
+
+		<c:catch var="e">
+		
+		<%
+		//DB Table 추가
+		UserDAO uDAO = UserDAO.getInstance();
+		
+		String existingUserId = uDAO.selectPwforTempPw(uVO);
+
+		if(existingUserId == null || existingUserId.equals("")) {
+		%>
+		<div class="failTitle">
+			<h2 style="font-weight: bold;">회원 확인</h2>
+		</div>
 	
-	<form>
+			<div class="wrap_findIdResult">
+				<hr>
+				<label style="font-size: 20px; font-weight: bold; color: red; margin-top: 70px;">
+				입력하신 정보와 일치하는 회원이 없습니다.<br>
+				정보를 다시 입력해 주시거나 회원가입 후 이용해 주세요.
+				</label>
+				<div class="returnBtn">
+					<button type="button" class="btn btn-primary btn-lg" onclick="closePopupAndReturn()" style="margin-top: 80px;">돌아가기</button>
+				</div>
+			</div>
+		
+		<% } else { 
+			
+			String chars = 
+					"ABCDEFGHIJKLNMOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*";
+			StringBuilder randomStr = new StringBuilder();
+				for(int i = 0; i < 10; i++) {
+					int randomIndex = (int)(Math.random() * chars.length());
+					randomStr.append(chars.charAt(randomIndex));
+				}//end for
+			
+			//UserVO uVO = new UserVO();
+			uVO.setUserPassword(randomStr.toString());
+			System.out.println(uVO);			
+			uDAO.updatePw(uVO);
+			
+		%>
+		<div class="successTitle">
+			<h2>비밀번호 확인</h2>
+		</div>
 		<div class="wrap_findPwResult">
-			<label>누구님의 임시 비밀번호 발급이 완료되었습니다.</label>
+			<label>{ param.userId }님의 임시 비밀번호 발급이 완료되었습니다.</label>
 			<hr>
 			<div class="findPwResultLabel">
-				<label class="labelId" id="labelId1">일단 누구님의 임시 비밀번호는</label><br>
-				<label class="labelId" id="labelId2">nuguseyo 입니다.</label><br>
+				<label class="labelId" id="labelId1">${ param.userId }님의 임시 비밀번호는</label><br>
+				<label class="labelId" id="labelId2"><strong><%=randomStr %>입니다.</strong></label><br>
 			</div>
 			<div class="findPwResultBtn">
-				<button type="button" class="btn btn-secondary" onclick="closePopupAndRedirect()">로그인</button>
+				<button type="button" class="btn btn-secondary" onclick="closePopupAndMoveLogin()">로그인</button>
 			</div>
 		</div>
-	</form>
+		
+		<%
+		}//else
+		%>
+		
+		</c:catch>
+				<!-- 에러상황 테스트 
+		<c:set var="errorOccurred" value="${1/0}" />
+		-->
+		<c:if test="${ not empty e }">
+			<!-- 다양한 경우의 문제의 에러상황 -->
+			<div id="resultFailContent" style="display: flex; flex-direction: column; align-items: center;">
+				<h2 style="font-size: 25px; font-weight: bold; margin-bottom: 50px; margin-top: 100px; color: red">
+					죄송합니다. 잠시 후 다시 시도해주세요.<br />
+				</h2>
+				<div style="display: flex; flex-direction: row; margin-bottom: 80px;">
+					<button class="btn btn-danger btn-lg" style="margin-right: 10px" onclick="closePopupAndMoveMain()">메인으로</button>
+					<button class="btn btn-primary btn-lg" onclick="closePopupAndReturn()">뒤로</button>
+				</div>
+			</div>
+		</c:if>
+	</div>
 </div>
 </body>
 </html>

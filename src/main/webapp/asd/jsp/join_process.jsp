@@ -177,6 +177,7 @@ html{
 
 ul{
 	font-size: 20px;
+	margin-bottom: 20px;
 }
 
 li{
@@ -248,8 +249,8 @@ li{
 					<div id="resultSuccessContent">
 						<p>
 							<strong style="font-size: 23px;">${param.userName}</strong>
-								<span style="font-size: 20px;">님의 회원가입을 축하드립니다.<br> 
-								입력하신 정보는 아래와 같습니다.<br />
+								<span style="font-size: 20px;">님의 회원가입을 축하드립니다!<br> 
+								입력하신 정보 확인 후 다시 로그인해주세요.<br />
 								</span>
 						<p>
 					</div>
@@ -262,6 +263,7 @@ li{
 							<li><strong>전화번호 : </strong>
 							<c:out value="${ param.userPhone }" /></li>
 						</ul>
+					<button class="btn btn-primary btn-lg" onClick="location.href='login.jsp'">로그인</button> 
 					</div>
 				</div>
 			</div>
