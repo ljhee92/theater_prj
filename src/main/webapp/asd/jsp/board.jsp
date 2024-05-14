@@ -29,8 +29,8 @@
 	href="https://img.cgv.co.kr/R2014/css/webfont.css" />
 <link rel="stylesheet" media="all" type="text/css"
 	href="https://img.cgv.co.kr/R2014/css/reset.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/layout.css" />
+<link rel="stylesheet" media="all" type="text/css" href="../css/layout.css" />
+
 <link rel="stylesheet" media="all" type="text/css"
 	href="https://img.cgv.co.kr/R2014/css/module.css?20211209" />
 <link rel="stylesheet" media="all" type="text/css"
@@ -51,8 +51,8 @@
 	href="https://img.cgv.co.kr/R2014/css/webfont.css" />
 <link rel="stylesheet" media="all" type="text/css"
 	href="https://img.cgv.co.kr/R2014/css/reset.css" />
-<link rel="stylesheet" media="all" type="text/css"
-	href="https://img.cgv.co.kr/R2014/css/layout.css" />
+<link rel="stylesheet" media="all" type="text/css" href="../css/layout.css" />
+
 <link rel="stylesheet" media="all" type="text/css"
 	href="https://img.cgv.co.kr/R2014/css/module.css?20211209" />
 <link rel="stylesheet" media="all" type="text/css"
@@ -185,7 +185,7 @@
 					</div>
 					<div class="col-detail">
 						<div class="customer_top">
-							<h2 class="tit"><%=faqsTitle%></h2>
+							<h2 class="tit" style="text-align: left;"><%=faqsTitle%></h2>
 							<p class="stit"><%=faqsContent %></p>
 						</div>
 						<div class="search_area">
