@@ -124,7 +124,6 @@ function closePopupAndMoveMain() {
 			
 			//UserVO uVO = new UserVO();
 			uVO.setUserPassword(randomStr.toString());
-			System.out.println(uVO);			
 			uDAO.updatePw(uVO);
 			
 		%>
@@ -132,7 +131,7 @@ function closePopupAndMoveMain() {
 			<h2>비밀번호 확인</h2>
 		</div>
 		<div class="wrap_findPwResult">
-			<label>{ param.userId }님의 임시 비밀번호 발급이 완료되었습니다.</label>
+			<label>${ param.userId }님의 임시 비밀번호 발급이 완료되었습니다.</label>
 			<hr>
 			<div class="findPwResultLabel">
 				<label class="labelId" id="labelId1">${ param.userId }님의 임시 비밀번호는</label><br>
