@@ -1,8 +1,13 @@
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="user.VO.ReviewVO"%>
+<%@page import="java.util.List"%>
+<%@page import="user.DAO.ReviewDAO"%>
 <%@page import="VO.MovieVO"%>
 <%@page import="user.DAO.MovieDetailDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info=""%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -341,14 +346,21 @@ if(screeningStatus.equals("Y")){
 				<div id="reviewTime">
 					<h1 class="rowLine">Review</h1>
 					<ul class="sort" id="sortTab">
-						<li class="sortTab on" id="test"><a
-							href="javascript:void(0);" title="현재선택">최신순<span
-								class="arrow-down"></span></a></li>
-						<li class="sortTab"><a href="javascript:void(0);">추천순<span
-								class="arrow-down"></span></a></li>
+					
+						<li class="sortTab${ empty param.type or param.type eq '1' ? ' on': '' }" id="test"><a
+							href="#void" onclick="setReview('movieDetail.jsp',1,'${ param.midx }')" title="현재선택">최신순
+							<span class="arrow-down"></span>
+								</a></li>
+						<li class="sortTab${  param.type eq '2' ? ' on': '' }"><a href="#void" onclick= "setReview('movieDetail.jsp',2,'${ param.midx }')">별점순
+						<span class="arrow-down"></span>
+						</a></li>
 					</ul>
 				</div>
 				<script type="text/javascript">
+				
+				function setReview(url, type, midx) {
+					location.href = url + "?type=" + type + "&midx=" + midx;
+				}
 $(function() {
     var sortTabs = $(".sortTab"); // 모든 정렬 탭을 선택합니다.
 
@@ -388,6 +400,33 @@ $(function() {
     	    // 예: $.ajax 를 사용하여 API 호출
     	    // 별점 데이터를 가져온 후 아래의 함수 호출: displayStarRatings(starData);
 
+    	    <%
+    	    	ReviewDAO rvDAO = ReviewDAO.getInstance();
+    	    	List<ReviewVO> reviewList = null;
+    	    	
+    	    	String type = request.getParameter("type");
+    	    	if(type == null) {
+    	    		type = "1";
+    	    	}//end if
+    	    	
+    	    	if("1".equals(type)) {
+    	    		reviewList =rvDAO.selectRecentReviewList(movieCode);
+    	    	}else{
+    	    		reviewList =rvDAO.selectScoreReviewList(movieCode);
+    	    	}//end else
+    	    	
+    	    	
+    	    	ReviewVO rvVO = null;
+    	    %>
+    	    var starData = [
+    	    <%
+    	    for(int i = 0; i < reviewList.size(); i++ ){%>
+    	    <%rvVO = reviewList.get(i);%>
+    	    	{ userId: "<%= rvVO.getUserId()%>", rating: <%= rvVO.getReviewScore()%>, reviewContent: "<%= rvVO.getReviewContent() %>" },
+    	   <%}%>
+    	    ];
+    	    
+    	    /*
     	    // 가상의 별점 데이터 (예시)
     	    var starData = [
     	        { userId: "사용자1", rating: 5, reviewContent: "리뷰 내용1" },
@@ -402,6 +441,7 @@ $(function() {
     	        { userId: "사용자10", rating: 1, reviewContent: "리뷰 내용10" },
     	        // 여기에 별점 데이터 추가
     	    ];
+    	    */
 
     	    // 별점 데이터를 가져온 후 아래의 함수 호출
     	    displayStarRatings(starData);

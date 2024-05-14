@@ -7,7 +7,7 @@
 <html>
 <head>
 
-<link rel="icon" href="http://192.168.10.227/jsp_prj/common/favicon.ico" />
+<link rel="icon" href="http://192.168.10.227/common/favicon.ico" />
 <!--bootstrap 시작-->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -20,9 +20,9 @@
 	crossorigin="anonymous"></script>
 <!--bootstrap 끝-->
 <link rel="stylesheet"
-	href="http://192.168.10.227/jsp_prj/common/css/main.css">
+	href="http://192.168.10.227/common/css/main.css">
 <link rel="stylesheet"
-	href="http://192.168.10.227/jsp_prj/common/css/board.css">
+	href="http://192.168.10.227/common/css/board.css">
 <!--jQeury CDN 시작-->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -220,7 +220,7 @@
 .inner-div {
 	width: 450px;
 	height: 210px;
-	/* background-color: #D6F793; */ /* 세 번째 div 배경색 */
+	/*  background-color: #D6F793; */  /* 세 번째 div 배경색 */
 	margin-left: 13px;
 	margin-top: 20px;
 }
@@ -236,7 +236,19 @@
 .dynamic-value span {
 	font-weight: normal; /* span 태그의 텍스트를 표준으로 설정합니다. */
 }
+
+.no-review {
+    color: red;
+}
 </style>
+
+
+
+
+
+
+
+
 
 
 <%
@@ -299,16 +311,9 @@ $(document).ready(function(){
         // 만약 내가 본 영화 메뉴가 클릭되었다면
         if(menuText.trim() == "내가 본 영화"){
         	  $(".right-div").empty();
-            // 내가 본 영화 내용 추가
-            var userInformationHTML = `
+        	  
+        	  myReview();
 
-            
-
-            	내가 본 영화 메인
-            
-            
-            `;
-            $(".right-div").html(userInformationHTML);
         }
      
      
@@ -391,6 +396,161 @@ $(document).ready(function(){
 });//ready
 
 
+	function myReview() {
+	    $(".right-div").empty();
+	    var id = "<%=userId%>";
+	    var request = new XMLHttpRequest(); // request 변수를 선언
+
+	    request.open(
+	        "POST",
+	        "http://localhost/theater_prj/SelectReviewServlet",
+	        true
+	    );
+	    request.setRequestHeader(
+	        "Content-Type",
+	        "application/x-www-form-urlencoded; charset=UTF-8"
+	    );
+
+	    // 에러 핸들링
+	    request.onerror = function() {
+	        alert("요청을 보낼 때 오류가 발생했습니다.");
+	    };
+
+	    request.onreadystatechange = function() {
+	        if (request.readyState == 4) {
+	            if (request.status == 200) {
+	                // 응답을 받으면 처리
+	                var jsonResponse = request.responseText;
+	                var responseObject = JSON.parse(jsonResponse);
+
+	                if (responseObject.success) {
+
+	                    // 예매 내역을 담을 변수
+	                    var reservationHTML = '';
+
+	                    // 예매 내역 데이터
+	                    var reservationData = responseObject.result;
+
+	                    if (reservationData.length > 0) {
+	                        // 각 예약 정보에 대해 HTML 생성
+	                        reservationData.forEach(function (reservation) {
+	                            // 평가 점수를 받아서 별을 생성하는 함수
+	                            function createStars(rating) {
+	                                var stars = '';
+	                                for (var i = 0; i < rating; i++) {
+	                                    stars += '★';
+	                                }
+	                                for (var i = rating; i < 5; i++) {
+	                                    stars += '☆';
+	                                }
+	                                return stars;
+	                            }
+
+	                            // 평가 점수
+	                            var rating = reservation.reviewScore || 0; // rating 값이 없으면 0으로 설정
+	                            var starsHTML = createStars(rating);
+	                            
+	                            // 리뷰 내용 자르기
+	                            var reviewContent = reservation.reviewContent;
+	                            var reviewClass = '';
+	                            var buttonHTML = '';
+	                            
+	                            
+	                            
+
+	                            if (reviewContent === 'null') {
+	                                reviewContent = '리뷰를 입력해주세요!';
+	                                reviewClass = 'no-review';
+	                                buttonHTML = '<button type="button" class="btn btn-danger float-end" onclick="writeReview(\'' + reservation.reservationNumber + '\')">리뷰 작성</button>';
+	                            } else {
+	                                if (reviewContent.length > 20) {
+	                                    reviewContent = reviewContent.substring(0, 20) + '....';
+	                                }
+	                                buttonHTML = '<button type="button" class="btn btn-secondary float-end" onclick="reviewDetail(\'' + reservation.reservationNumber + '\')">상세보기</button>';
+	                            }
+
+	                            // 문자열 연결 연산자를 사용하여 HTML 조립
+	                            reservationHTML +=
+	                                '<div class="container mt-5">' +
+	                                '<div class="card">' +
+	                                '<div class="card-body">' +
+	                                '<div class="row" >' +
+	                                '<div class="col-4">' +
+	                                '<div class="d-flex justify-content-center justify-content-md-start">' +
+	                                '<div class="aaaa">' +
+	                                '<img src="../images/movie/' + reservation.moviePosterPath + '" alt="영화 포스터" width="160" height="160">' +
+	                                '</div>' +
+	                                '</div>' +
+	                                '</div>' +
+	                                '<div class="col">' +
+	                                '<p style="margin-top: 5px;"><strong>영화제목  </strong></p>' +
+	                                '<div> ' + reservation.movieTitle + '</div>' +
+	                                '<p style="margin-top: 5px;"><strong>관람극장  </strong></p>' +
+	                                '<div> ' + reservation.theaterName + ' ' + reservation.theaterNumber + '</div>' +
+	                                '<p style="margin-top: 5px;"><strong>관람일시  </strong></p>' +
+	                                '<div> ' + reservation.screeningDate + ' ' +  reservation.screeningTime + '</div>' +
+	                                '<p style="margin-top: 5px;"><strong>평점  </strong></p>' +
+	                                '<div> ' + starsHTML + '</div>' +
+	                                '</div>' +
+	                                '</div>' +
+	                                '<div class="row">' +
+	                                '<div class="col text-start">' +
+	                                '<div style="margin-top: 15px; font-weight: bolder;" class="' + reviewClass + '"> ' + reviewContent + '</div>' + // 리뷰 내용 추가
+	                                '</div>' +
+	                                '<div class="col text-end">' +
+	                                buttonHTML +
+	                                '</div>' +
+	                                '</div>' +
+	                                '</div>' +
+	                                '</div>' +
+	                                '</div>';
+	                        });
+	                    } else {
+	                        reservationHTML =
+	                            '<img src="../images/myPage/noReservation.png" style="width: 600px; height: 330px;">';
+	                    }
+
+	                    // 생성된 예매 내역 HTML을 .right-div 요소에 삽입
+	                    $(".right-div").html(reservationHTML);
+	                } else {
+	                    reservationHTML =
+	                        '<img src="../images/myPage/noReservation.png" style="width: 600px; height: 330px;">';
+	                    $(".right-div").html(reservationHTML);
+	                }
+	            } else {
+	                alert("문제발생.");
+	            }
+	        }
+	    };
+
+	    // POST 요청의 파라미터를 설정하여 보냄
+	    request.send("id=" + encodeURIComponent(id));
+	}//end myReview
+
+	
+	
+	
+	//리뷰 상세 조회
+	function reviewDetail(reservationNumber) {
+	    alert("리뷰조회 -> 예매번호 : " + reservationNumber);
+	}//reviewDetail
+
+	//리뷰 작성
+	function writeReview(reservationNumber) {
+	    alert("리뷰작성 -> 예매번호 : " + reservationNumber);
+	}//writeReview
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function selectReservation() {
@@ -423,11 +583,17 @@ function selectReservation() {
 			
                 
                 if (responseObject.success) {
+
                     // 예매 내역을 담을 변수
                     var reservationHTML = '';
 
                     // 예매 내역 데이터
                     var reservationData = responseObject.result;
+                    
+                    
+                    if (reservationData.length > 0) {
+                    
+                  
 
                     // 예매 내역 데이터를 reservationNumber를 기준으로 그룹화
                     var groupedReservations = {};
@@ -494,9 +660,27 @@ function selectReservation() {
                             '</div>';
                     });
 
-                    // 생성된 예매 내역 HTML을 .right-div 요소에 삽입
-                    $(".right-div").html(reservationHTML);
-                }
+                   
+                    
+                    
+                    
+                    
+                    
+                    }//end if
+                    
+                    
+                    
+                    
+                    
+                    
+                }else{
+                	reservationHTML = 
+                		'<img src="../images/myPage/noReservation.png" style="width: 600px; height: 330px;">'
+                
+                }//end else
+                
+                // 생성된 예매 내역 HTML을 .right-div 요소에 삽입
+                $(".right-div").html(reservationHTML);
 			
                   
                 
@@ -697,7 +881,7 @@ function checkReservationTime(reservationNumber){
 
 
 function deleteReservation(reservationNumber) {
-    alert(reservationNumber);
+
 
     var request = new XMLHttpRequest();
 
@@ -902,39 +1086,8 @@ function changePWWin() {
 } //changePWForm.jsp
 
 
-	
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 </script>
-
-
-
-
-
 
 
 
