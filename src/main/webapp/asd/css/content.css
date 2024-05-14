@@ -147,7 +147,7 @@
 .cols-content .set-btn.aright {margin:20px 0 0; padding-right:10px; text-align:right;}
 
 /* Section MYCGV Area */
-.mycgv-info-wrap {width:882px; height:440px; padding:60px 40px 0 58px; background:url(../images/myPage/bg_mycgv_info.gif) no-repeat 0 0;}
+.mycgv-info-wrap {width:882px; height:440px; padding:60px 40px 0 58px no-repeat 0 0;}
 .mycgv-info-wrap em {font-family:verdana, sans-serif; font-weight:bold;}
 .mycgv-info-wrap .sect-person-info:after,
 .mycgv-info-wrap .cols-benefit-info:after {content:''; clear:both; display:block;}

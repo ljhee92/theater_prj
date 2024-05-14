@@ -262,7 +262,7 @@ public class UserReservationDAO {
 	
 	
 	/**
-	 * 예매한 영화의 상영시작시간과 현재 시간을 비교하는 메서드 
+	 * 예매 취소 메서드 
 	 * 
 	 * @param 예매번호
 	 * @return 삭제 성공유무 
