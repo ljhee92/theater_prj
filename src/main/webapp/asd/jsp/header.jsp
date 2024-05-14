@@ -77,39 +77,19 @@
 				$(document)
 						.ready(
 								function() {
-									$('.nav_menu > li > h2 > a')
-											.on(
-													{
-														mouseenter : function(e) {
-															var target = e.target;
-															$(target)
-																	.parents(
-																			'.nav_menu')
-																	.find(
-																			'.nav_overMenu')
-																	.slideDown(
-																			function() {
-																				$(
-																						'.nav')
-																						.addClass(
-																								'active');
-																			});
-														},
-														click : function(e) {
-															var target = e.target;
-															if (!$('.nav')
-																	.hasClass(
-																			'active')) {
-																$(this)
-																		.trigger(
-																				'mouseenter');
-															} else {
-																$('.nav')
-																		.trigger(
-																				'mouseleave');
-															}
-														}
-													});
+									$('.nav_menu > li > h2 > a').on({mouseenter : function(e) {
+										var target = e.target;
+										$(target).parents('.nav_menu').find('.nav_overMenu').slideDown(function() {
+											$('.nav').addClass('active');});
+									},
+										click : function(e) {
+											var target = e.target;
+											if (!$('.nav').hasClass('active')) {
+												$(this).trigger('mouseenter');
+											} else {
+												$('.nav').trigger('mouseleave');}
+										}
+									});
 
 									/********************************************************
 									//서브메뉴 구글 GA Analytics 로그 처리 - 2022.01.12 myilsan
@@ -306,113 +286,47 @@
 
 						<li>
 							<h2>
-								<a href="#/">스토어</a>
-							</h2>
-
-							<dl class="nav_overMenu">
-								<dt>
-									<h2>
-										<a href="#" tabindex="-1">스토어</a>
-									</h2>
-								</dt>
-
-								<dd>
-									<h3>
-										<a
-											href="#">영화관람권</a>
-									</h3>
-								</dd>
-
-								<dd>
-									<h3>
-										<a
-											href="#">콤보</a>
-									</h3>
-								</dd>
-
-								<dd>
-									<h3>
-										<a
-											href="#">팝콘</a>
-									</h3>
-								</dd>
-
-								<dd>
-									<h3>
-										<a
-											href="#">음료</a>
-									</h3>
-								</dd>
-
-								<dd>
-									<h3>
-										<a
-											href="#">스낵</a>
-									</h3>
-								</dd>
-
-
-							</dl>
-						</li>
-
-						<li>
-							<h2>
-								<a href="#">커뮤니티</a>
-							</h2>
-							<dl class="nav_overMenu">
-								<dt>
-									<h2>
-										<a href="#"
-											tabindex="-1">커뮤니티</a>
-									</h2>
-								</dt>
-
-								<dd>
-									<h3>
-										<a href="#">영화게시판</a>
-									</h3>
-								</dd>
-
-								<dd>
-									<h3>
-										<a href="#">영화리뷰</a>
-									</h3>
-								</dd>
-
-							</dl>
-						</li>
-						
-						<li>
-							<h2 onclick="gaEventLog('PC_GNB','주메뉴_해택','')">
 								<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=N">공지사항</a>
 							</h2>
 
 							<dl class="nav_overMenu">
-
 								<dt>
 									<h2>
 										<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=N">공지사항</a>
 									</h2>
 								</dt>
 
+								<dd>
+									<h3>
+										<a
+											href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=N">공지사항</a>
+									</h3>
+								</dd>
+
 							</dl>
 						</li>
 
 						<li>
-							<h2 onclick="gaEventLog('PC_GNB','주메뉴_해택','')">
+							<h2>
 								<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=Q">자주찾는 질문</a>
 							</h2>
-
 							<dl class="nav_overMenu">
-
 								<dt>
 									<h2>
 									<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=Q">자주찾는질문</a>
 									</h2>
 								</dt>
 
+								<dd>
+									<h3>
+										<a href="http://localhost/theater_prj/asd/jsp/board.jsp?FAQS=Q">자주찾는질문</a>
+									</h3>
+								</dd>
+
 							</dl>
 						</li>
+						
+
 					</ul>
 				</div>
 			</div>
