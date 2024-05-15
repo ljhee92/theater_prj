@@ -402,7 +402,7 @@ for (MovieVO tempMovie : mVO) {
 								<strong>공지사항</strong> <a
 									href="/support/news/detail-view.aspx?idx=8004" class="btn_link">[속보]
 									장원영 : 명화 , 차은우 : 웅찬</a> <a
-									href="http://www.cgv.co.kr/support/news/default.aspx"
+									href="board.jsp?FAQS=N"
 									id="notice_more" class="btn_more">더보기</a>
 							</div>
 
@@ -419,7 +419,7 @@ for (MovieVO tempMovie : mVO) {
 								</dl>
 
 								<div class="client_btn_wrap" id="client_btn_wrap">
-									<a href="http://www.cgv.co.kr/support/faq/default.aspx">자주
+									<a href="board.jsp?FAQS=Q">자주
 										찾는 질문</a> <a href="http://www.cgv.co.kr/support/qna/default.aspx">할만한거
 										1</a>
 									<!--<a href="http://www.cgv.co.kr/support/lost/default.aspx">분실물 문의</a>//-->
