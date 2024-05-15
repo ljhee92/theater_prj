@@ -84,7 +84,7 @@ window.location.href = "login.jsp?prevPage=questionDetail.jsp";
 	                pageContext.setAttribute("selectedBVO", selectedBVO);
 	                %>
 	                
-	                <form name="frm" action="noticeDetailProcess.jsp" method="get">
+	                <form name="frm" action="questionDetailProcess.jsp" method="get">
 	                <div style = "height: 610px;">
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">번호</label>
@@ -154,16 +154,16 @@ window.location.href = "login.jsp?prevPage=questionDetail.jsp";
 		    }); // summernote
 		    
 		    $("#btnCancel").click(function(){
-				location.href = "notice.jsp?currentPage=${ param.currentPage }";
+				location.href = "question.jsp?currentPage=${ param.currentPage }";
 			}); // click
 			
 			$("#btnDelete").click(function(){
 				if(!confirm("정말 삭제하시겠습니까?")){
 					return;
 				} // end if
-				location.href = "noticeDetailProcess.jsp?num="+${ selectedBVO.boardNumber }+"&flag=d";
+				location.href = "questionDetailProcess.jsp?num="+${ selectedBVO.boardNumber }+"&flag=d";
 				alert("삭제완료");
-				location.href="notice.jsp?currentPage=${ param.currentPage }";
+				location.href="question.jsp?currentPage=${ param.currentPage }";
 			}); // click
 	
 			$("#btnEdit").click(function(){
@@ -202,7 +202,7 @@ window.location.href = "login.jsp?prevPage=questionDetail.jsp";
 				if(flagInputAll) {
 					$("[name='frm']").submit();
 					alert("글수정 성공");
-					location.href="notice.jsp?currentPage=${ param.currentPage }";
+					location.href="question.jsp?currentPage=${ param.currentPage }";
 				}; // end if
 			} // chkNull
 		}); // ready

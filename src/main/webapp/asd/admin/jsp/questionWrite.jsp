@@ -162,7 +162,7 @@ window.location.href = "login.jsp?prevPage=questionWrite.jsp";
 		    }); // click
 		    
 		    $("#btnCancel").click(function(){
-				location.href = "notice.jsp";
+				location.href = "question.jsp";
 			}); // click
 		}); // ready
 		
