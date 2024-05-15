@@ -648,10 +648,10 @@ function selectReservation() {
                                         '<div class="row">' +
                                      // selectReservation 함수 내에서 예매내역을 생성하는 부분 수정
                                         '<div class="col text-end">' +
-                                            '<p style="margin-top: 5px;"><strong>총 결제금액 : </strong></p>' +
+                                            '<p style="margin-top: 20px;"><strong>총 결제금액    : </strong></p>' +
                                         '</div>' +
-                                        '<div class="col text-start">' +
-                                            '<strong style="font-size: 20px;">' + groupedReservation.totalPrice + '</strong>' +
+                                        '<div  style="margin-top: 15px;" class="col text-start">' +
+                                            '<strong style="font-size: 20px ;">' + groupedReservation.totalPrice +'원'+ '</strong>' +
                                         '</div>' +
                                         '<div class="col text-end">' +
                                             '<button type="button" class="btn btn-info float-end" onclick="reservationDetail(\'' + groupedReservation.reservationNumber + '\')">상세보기</button>' +
