@@ -61,7 +61,6 @@
         try {
             // 상영 정보 업데이트
             movieDAO.updateMovie(resultMovieVO);
-        	System.out.println("업데이트 결과 movieVO: " + resultMovieVO.toString());
 
             // 등록이 성공했음을 JSON 형식으로 응답으로 전송
             response.setContentType("application/json");
@@ -77,15 +76,12 @@
     } else if("table".equals(action)){
         // 해당 영화 코드로 영화 정보를 가져와서 JSON 형식으로 응답
         String tableMovieCode = request.getParameter("tableMovieCode");
-        System.out.println("editMovieService 실행 tableMovieCode : "+tableMovieCode);
         // AdminMovieDAO 객체 생성
         AdminMovieDAO movieDAO = AdminMovieDAO.getInstance();
-        System.out.println("edit_movie_service의 action:table 실행됨");
         
         try {
             // 해당 영화 코드로 영화 정보 가져오기
             AdminMovieVO movieVO = movieDAO.getMovieByCode(tableMovieCode);
-            System.out.println("edit_movie_service : MovieVO : "+movieVO.toString());
             // JSON 형식으로 응답을 준비
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

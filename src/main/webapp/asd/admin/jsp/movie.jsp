@@ -88,7 +88,7 @@
            
             });
 
-        function clickTable(mCode) {
+        function clickTable(mCode, poster, rDate,rTime) {
             // 클릭한 테이블의 정보를 가져오는 코드
             $("#registerForm").hide();
             $("#table-content").hide();
@@ -107,19 +107,30 @@
                     dataType: "JSON",
                     success: function(jsonArr) {
                         // 검색 결과를 테이블에 반영
+                    	$("#eMovieCode").val(jsonArr.movieCode);
                     	$("#movie_title_edit").val(jsonArr.movieTitle);
                     	$("#movie_genre_edit").val(jsonArr.movieGenre);
                     	$("#movie_director_edit").val(jsonArr.movieDirector);
                     	$("#movie_main_actor_edit").val(jsonArr.movieMainActor);
                     	$("#movie_sub_actor_edit").val(jsonArr.movieSubActor);
-                    	$("#movie_releaseDate_edit").val(jsonArr.editMovieReleaseDate);
+                    	//$("#movie_release_date_edit").val(jsonArr.editMovieReleaseDate);
+                    	$("#movie_release_date_edit").val(rDate);
                     	$("#movie_rating_edit").val(jsonArr.movieRating);
                     	$("#movie_distributor_edit").val(jsonArr.movieDistributor);
-                    	$("#movie_runningTime_edit").val(jsonArr.movieRunningTime);
+                    	$("#movie_running_time_edit").val(jsonArr.movieRunningTime);
                     	$("#movie_description_edit").val(jsonArr.movieDescription);
-                    	$("#movie_poster_path_edit").val(jsonArr.moviePosterPath);
+                    	//$("#movie_poster_edit").val(jsonArr.moviePosterPath);
+                    	$("#movie_poster_edit").val(poster);
                     	$("#movie_status_edit").val(jsonArr.movieScreeningStatus);
+                    	/* if (jsonArr.movieScreeningStatus === "Y") {
+		                    $("#movie_status_edit").val("Y");
+		                } else {
+		                    $("#movie_status_edit").val("N");
+		                } */
                         console.log(jsonArr.movieTitle);
+                        console.log(jsonArr.editMovieReleaseDate);
+                        console.log(jsonArr.moviePosterPath);
+                        console.log(jsonArr.moviePosterPath);
                         
                     },
                     error: function(xhr) {
@@ -140,7 +151,7 @@
                     if (new Date(movie.movieReleaseDate) > new Date()) {
                         status = "<span style=\"color: red;\">상영예정</span>";
                     } else {
-                        status = "상영중";
+                        status = "상영중"; 
                     }
                 } else {
                     status = "<span style=\"color: blue;\">상영완료</span>";
@@ -226,7 +237,8 @@
 							               status = "<span style=\"color: blue;\">상영완료</span>";
 							           }
 							   %>
-							   <tr onClick="clickTable('<%=movie.getMovieCode()%>', '<%=movie.getMovieTitle()%>','<%=movie.getMovieGenre()%>', '<%=movie.getMovieDistributor()%>', '<%=movie.getMovieDirector()%>', '<%=movie.getMovieRunningTime()%>', '<%=movie.getMovieMainActor()%>', '<%=movie.getMovieSubActor()%>', '<%=movie.getMovieDescription()%>', '<%=movie.getMoviePosterPath()%>', '<%=movie.getMovieReleaseDate()%>', '<%=movie.getMovieRating()%>', '<%=movie.getMovieScreeningStatus()%>')">
+							   <%-- <tr onClick="clickTable('<%=movie.getMovieCode()%>', '<%=movie.getMovieTitle()%>','<%=movie.getMovieGenre()%>', '<%=movie.getMovieDistributor()%>', '<%=movie.getMovieDirector()%>', '<%=movie.getMovieRunningTime()%>', '<%=movie.getMovieMainActor()%>', '<%=movie.getMovieSubActor()%>', '<%=movie.getMovieDescription()%>', '<%=movie.getMoviePosterPath()%>', '<%=movie.getMovieReleaseDate()%>', '<%=movie.getMovieRating()%>', '<%=movie.getMovieScreeningStatus()%>')"> --%>
+							   <tr onClick="clickTable('<%=movie.getMovieCode()%>', '<%=movie.getMoviePosterPath()%>', '<%=movie.getMovieReleaseDate()%>','<%=movie.getMovieRunningTime()%>')">
 							       <td><%=movie.getMovieCode()%></td>
 							       <td><%=movie.getMovieTitle()%></td>
 							       <td><%=status%></td>

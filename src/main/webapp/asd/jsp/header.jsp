@@ -239,7 +239,7 @@
 			<div class="nav">
 				<div class="contents">
 					<h1>
-						<a href="/" tabindex="-1"><img
+						<a href="index.html" tabindex="-1"><img
 							src="../logo_white.png"
 							alt="띵화관" /></a>
 					</h1>

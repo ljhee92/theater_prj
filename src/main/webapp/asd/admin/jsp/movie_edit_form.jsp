@@ -82,7 +82,8 @@
                 </div>
 
                 <div class="form-group">
-                    개봉일자 : <input type="text" id="movie_release_date_edit" placeholder="YYYY-MM-DD">
+                    <!-- 개봉일자 : <input type="text" id="movie_release_date_edit" placeholder="YYYY-MM-DD"> -->
+                    개봉일자 : <input type="text" id="movie_release_date_edit">
                 </div>
                 <input type="hidden" id="eMovieCode" name="movieCode">
             
@@ -104,7 +105,8 @@
                 </div>
 
                 <div class="form-group">
-                    러닝타임 : <input type="text" id="movie_running_time_edit" placeholder="mm분">
+                    <!-- 러닝타임 : <input type="text" id="movie_running_time_edit" placeholder="mm분"> -->
+                    러닝타임 : <input type="text" id="movie_running_time_edit">
                 </div>
 
                 <div class="form-group">
@@ -115,13 +117,11 @@
                     포스터 : <input type="file" class="form-control" id="movie_poster_edit" aria-describedby="inputGroupFileAddon03">
                 </div>
 
-                <div class="form-group">
                     <div class="form-group">
                     상영상태 : <select id="movie_status_edit">
                     	<option value="Y">상영가능</option>
                     	<option value="N">상영불가</option>
                     </select>
-                </div>
                 </div>
         </div>
     </div>
