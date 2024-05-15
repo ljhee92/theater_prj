@@ -156,7 +156,9 @@ function updateMovieChart(response) {
             $('<span>').addClass('txt-info').append(
                 $('<strong>').text(movie.movieReleaseDate + ' 개봉'),
                 $('<em>').addClass('dday').append(
-                    $('<i>').addClass('cgvIcon etc ageDay').attr('data-before-text', 'D - ' + dDay).text('DDay')
+                		dDay === 0 ?
+                                $('<i>').addClass('cgvIcon etc ageDay').text('DDay') :
+                                $('<i>').addClass('cgvIcon etc ageDay').attr('data-before-text', 'D - ' + dDay).text('DDay')
                 )
             ),
             $('<span>').addClass('like').append(
