@@ -425,6 +425,7 @@ $(document).ready(function(){
 
 	                if (responseObject.success) {
 
+
 	                    // 예매 내역을 담을 변수
 	                    var reservationHTML = '';
 
@@ -434,6 +435,7 @@ $(document).ready(function(){
 	                    if (reservationData.length > 0) {
 	                        // 각 예약 정보에 대해 HTML 생성
 	                        reservationData.forEach(function (reservation) {
+
 	                            // 평가 점수를 받아서 별을 생성하는 함수
 	                            function createStars(rating) {
 	                                var stars = '';

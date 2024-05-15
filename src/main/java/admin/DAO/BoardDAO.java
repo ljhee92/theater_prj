@@ -414,6 +414,73 @@ public class BoardDAO {
 	} // updateBoard
 	
 	
+	
+	
+	/**
+	 * index.jsp 하단 공지시항 글 가져오는 메서드
+	 * 
+	 * @param boardNumber
+	 * @return
+	 * @throws SQLException
+	 */
+	public BoardVO selectOneNotice() throws SQLException {
+		BoardVO bVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder selectOneBoard = new StringBuilder();
+
+			selectOneBoard.append("SELECT BOARD_NUMBER, BOARD_TITLE ")
+	        .append("FROM (SELECT b.BOARD_NUMBER, b.BOARD_TITLE, ROW_NUMBER() OVER(ORDER BY BOARD_NUMBER DESC) rank ")
+	        .append("FROM BOARD b ")
+	        .append("INNER JOIN CATEGORY c ON b.CATEGORY_NUMBER = c.CATEGORY_NUMBER ")
+	        .append("WHERE c.CATEGORY_TYPE_FLAG = 'N') ")
+	        .append("WHERE rank = 1");
+			
+			pstmt = con.prepareStatement(selectOneBoard.toString());
+
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				bVO = BoardVO.builder()
+					.boardNumber(rs.getInt("BOARD_NUMBER"))
+					.boardTitle(rs.getString("BOARD_TITLE"))
+					.build();
+			} // end if
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		} // end finally
+		return bVO;
+	} // selectOneNotice
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/////////////////////////////////자주찾는 질문///////////////////////////////////////
 	
 	
