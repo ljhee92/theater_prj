@@ -150,6 +150,8 @@ public class AdminMovieDAO {
 	        }
 
 	        rs = pstmt.executeQuery();
+	        
+	        
 
 	        while (rs.next()) {
 	            AdminMovieVOBuilder movieVOBuilder = AdminMovieVO.builder();
@@ -162,7 +164,7 @@ public class AdminMovieDAO {
 	                            .movieRunningTime(rs.getString("movie_running_time"))
 	                            .movieMainActor(rs.getString("movie_main_actor"))
 	                            .movieSubActor(rs.getString("movie_sub_actor"))
-	                            .movieDescription(rs.getString("movie_description"))
+	                            .movieDescription(rs.getString("movie_description").replaceAll("\n", " "))
 	                            .moviePosterPath(rs.getString("movie_poster_path"))
 	                            .movieReleaseDate(rs.getDate("movie_release_date"))
 	                            .movieRating(rs.getString("movie_rating"))
