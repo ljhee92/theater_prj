@@ -598,7 +598,40 @@ public class BoardDAO {
 		return totalCnt;
 	} // selectTotalCount
 	
-	
+	/**
+	 * 자주찾는질문 게시물 추가
+	 * @param bVO
+	 * @throws SQLException
+	 */
+	public void insertQuestion(BoardVO bVO) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		DbConnection dbCon = DbConnection.getInstance();
+		
+		try {
+			String id = "son";
+			String pass = "jimin";
+			
+			con = dbCon.getConnection(id, pass);
+			
+			StringBuilder insertQuestion = new StringBuilder();
+			insertQuestion.append("insert into board ")
+			.append("(board_number, board_title, board_content, admin_id, category_number) ")
+			.append("values(?, ?, ?, ?, ?)");
+			
+			pstmt = con.prepareStatement(insertQuestion.toString());
+			
+			pstmt.setInt(1, bVO.getBoardNumber());
+			pstmt.setString(2, bVO.getBoardTitle());
+			pstmt.setString(3, bVO.getBoardContent());
+			pstmt.setString(4, bVO.getAdminId());
+			pstmt.setInt(5, bVO.getCategoryNumber());
+			
+			pstmt.executeUpdate();
+		} finally {
+			dbCon.dbClose(null, pstmt, con);
+		} // end finally
+	} // insertBoard
 	
 	
 	
