@@ -111,7 +111,7 @@
                             <% for (int i = 0; i < userList.size(); i++) { %>
                                 <tr>
                                     <% uVO = userList.get(i); %>
-                                    <td><%= uVO.getUserId() %></td>
+                                    <td><a href="#"><%= uVO.getUserId() %></a></td>
                                     <td><%= uVO.getUserName() %></td>
                                     <td><%= uVO.getUserBirthday() %></td>
                                     <td><%= uVO.getUserPhone() %></td>
