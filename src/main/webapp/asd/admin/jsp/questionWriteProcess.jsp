@@ -1,7 +1,7 @@
 <%@page import="admin.DAO.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    info = "공지사항 글쓰기에서 입력된 값을 받는 JSP" %>
+    info = "자주찾는질문 글쓰기에서 입력된 값을 받는 JSP" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -40,10 +40,10 @@
 	bVO.setBoardTitle(request.getParameter("title"));
 	bVO.setBoardContent(request.getParameter("textarea"));
 	bVO.setCategoryNumber(Integer.parseInt(request.getParameter("category")));
-	bVO.setAdminId(session.getAttribute("id").toString());
+	bVO.setAdminId(session.getAttribute("adminId").toString());
 	
 	BoardDAO bDAO = BoardDAO.getInstance();
-	bDAO.insertNotice(bVO);
+	bDAO.insertQuestion(bVO);
 	response.sendRedirect("question.jsp");
 	%>
 	</c:catch>
