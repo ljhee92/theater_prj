@@ -1,11 +1,13 @@
 package admin;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,9 +18,9 @@ public class AdminReserveManageVO {
 	private String userId;
 	private String movieTitle;
 	private String theaterName;
-	private String screeningDate;
 	private String theaterNumber;
-	private String screeningRound;
+	private String screeningDate;
+	private String screeningTime;
 	private String seatNumber;
 	private int totalPeopleNumber;
-}
+}   
