@@ -425,6 +425,7 @@ $(document).ready(function(){
 
 	                if (responseObject.success) {
 
+
 	                    // 예매 내역을 담을 변수
 	                    var reservationHTML = '';
 
@@ -434,6 +435,7 @@ $(document).ready(function(){
 	                    if (reservationData.length > 0) {
 	                        // 각 예약 정보에 대해 HTML 생성
 	                        reservationData.forEach(function (reservation) {
+
 	                            // 평가 점수를 받아서 별을 생성하는 함수
 	                            function createStars(rating) {
 	                                var stars = '';
@@ -646,10 +648,10 @@ function selectReservation() {
                                         '<div class="row">' +
                                      // selectReservation 함수 내에서 예매내역을 생성하는 부분 수정
                                         '<div class="col text-end">' +
-                                            '<p style="margin-top: 5px;"><strong>총 결제금액 : </strong></p>' +
+                                            '<p style="margin-top: 20px;"><strong>총 결제금액    : </strong></p>' +
                                         '</div>' +
-                                        '<div class="col text-start">' +
-                                            '<strong style="font-size: 20px;">' + groupedReservation.totalPrice + '</strong>' +
+                                        '<div  style="margin-top: 15px;" class="col text-start">' +
+                                            '<strong style="font-size: 20px ;">' + groupedReservation.totalPrice +'원'+ '</strong>' +
                                         '</div>' +
                                         '<div class="col text-end">' +
                                             '<button type="button" class="btn btn-info float-end" onclick="reservationDetail(\'' + groupedReservation.reservationNumber + '\')">상세보기</button>' +

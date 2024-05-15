@@ -1,3 +1,5 @@
+<%@page import="admin.BoardVO"%>
+<%@page import="admin.DAO.BoardDAO"%>
 <%@page import="VO.MovieVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" info=""%>
@@ -301,6 +303,8 @@
  
  MovieDAO mDAO = MovieDAO.getInstance();
  List<MovieVO> mVO = mDAO.selectMovieList();
+ BoardDAO bDAO = BoardDAO.getInstance();
+ BoardVO bVO = bDAO.selectOneNotice();
  
 for (MovieVO tempMovie : mVO) {
 	String code = tempMovie.getMovieCode();
@@ -400,8 +404,7 @@ for (MovieVO tempMovie : mVO) {
 							<div id="ctl00_PlaceHolderContent_notice_wrap"
 								class="notice_wrap">
 								<strong>공지사항</strong> <a
-									href="/support/news/detail-view.aspx?idx=8004" class="btn_link">[속보]
-									장원영 : 명화 , 차은우 : 웅찬</a> <a
+									href="boardDetail.jsp?FAQS=N&boardNumber=<%=bVO.getBoardNumber() %>" class="btn_link"><%=bVO.getBoardTitle() %></a> <a
 									href="board.jsp?FAQS=N"
 									id="notice_more" class="btn_more">더보기</a>
 							</div>

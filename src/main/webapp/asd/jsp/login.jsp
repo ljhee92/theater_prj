@@ -308,8 +308,8 @@ window.location.href = prevPage;
                 <input type="hidden" id="prevPage" name="prevPage" value=<%= prevPage %> >
                 <div class="login-option">
                      
-                    <a style="cursor:pointer;" onclick="alert('아이디 찾기 클릭')"  target="_blank">아이디 찾기</a>
-                    <a style="cursor:pointer;" onclick="alert('비번 찾기 클릭')" target="_blank">비밀번호 찾기</a>
+                    <a style="cursor:pointer;" onclick="location.href='findId.jsp'"  target="_blank">아이디 찾기</a>
+                    <a style="cursor:pointer;" onclick="location.href='findPw.jsp'" target="_blank">비밀번호 찾기</a>
                    
                 </div>
             </fieldset>

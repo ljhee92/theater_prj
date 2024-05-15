@@ -73,7 +73,7 @@ public class MovieDAO {
 		}
 
 		return mVOList;
-	}// AdminLogin
+	}// selectMovieList
 	
 
 }
