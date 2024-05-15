@@ -49,32 +49,33 @@ public class UserReviewDAO {
 
 			StringBuilder sqlQuery = new StringBuilder();
 			sqlQuery.append("SELECT ")
-			        .append("    r.RESERVATION_NUMBER, ")
-			        .append("    m.MOVIE_TITLE, ")
-			        .append("    m.MOVIE_POSTER_PATH, ")
-			        .append("    s.THEATER_NAME, ")
-			        .append("    s.THEATER_NUMBER, ")
-			        .append("    TO_DATE(s.SCREENING_DATE, 'yyyy-mm-dd') AS SCREENING_DATE, ")
-			        .append("    st.SCREENING_TIME, ")
-			        .append("    rev.REVIEW_NUMBER, ")
-			        .append("    rev.REVIEW_SCORE, ")
-			        .append("    rev.REVIEW_CONTENT ")
-			        .append("FROM ")
-			        .append("    RESERVATION r ")
-			        .append("INNER JOIN ")
-			        .append("    SCREENING s ON r.SCREENING_CODE = s.SCREENING_CODE ")
-			        .append("INNER JOIN ")
-			        .append("    SCREENING_TIME st ON s.SCREENING_ROUND = st.SCREENING_ROUND ")
-			        .append("INNER JOIN ")
-			        .append("    MOVIE m ON s.MOVIE_CODE = m.MOVIE_CODE ")
-			        .append("LEFT JOIN ")
-			        .append("    REVIEW rev ON r.RESERVATION_NUMBER = rev.RESERVATION_NUMBER ")
-			        .append("WHERE ")
-			        .append("    r.USER_ID = ? ")
-			        .append("    AND s.SCREENING_DATE <= TRUNC(SYSDATE) ")
-			        .append("    AND TO_NUMBER(SUBSTR(st.SCREENING_TIME, 1, 2)) <= TO_NUMBER(TO_CHAR(SYSDATE, 'hh24')) ")
-			        .append("ORDER BY ")
-			        .append("    s.SCREENING_DATE DESC");
+	        .append("    r.RESERVATION_NUMBER, ")
+	        .append("    m.MOVIE_TITLE, ")
+	        .append("    m.MOVIE_POSTER_PATH, ")
+	        .append("    s.THEATER_NAME, ")
+	        .append("    s.THEATER_NUMBER, ")
+	        .append("    TO_DATE(s.SCREENING_DATE, 'yyyy-mm-dd') AS SCREENING_DATE, ")
+	        .append("    st.SCREENING_TIME, ")
+	        .append("    rev.REVIEW_NUMBER, ")
+	        .append("    rev.REVIEW_SCORE, ")
+	        .append("    rev.REVIEW_CONTENT ")
+	        .append("FROM ")
+	        .append("    RESERVATION r ")
+	        .append("INNER JOIN ")
+	        .append("    SCREENING s ON r.SCREENING_CODE = s.SCREENING_CODE ")
+	        .append("INNER JOIN ")
+	        .append("    SCREENING_TIME st ON s.SCREENING_ROUND = st.SCREENING_ROUND ")
+	        .append("INNER JOIN ")
+	        .append("    MOVIE m ON s.MOVIE_CODE = m.MOVIE_CODE ")
+	        .append("LEFT JOIN ")
+	        .append("    REVIEW rev ON r.RESERVATION_NUMBER = rev.RESERVATION_NUMBER ")
+	        .append("WHERE ")
+	        .append("    r.USER_ID = ? ")
+	        .append("    AND (s.SCREENING_DATE < TRUNC(SYSDATE) ")
+	        .append("    OR (s.SCREENING_DATE = TRUNC(SYSDATE) ")
+	        .append("    AND TO_NUMBER(SUBSTR(st.SCREENING_TIME, 1, 2)) <= TO_NUMBER(TO_CHAR(SYSDATE, 'hh24')))) ")
+	        .append("ORDER BY ")
+	        .append("    s.SCREENING_DATE DESC");
 			pstmt = con.prepareStatement(sqlQuery.toString());
 			pstmt.setString(1, userId);
 
@@ -94,6 +95,8 @@ public class UserReviewDAO {
 					   .reviewScore(rs.getInt("REVIEW_SCORE"))
 					   .reviewContent(rs.getString("REVIEW_CONTENT"))
 					   .build();
+				
+				
 				
 				list.add(rVO);
 			}
