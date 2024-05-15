@@ -75,7 +75,7 @@ public class SelectReviewServlet extends HttpServlet {
             e.printStackTrace();
             result.append("false}");
         }
-        
+     
         return result.toString();
     }
 }
