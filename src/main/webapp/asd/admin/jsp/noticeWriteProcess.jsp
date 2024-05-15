@@ -40,7 +40,7 @@
 	bVO.setBoardTitle(request.getParameter("title"));
 	bVO.setBoardContent(request.getParameter("textarea"));
 	bVO.setCategoryNumber(Integer.parseInt(request.getParameter("category")));
-	bVO.setAdminId(session.getAttribute("id").toString());
+	bVO.setAdminId(session.getAttribute("adminId").toString());
 	
 	BoardDAO bDAO = BoardDAO.getInstance();
 	bDAO.insertNotice(bVO);
