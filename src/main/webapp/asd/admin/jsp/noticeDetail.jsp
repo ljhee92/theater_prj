@@ -13,7 +13,7 @@ String id = (String) session.getAttribute("adminId");
 if (id == null) {// 로그인되지 않은 경우 로그인 페이지로 리디렉션
 %>
 <script type="text/javascript">
-window.location.href = "login.jsp?prevPage=theater.jsp";
+window.location.href = "login.jsp?prevPage=noticeDetail.jsp";
 </script>
 <%
 }

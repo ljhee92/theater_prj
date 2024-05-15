@@ -195,34 +195,23 @@ MovieDetailDAO mdDAO = MovieDetailDAO.getInstance();
 
 MovieVO mVO = mdDAO.selectMovieDetail(movieCode);
 
-String title = mVO.getMovieTitle();
-String releaseDate = mVO.getMovieReleaseDate();
-String genre = mVO.getMovieGenre();
 String rating = mVO.getMovieRating();
-String director = mVO.getMovieDirector();
-String distributor = mVO.getMovieDistributor();
-String runningTime = mVO.getMovieRunningTime();
-String mainActor = mVO.getMovieMainActor();
-String subActor = mVO.getMovieSubActor();
-String description = mVO.getMovieDescription();
-String posterPath = mVO.getMoviePosterPath();
-String screeningStatus = mVO.getMovieScreeningStatus();
-String inputDate = mVO.getMovieInputDate();
 String statusClass = null;
+String screeningStatus = mVO.getMovieScreeningStatus();
+String description = mVO.getMovieDescription();
 //관람 등급 설정
-rating = rating.equals("All") ? "전체 관람가" : rating + "이상 관람가";
-
 
 //상영 상태 설정
+rating = rating.equals("All") ? "전체 관람가" : rating + "이상 관람가";
 if(screeningStatus.equals("Y")){
 	screeningStatus = "현재상영중";
     statusClass = "round lightblue";
-
 }else{
 	screeningStatus = "미상영작";
     statusClass = "round red";
-
 }
+pageContext.setAttribute("movieVO", mVO);
+
 %>
 		<!-- Contaniner -->
 		<div id="contaniner" class="">
@@ -235,13 +224,11 @@ if(screeningStatus.equals("Y")){
 
 					<div class="sect-base-movie">
 						<h3>
-							<strong><%= title %></strong>기본정보
+							<strong>${movieVO.movieTitle}</strong>기본정보
 						</h3>
 						<div class="box-image">
-							<a
-								href="https://img.cgv.co.kr/Movie/Thumbnail/Poster/000088/88104/88104_1000.jpg"
-								title="포스터 크게 보기 새창" target="_blank"> <span
-								class="thumb-image"> <img src="../images/movie/<%=posterPath%>">
+							<a href="#"title="포스터 크게 보기 새창" target="_blank"> <span
+								class="thumb-image"> <img src="../images/movie/${movieVO.moviePosterPath}">
 									<span class="ico-posterdetail">포스터 크게 보기</span> <!-- 영상물 등급 노출 변경 2022.08.24 -->
 									<i class="cgvIcon etc age<%=rating%>"><%=rating %></i> <!--<span class="ico-grade 15"> 15</span> -->
 							</span>
@@ -249,30 +236,23 @@ if(screeningStatus.equals("Y")){
 						</div>
 						<div class="box-contents">
 							<div class="title">
-								<strong><%= title %></strong> <em class="<%=statusClass %>"><span><%=screeningStatus %></span></em>
+								<strong>${movieVO.movieTitle}</strong> <em class="<%=statusClass %>"><span><%=screeningStatus %></span></em>
 							</div>
 							<div class="spec">
 								<dl>
 									<dt>
-										감독 :
-										<%=director %></dt>
+										감독 :${movieVO.movieTitle}</dt>
 									<dt>
-										/ 주연배우 :
-										<%=mainActor%>
-										/ 조연배우 :
-										<%=subActor%>
+										/ 주연배우 :${movieVO.movieMainActor}
+										/ 조연배우 :${movieVO.movieSubActor}
 									</dt>
-									<br />
-
-
 									<dt>
-										장르 :
-										<%=genre%></dt>
+										장르 :${movieVO.movieGenre}</dt>
 									<dd></dd>
 									<dt>/ 기본 정보 :</dt>
-									<dd class="on"><%=rating%>,<%=runningTime%></dd>
+									<dd class="on"><%=rating%>,${movieVO.movieRunningTime}</dd>
 									<dt>개봉 :</dt>
-									<dd class="on"><%=releaseDate%></dd>
+									<dd class="on">${movieVO.movieReleaseDate}</dd>
 
 
 
@@ -312,7 +292,7 @@ if(screeningStatus.equals("Y")){
 								<div class="heading">
 									<h4>스틸컷</h4>
 									<span class="count"><strong id="stillcut_current">1</strong>/2</span><a
-										class="link-more" href="still-cut.aspx?midx=88104">더보기</a>
+										class="link-more" href="#">더보기</a>
 								</div>
 								<div class="slider-wrap">
 									<div class="slider" id="still_motion">
@@ -320,7 +300,7 @@ if(screeningStatus.equals("Y")){
 										<div class="item-wrap">
 											<div class="item">
 												<img
-													data-src="https://img.cgv.co.kr/Movie/Thumbnail/StillCut/000088/88104/88104224996_727.jpg"
+													data-src="../images/movie/${movieVO.moviePosterPath}"
 													alt="범죄도시4" onerror="errorImage(this)" />
 											</div>
 										</div>
@@ -328,7 +308,7 @@ if(screeningStatus.equals("Y")){
 										<div class="item-wrap">
 											<div class="item">
 												<img
-													data-src="https://img.cgv.co.kr/Movie/Thumbnail/StillCut/000088/88104/88104224995_727.jpg"
+													data-src="../images/movie/${movieVO.moviePosterPath}"
 													alt="범죄도시4" onerror="errorImage(this)" />
 											</div>
 										</div>
@@ -573,7 +553,7 @@ var commentOptions;
 		<!-- S 예매하기 및 TOP Fixed 버튼 -->
 		<div class="fixedBtn_wrap">
 
-			<a href="/ticket/" class="btn_fixedTicketing">예매하기</a> <a
+			<a href="ticket.jsp" class="btn_fixedTicketing">예매하기</a> <a
 				href="#none" class="btn_gotoTop"><img
 				src="https://img.cgv.co.kr/R2014/images/common/btn/gotoTop.png"
 				alt="최상단으로 이동" /></a>
@@ -590,5 +570,4 @@ var commentOptions;
 
 	</div>
 </body>
-</html>
 </html>

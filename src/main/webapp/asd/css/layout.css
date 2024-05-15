@@ -126,7 +126,6 @@
 			.nav_menu > li:first-child{width:137px;}
 			.nav_menu > li:first-child .nav_overMenu{padding-left:0}
 			.nav_menu > li:first-child .nav_overMenu:before{content:none}
-			.nav_menu > li:last-child{width:195px}
 			/*.nav_menu > li:nth-child(2) > h2{left:80px}
 			.nav_menu > li:nth-child(3) > h2{left:160px}
 			.nav_menu > li:nth-child(4) > h2{left:240px}
@@ -179,8 +178,6 @@
 		.nav.fixed .contents .nav_menu > li:nth-child(2) > h2{left:200px}
 		.nav.fixed .contents .nav_menu > li:nth-child(3) > h2{left:280px}
 		.nav.fixed .contents .nav_menu > li:nth-child(4) > h2{left:360px}
-		.nav.fixed .contents .nav_menu > li:nth-child(5) > h2{left:455px}
-		.nav.fixed .contents .nav_menu > li:last-child > h2{left:550px}
 		.nav.fixed .contents .nav_menu > li > h2 > a{color:#fff}
 		.nav.fixed .contents .nav_menu > li > h2 > a strong{color:#fff}
 		.nav.fixed .contents .totalSearch_wrap:before,
