@@ -1,3 +1,4 @@
+<%@page import="admin.AdminReserveManageVO"%>
 <%@page import="admin.AdminUserManageDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="admin.UserVO"%>
@@ -38,7 +39,7 @@
 </style>
 <script type="text/javascript">
     $(function() {
-        $("#searchMemberId").keydown(function(evt) {
+        $("#userId").keydown(function(evt) {
             if (evt.which == 13) {
                 chkNull();
             } //end if
@@ -46,9 +47,13 @@
     }); // ready
 
     function chkNull(){
-        if($("#searchMemberId").val().trim() != ""){
+        var userId = $("#userId").val().trim();
+        if(userId != ""){
             $("#searchMemberForm").submit();
-        }//end if
+        } else {
+            alert("회원 아이디를 입력하세요.");
+            window.location.href = "member.jsp";
+        }
     }//chkNull
 </script>
 </head>
@@ -73,11 +78,12 @@
                 <div id="memberTableContent">
                     <!-- 검색 폼 -->
                     <form action="member.jsp" method="get" name="searchMemberForm" id="searchMemberForm">
+                    
                         <!-- 검색 inputText와 button을 감싸는 div -->
                         <div class="searchMember" style="width:300px; margin-left: 25px;">
                             <!-- 입력란 -->
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="searchMemberId" name="searchMemberId" value="${ param.searchMemberId }" placeholder="회원 아이디 입력" />
+                                <input type="text" class="form-control" id="userId" name="userId" value="${ param.userId }" placeholder="회원 아이디 입력" />
                             </div>
                             <div id="searchBtn" style="margin-left: 15px; margin-bottom: auto;">
                                 <!-- 버튼 -->
@@ -100,9 +106,9 @@
                             <%
                                 List<UserVO> userList = new ArrayList<UserVO>();
                                 AdminUserManageDAO aumDAO = AdminUserManageDAO.getInstance();
-                                String searchMemberId = request.getParameter("searchMemberId");
-                                if (searchMemberId != null && !"".equals(searchMemberId.trim())) {
-                                    userList = aumDAO.selectUser(searchMemberId.trim());
+                                String userId = request.getParameter("userId");
+                                if (userId != null && !"".equals(userId.trim())) {
+                                    userList = aumDAO.selectUser(userId.trim());
                                 } else {
                                     userList = aumDAO.selectAllUserList();
                                 }
@@ -111,7 +117,7 @@
                             <% for (int i = 0; i < userList.size(); i++) { %>
                                 <tr>
                                     <% uVO = userList.get(i); %>
-                                    <td><a href="#"><%= uVO.getUserId() %></a></td>
+                                    <td><a href="memberDetail.jsp?userId=<%= uVO.getUserId() %>"><%= uVO.getUserId() %></a></td>
                                     <td><%= uVO.getUserName() %></td>
                                     <td><%= uVO.getUserBirthday() %></td>
                                     <td><%= uVO.getUserPhone() %></td>

@@ -23,6 +23,7 @@ public class ReviewVO {
 	private String reviewInputDate;//리뷰작성일
 	private String reviewContent;//리뷰내용
 	private String movieTitle;//영화제목
+	private String movieCode;//영화코드
   private String screeningTime;//상영시간
   private String theaterNumber;//상영관
   private String theaterName;//극장명

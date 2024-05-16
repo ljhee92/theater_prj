@@ -13,11 +13,11 @@
 					marginwidth="0" marginheight="0" name="Bottom" id="Bottom"></iframe>
 			</div>
 			<ul class="policy_list">
-				<li><a href="http://corp.cgv.co.kr/company/" target="_blank">회사소개</a></li>
-				<li><a href="http://www.cgv.co.kr/rules/service.aspx">이용약관</a></li>
-				<li><a href="http://www.cgv.co.kr/rules/privacy.aspx"><strong>개인정보처리방침</strong></a></li>
-				<li><a href="http://www.cgv.co.kr/rules/disclaimer.aspx">법적고지</a></li>
-				<li><a href="http://www.cgv.co.kr/rules/emreject.aspx">이메일주소무단수집거부</a></li>
+				<li><a href="" target="_blank">회사소개</a></li>
+				<li><a href="">이용약관</a></li>
+				<li><a href=""><strong>개인정보처리방침</strong></a></li>
+				<li><a href="">법적고지</a></li>
+				<li><a href="">이메일주소무단수집거부</a></li>
 				<li><a href="../admin/jsp/dashboard.jsp">관리자 로그인</a></li>
 			</ul>
 			<article class="company_info_wrap">
@@ -32,7 +32,7 @@
 						<dd>010-8623-5905</dd>
 						<dt>통신판매업신고번호</dt>
 						<dd>
-							1998-경기수원-0513 <a href="#none" onclick="goFtc()"
+							1998-경기수원-0513 <a href="" onclick="goFtc()"
 								class="btn_goFtc">사업자정보확인<a></a></a>
 						</dd>
 					</dl>

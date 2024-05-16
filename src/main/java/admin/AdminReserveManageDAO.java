@@ -34,78 +34,68 @@ public class AdminReserveManageDAO {
     }
 
     ////////////////////////모든 예매리스트를 가져오는 메소드///////////////////////
-    public List<AdminReserveManageVO> selectAllReserve() throws SQLException {
-        List<AdminReserveManageVO> list = new ArrayList<AdminReserveManageVO>();
+	public List<AdminReserveManageVO> selectAllReserve() throws SQLException {
+		List<AdminReserveManageVO> list = new ArrayList<AdminReserveManageVO>();
 
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-        DbConnection dbCon = DbConnection.getInstance();
+		DbConnection dbCon = DbConnection.getInstance();
 
-        try {
-            // 데이터베이스 연결 정보
-            String id = "son";
-            String pass = "jimin";
-            con = dbCon.getConnection(id, pass);
+		try {
+			// 데이터베이스 연결 정보
+			String id = "son";
+			String pass = "jimin";
+			con = dbCon.getConnection(id, pass);
 
-            // 쿼리문 생성
-            StringBuilder selectReserve = new StringBuilder();
-            selectReserve
-                .append(" SELECT rv.reservation_number, rv.user_id, m.movie_title, ")
-                .append(" s.theater_name, s.theater_number, ")
-                .append(" s.screening_date, st.screening_time, ")
-                .append(" rs.seat_lownumber, rs.seat_colnumber ")
-                .append(" FROM reservation rv ")
-                .append(" JOIN screening s ON rv.screening_code = s.screening_code ")
-                .append(" JOIN movie m ON s.movie_code = m.movie_code ")
-                .append(" JOIN screening_time st ON s.screening_round = st.screening_round ")
-                .append(" JOIN reserved_seat rs ON rv.reservation_number = rs.reservation_number ");
+			// 쿼리문 생성
+			String selectReserve = "SELECT rv.reservation_number, rv.user_id, m.movie_title, "
+					+ "s.theater_name, s.theater_number, s.screening_date, st.screening_time, "
+					+ "rs.seat_lownumber, rs.seat_colnumber " + "FROM reservation rv "
+					+ "JOIN screening s ON rv.screening_code = s.screening_code "
+					+ "JOIN movie m ON s.movie_code = m.movie_code "
+					+ "JOIN screening_time st ON s.screening_round = st.screening_round "
+					+ "JOIN reserved_seat rs ON rv.reservation_number = rs.reservation_number";
 
-            pstmt = con.prepareStatement(selectReserve.toString());
+			pstmt = con.prepareStatement(selectReserve);
 
-            // 쿼리문 수행 후 결과 얻기
-            rs = pstmt.executeQuery();
+			// 쿼리문 수행 후 결과 얻기
+			rs = pstmt.executeQuery();
 
-            // Map to store the total seat count and seat numbers per reservation
-            Map<String, List<String>> seatMap = new HashMap<>();
-            List<AdminReserveManageVO> tempList = new ArrayList<>();
+			// Map to store the total seat count and seat numbers per reservation
+			Map<String, AdminReserveManageVO> reserveMap = new HashMap<>();
 
-            while (rs.next()) {
-                String reservationNumber = rs.getString("reservation_number");
+			while (rs.next()) {
+				String reservationNumber = rs.getString("reservation_number");
 
-                // 좌석 정보 누적
-                seatMap.putIfAbsent(reservationNumber, new ArrayList<>());
-                seatMap.get(reservationNumber).add(rs.getString("seat_lownumber") + rs.getString("seat_colnumber"));
+				AdminReserveManageVO armVO = reserveMap.get(reservationNumber);
+				if (armVO == null) {
+					armVO = AdminReserveManageVO.builder().reservationNumber(reservationNumber)
+							.userId(rs.getString("user_id")).movieTitle(rs.getString("movie_title"))
+							.theaterName(rs.getString("theater_name")).theaterNumber(rs.getString("theater_number"))
+							.screeningDate(rs.getString("screening_date")).screeningTime(rs.getString("screening_time"))
+							.seatNumber(rs.getString("seat_lownumber") + rs.getString("seat_colnumber"))
+							.totalPeopleNumber(1) // 한 개의 좌석 정보만 있는 경우
+							.build();
+					reserveMap.put(reservationNumber, armVO);
+				} else {
+					// 좌석 정보 누적
+					armVO.setSeatNumber(armVO.getSeatNumber() + ", " + rs.getString("seat_lownumber")
+							+ rs.getString("seat_colnumber"));
+					armVO.setTotalPeopleNumber(armVO.getTotalPeopleNumber() + 1); // 좌석 개수 증가
+				}
+			}
 
-                AdminReserveManageVO armVO = AdminReserveManageVO.builder()
-                    .reservationNumber(reservationNumber)
-                    .userId(rs.getString("user_id"))
-                    .movieTitle(rs.getString("movie_title"))
-                    .theaterName(rs.getString("theater_name"))
-                    .theaterNumber(rs.getString("theater_number"))
-                    .screeningDate(rs.getString("screening_date"))
-                    .screeningTime(rs.getString("screening_time"))
-                    .build();
+			// Convert map values to list
+			list.addAll(reserveMap.values());
 
-                tempList.add(armVO);
-            }
-
-            // Update the list with the total seat count and concatenated seat numbers for each reservation
-            for (AdminReserveManageVO vo : tempList) {
-                List<String> seats = seatMap.get(vo.getReservationNumber());
-                if (seats != null) {
-                    vo.setSeatNumber(String.join(", ", seats));
-                    vo.setTotalPeopleNumber(seats.size());
-                }
-                list.add(vo);
-            }
-
-        } finally {
-            dbCon.dbClose(rs, pstmt, con);
-        }
-        return list;
-    }//selectAllReserve
+		} finally {
+			dbCon.dbClose(rs, pstmt, con);
+		}
+		return list;
+	}// selectAllReserve
+	
     
     ////////////////////////조건에 맞는 예매리스트를 가져오는 메소드///////////////////////
     public List<AdminReserveManageVO> searchReserve(String theater, String screeningRoom, String date, String reserveNum) throws SQLException {
@@ -175,10 +165,14 @@ public class AdminReserveManageDAO {
 				seatMap.putIfAbsent(reservationNumber, new ArrayList<>());
 				seatMap.get(reservationNumber).add(rs.getString("seat_lownumber") + rs.getString("seat_colnumber"));
 
-				AdminReserveManageVO armVO = AdminReserveManageVO.builder().reservationNumber(reservationNumber)
-						.userId(rs.getString("user_id")).movieTitle(rs.getString("movie_title"))
-						.theaterName(rs.getString("theater_name")).theaterNumber(rs.getString("theater_number"))
-						.screeningDate(rs.getString("screening_date")).screeningTime(rs.getString("screening_time"))
+				AdminReserveManageVO armVO = AdminReserveManageVO.builder()
+						.reservationNumber(reservationNumber)
+						.userId(rs.getString("user_id"))
+						.movieTitle(rs.getString("movie_title"))
+						.theaterName(rs.getString("theater_name"))
+						.theaterNumber(rs.getString("theater_number"))
+						.screeningDate(rs.getString("screening_date"))
+						.screeningTime(rs.getString("screening_time"))
 						.build();
 
 				tempList.add(armVO);
@@ -200,6 +194,36 @@ public class AdminReserveManageDAO {
 		}
 		return list;
 	}//searchReserve
+    
+    
+    ////////////////////////예매 삭제///////////////////////
+    public int deleteReserve(String reservationNumber) throws SQLException {
+        int result = 0;
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        DbConnection dbCon = DbConnection.getInstance();
+
+        try {
+            String id = "son";
+            String pass = "jimin";
+            con = dbCon.getConnection(id, pass);
+
+            // 쿼리문: reservation 테이블에서 예약 정보 삭제
+            String deleteReservationSQL = "DELETE FROM reservation WHERE reservation_number = ?";
+            pstmt = con.prepareStatement(deleteReservationSQL);
+            pstmt.setString(1, reservationNumber);
+
+            // 쿼리 실행 및 결과 확인
+            result = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e; // 예외 다시 던지기
+        } finally {
+            // 리소스 해제
+            dbCon.dbClose(null, pstmt, con);
+        }
+        return result;
+    }//deleteReserve
     
     
     
