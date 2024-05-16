@@ -50,6 +50,7 @@ public class UserReviewDAO {
 			StringBuilder sqlQuery = new StringBuilder();
 			sqlQuery.append("SELECT ")
 	        .append("    r.RESERVATION_NUMBER, ")
+	        .append("    m.MOVIE_CODE, ")
 	        .append("    m.MOVIE_TITLE, ")
 	        .append("    m.MOVIE_POSTER_PATH, ")
 	        .append("    s.THEATER_NAME, ")
@@ -58,7 +59,8 @@ public class UserReviewDAO {
 	        .append("    st.SCREENING_TIME, ")
 	        .append("    rev.REVIEW_NUMBER, ")
 	        .append("    rev.REVIEW_SCORE, ")
-	        .append("    rev.REVIEW_CONTENT ")
+	        .append("    rev.REVIEW_CONTENT, ")
+	        .append("    TO_DATE(rev.REVIEW_INPUT_DATE,'yyyy-mm-dd') AS REVIEW_INPUT_DATE ")
 	        .append("FROM ")
 	        .append("    RESERVATION r ")
 	        .append("INNER JOIN ")
@@ -80,21 +82,24 @@ public class UserReviewDAO {
 			pstmt.setString(1, userId);
 
 			rs = pstmt.executeQuery();
+			
 		
 			while (rs.next()) {
 				rVO = null;
 				rVO = ReviewVO.builder()
-					   .reservationNumber(rs.getString("RESERVATION_NUMBER"))
-					   .movieTitle(rs.getString("MOVIE_TITLE"))
-					   .moviePosterPath(rs.getString("MOVIE_POSTER_PATH"))
-					   .theaterName(rs.getString("THEATER_NAME"))
-					   .theaterNumber(rs.getString("THEATER_NUMBER"))
-					   .screeningDate(rs.getDate("SCREENING_DATE"))
-					   .screeningTime(rs.getString("SCREENING_TIME"))
-					   .reviewNumber(rs.getInt("REVIEW_NUMBER"))
-					   .reviewScore(rs.getInt("REVIEW_SCORE"))
-					   .reviewContent(rs.getString("REVIEW_CONTENT"))
-					   .build();
+					    .reservationNumber(rs.getString("RESERVATION_NUMBER"))
+					    .movieCode(rs.getString("MOVIE_CODE"))
+					    .movieTitle(rs.getString("MOVIE_TITLE"))
+					    .moviePosterPath(rs.getString("MOVIE_POSTER_PATH"))
+					    .theaterName(rs.getString("THEATER_NAME"))
+					    .theaterNumber(rs.getString("THEATER_NUMBER"))
+					    .screeningDate(rs.getDate("SCREENING_DATE"))
+					    .screeningTime(rs.getString("SCREENING_TIME"))
+					    .reviewNumber(rs.getInt("REVIEW_NUMBER"))
+					    .reviewScore(rs.getInt("REVIEW_SCORE"))
+					    .reviewContent(rs.getString("REVIEW_CONTENT"))
+					    .reviewInputDate((rs.getDate("REVIEW_INPUT_DATE") != null) ? rs.getDate("REVIEW_INPUT_DATE").toString() : null)
+					    .build();
 				
 				
 				
