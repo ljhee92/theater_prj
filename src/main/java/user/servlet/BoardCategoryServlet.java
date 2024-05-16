@@ -32,19 +32,22 @@ public class BoardCategoryServlet extends HttpServlet {
 		String startNum = request.getParameter("startNum");
 		String endNum = request.getParameter("endNum");
 		String category = request.getParameter("category");
+		String currentPage  = request.getParameter("currentPage");
 		
+		int intCurrentPage = 0;
 		int intStartNum = 0;
 		int intEndNum = 0;
 		try {
 			intStartNum = Integer.parseInt(startNum);
 			intEndNum = Integer.parseInt(endNum);
+			intCurrentPage = Integer.parseInt(currentPage);
 			
 		}catch (NumberFormatException e) {
 			
 		}
 		String selectCategoryJson = null;
 		try {
-			selectCategoryJson = getJson(intStartNum, intEndNum, FAQS, category);
+			selectCategoryJson = getJson(intStartNum, intEndNum, FAQS, category, intCurrentPage);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -64,7 +67,7 @@ public class BoardCategoryServlet extends HttpServlet {
 	 * @throws SQLException
 	 */
 	@SuppressWarnings("unchecked")
-	public String getJson(int startNum,int endNum,String FAQS,String category) throws SQLException {
+	public String getJson(int startNum,int endNum,String FAQS,String category,int currentPage) throws SQLException {
 		
 		BoardDAO bDAO = BoardDAO.getInstance();
 
@@ -112,6 +115,7 @@ public class BoardCategoryServlet extends HttpServlet {
 		jsonObj.put("FAQS", FAQS);
 		jsonObj.put("startNum", startNum);
 		jsonObj.put("endNum", endNum);
+		jsonObj.put("currentPage", currentPage);
 		
 		jsonObj.put("category", category);
 		
@@ -120,7 +124,6 @@ public class BoardCategoryServlet extends HttpServlet {
 			jsonObj.put("status", "FAIL");
 		}
 		
-		System.out.println(jsonObj);
 		return jsonObj.toJSONString();
 	}
 
