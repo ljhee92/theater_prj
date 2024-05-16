@@ -1,3 +1,4 @@
+<%@page import="admin.BoardUtil"%>
 <%@page import="java.util.List"%>
 <%@page import="admin.DAO.BoardDAO"%>
 <%@page import="admin.BoardVO"%>
@@ -156,22 +157,20 @@ window.location.href = "login.jsp?prevPage=notice.jsp";
 	                
 	                <div style="display: flex; justify-content: space-between; margin-top: 30px;">
 						<span style="display: flex; align-items: flex-end; margin: auto;">
-							<c:choose>
-							    <c:when test="${ param.field eq 'NA'}">
-							        <c:set var="link" value=""/>
-							    </c:when>
-							    <c:otherwise>
-							        <c:set var="link" value="&field=${ param.field }"/>
-							    </c:otherwise>
-							</c:choose>
-							<c:if test ="${ not empty param.keyword }">
-								<c:set var="link2" value="&keyword=${ param.keyword }"/>
-							</c:if>
-							<% for(int i = 1; i <= totalPage; i++) { %>
-								<input type="button" class="btn btn-primary btn-user btn-block"
-									style="width: 40px; height: 40px; margin-right: 10px; margin-bottom: 10px;"
-									value="<%= i %>" onclick="location.href='notice.jsp?currentPage=<%= i %>${ link }${ link2 }'">
-							<% } // end for %>
+						<%
+						String param = "";
+						
+						if(request.getParameter("field") != null && request.getParameter("keyword") != null) {
+							if(request.getParameter("field").equals("NA")) {
+								param = "&keyword=" + request.getParameter("keyword");
+							} else {
+								param = "&field=" + request.getParameter("field") + "&keyword=" + request.getParameter("keyword");
+							} // end if
+						} // end if
+						
+						String pageNation = BoardUtil.getInstance().pageNation("notice.jsp", param, totalPage, currentPage);
+						%>
+						<%= pageNation %>
 						</span>
 						<span style="align-self: flex-end;">
 							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 120px; margin-bottom: 10px;" value="글쓰기" id = "btnWrite">

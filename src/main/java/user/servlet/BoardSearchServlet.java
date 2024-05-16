@@ -32,11 +32,14 @@ public class BoardSearchServlet extends HttpServlet {
 		String FAQS = request.getParameter("FAQS");
 		String startNum = request.getParameter("startNum");
 		String endNum = request.getParameter("endNum");
+		String currentPage = request.getParameter("currentPage");
 		
 		int intStartNum = 0;
 		int intEndNum = 0;
+		int intCurrentPage = 0;
 		
 		try {
+			intCurrentPage = Integer.parseInt(currentPage);
 			intStartNum = Integer.parseInt(startNum);
 			intEndNum = Integer.parseInt(endNum);
 			
@@ -46,7 +49,7 @@ public class BoardSearchServlet extends HttpServlet {
 		
 		String selectCategoryJson = "";
 		try {
-			selectCategoryJson = getJson(intStartNum,intEndNum, FAQS, searchText);
+			selectCategoryJson = getJson(intStartNum,intEndNum, FAQS, searchText,intCurrentPage);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -55,7 +58,7 @@ public class BoardSearchServlet extends HttpServlet {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public String getJson(int startNum,int endNum,String FAQS,String searchText) throws SQLException {
+	public String getJson(int startNum,int endNum,String FAQS,String searchText, int currentPage) throws SQLException {
 		BoardDAO bDAO = BoardDAO.getInstance();
 		
 		List<BoardVO> boardList = null;
@@ -103,13 +106,12 @@ public class BoardSearchServlet extends HttpServlet {
 			jsonObj.put("Categorycount", totalSearchCount );
 			jsonObj.put("totalPage", totalPage);
 			jsonObj.put("searchText", searchText);
-			
+			jsonObj.put("currentPage", currentPage);
 			}catch(Exception e) {
 				e.printStackTrace();
 				jsonObj.put("status", "FAIL");
 			}
 			
-			System.out.println(jsonObj);
 			return jsonObj.toJSONString();
 		
 	}

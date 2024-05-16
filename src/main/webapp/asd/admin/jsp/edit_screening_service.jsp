@@ -29,7 +29,6 @@
                 .screeningDate(openDate)
                 .screeningRound(screeningRound)
                 .build();
-        System.out.println("업데이트 결과 ScreeningVO: " + resultScreeningVO.toString());
 
         try {
             // 상영 정보 업데이트

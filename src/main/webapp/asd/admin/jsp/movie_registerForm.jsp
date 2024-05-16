@@ -53,7 +53,6 @@
                     
                 };
 
-                alert(JSON.stringify(param));
 
                 $.ajax({
                     url: "movie_register_service.jsp",
@@ -138,7 +137,7 @@
                 </div>
         </div>
     </div>
-	<input type="button" id="addNewMovie" class="btn btn-info" value="상영 등록" />
+	<input type="button" id="addNewMovie" class="btn btn-info" value="영화 등록" />
 </body>
 
 </html>

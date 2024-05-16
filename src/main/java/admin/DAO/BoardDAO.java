@@ -407,6 +407,12 @@ public class BoardDAO {
 			pstmt.setInt(5, bVO.getBoardNumber());
 			
 			pstmt.executeUpdate();
+			//int result = pstmt.executeUpdate();
+			//if (result > 0) {
+	        //    System.out.println("Update successful");
+	        //} else {
+	        //    System.out.println("Update failed");
+	        //}
 		} finally {
 			dbCon.dbClose(null, pstmt, con);
 		} // end finally
@@ -567,8 +573,7 @@ public class BoardDAO {
 			} // end else
 			
 			selectBoard.append(") ")
-			.append("where rnum between ? and ? ")
-			.append("order by board_number desc");
+			.append("where rnum between ? and ? ");
 			
 			pstmt = con.prepareStatement(selectBoard.toString());
 			int bindIndex = 0;

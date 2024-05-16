@@ -30,7 +30,6 @@
         .screeningDate(screeningDate)
         .screeningRound(screeningRound)
         .build();
-	System.out.println("getScreeningCode.jsp : screeningVO : " + screeningVO.toString());
     // ScreeningDAO1 객체 생성
     ScreeningDAO1 screeningDAO = ScreeningDAO1.getInstance();
 
@@ -40,7 +39,6 @@
     try {
         // screeningCode 조회
         screeningCode = screeningDAO.selectScreeningCode(screeningVO);
-        System.out.println("getScreeningCode.jsp : 받아온 screeningCode : " +screeningCode);
     } catch (SQLException e) {
         // 오류 발생 시 예외 처리
         e.printStackTrace();

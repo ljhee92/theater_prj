@@ -26,7 +26,6 @@
                 screeningRound: $("#eScreeningRound").val(),
                 action: "update" // 업데이트 액션 지정
             };
-            alert(JSON.stringify(param));
     
             $.ajax({
                 url: "edit_screening_service.jsp",
@@ -126,7 +125,6 @@ $(function(){
             screeningRound: $("#screeningRound").val()
         };
         
-        alert(JSON.stringify(param));
 
         $.ajax({
             url: "edit_screening_service.jsp", // 수정 요청을 처리할 서블릿 주소
