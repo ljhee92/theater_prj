@@ -126,7 +126,7 @@ window.location.href = "login.jsp?prevPage=question.jsp";
 	                </div>
 	                </form>
 	                
-	                <div style = "height: 520px;">
+	                <div class="table-responsive" style="height: 585px;">
 		                <table class="table" style = "margin-top: 25px;">
 		                <thead>
 		                	<tr>
@@ -152,7 +152,7 @@ window.location.href = "login.jsp?prevPage=question.jsp";
 		                </table>
 	                </div>
 	                
-	                <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+	                <div style="display: flex; justify-content: space-between;">
 						<span style="display: flex; align-items: flex-end; margin: auto;">
 						<%
 						String param = "";
