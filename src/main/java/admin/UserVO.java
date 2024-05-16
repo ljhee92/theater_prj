@@ -22,7 +22,7 @@ public class UserVO {
 	private String userName;
 	private String userBirthday;
 	private String userPhone;
-	private Date userInputDate;
+	private String userInputDate;
 	private char userDeleteFlag;
 	
 }

@@ -4,7 +4,7 @@
 <%@page import="java.sql.SQLException"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    info = "명화관 관리자 공지사항" %>
+    info = "명화관 관리자 자주찾는질문" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!-- S 로그인 세션 확인  -->
 <%
@@ -24,7 +24,7 @@ window.location.href = "login.jsp?prevPage=question.jsp";
 <head>
 <meta charset="UTF-8">
 <title>명화관 관리자 페이지</title>
-<link rel = "icon" href = "http://localhost/movie_admin/favicon.ico">
+<link rel = "icon" href = "http://localhost/theater_prj/asd/favicon.ico">
 <!--bootstrap 시작-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -66,7 +66,6 @@ window.location.href = "login.jsp?prevPage=question.jsp";
                		
                 	// 1. 총 레코드의 수 얻기
                 	int totalCnt = bDAO.selectQuestionTotalCount(sVO);
-                	System.out.print(totalCnt);
                 	// 2. 한 화면에 보여줄 게시물의 수
                 	int pageScale = 10;
                 	
@@ -94,6 +93,9 @@ window.location.href = "login.jsp?prevPage=question.jsp";
                 	// 시작 번호와 끝 번호 사이의 게시물 불러오기
                 	List<BoardVO> boards = bDAO.selectQuestionBoard(sVO);
                 	pageContext.setAttribute("boards", boards);
+                	pageContext.setAttribute("totalCnt", totalCnt);
+        			pageContext.setAttribute("pageScale", pageScale);
+        			pageContext.setAttribute("currentPage", currentPage);
                 	
                 	// 카테고리명 얻기
                 	List<BoardVO> categories = bDAO.selectQuestionCategory();
@@ -135,9 +137,9 @@ window.location.href = "login.jsp?prevPage=question.jsp";
 		                	</tr>
 		                </thead>
 		                <tbody>
-		                	<c:forEach var="bVO" items="${ boards }" varStatus="i">
+		                	<c:forEach var="bVO" items="${ boards }" varStatus="j">
 		                	<tr>
-	                		<td><c:out value="${ bVO.boardNumber }"/></td>
+	                		<td><c:out value="${ totalCnt - (currentPage - 1) * pageScale - j.index }"/></td>
 	                		<td><c:out value="${ bVO.categoryName }"/></td>
 	                		<td><a href="questionDetail.jsp?num=${ bVO.boardNumber }&currentPage=${ empty param.currentPage ?1:param.currentPage }">
 	                			<c:out value="${ bVO.boardTitle }"/></a></td>
