@@ -48,7 +48,6 @@
                 searchType: $("#searchType").val(),
                 searchText: $("#searchText").val()
             };
-            alert(JSON.stringify(param));
 
             $.ajax({
                 url: "movie_service.jsp",
@@ -58,7 +57,6 @@
                 success: function(jsonArr) {
                     // 검색 결과를 테이블에 반영
                     updateTable(jsonArr);
-                    alert("searchButton:jsonArr response: " + JSON.stringify(jsonArr));
                 },
                 error: function(xhr) {
                     alert(xhr.statusText);
@@ -98,7 +96,6 @@
                     tableMovieCode: mCode,
                     action: "table"
                 };
-                alert(JSON.stringify(param));
 
                 $.ajax({
                     url: "edit_movie_service.jsp",
@@ -141,7 +138,6 @@
            
            
         function updateTable(jsonArr) {
-        	alert("updateTable 메서드 실행");
             // id="content"를 삭제하고
             $("#contentBoard").empty();
             // jsonArr를 반복하고, jsonObject을 parsing하여

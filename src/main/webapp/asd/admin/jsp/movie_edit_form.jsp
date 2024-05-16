@@ -32,7 +32,6 @@
                     movieScreeningStatus: $("#movie_status_edit").val(), // 상영상태
                     action: "update"
             };
-            alert(JSON.stringify(param));
     
             $.ajax({
                 url: "edit_movie_service.jsp",

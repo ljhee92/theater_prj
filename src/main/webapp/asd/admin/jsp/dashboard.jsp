@@ -1,3 +1,7 @@
+<%@page import="java.util.List"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="admin.DashboardDAO"%>
+<%@page import="admin.MovieReservationVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     info = "명화관 관리자 대시보드" %>
@@ -73,6 +77,24 @@
 
                     <!-- Content Row 1 -->
                     <div class="row">
+                    <%
+                            DashboardDAO dashboardDAO = DashboardDAO.getInstance();
+		                    int lastMonthTotalAudience = 0;
+		                    int currentMonthTotalAudience = 0;
+		                    int todayTotalAudience = 0;
+		                    int totalAudience = 0;
+                            
+                            try {
+                                lastMonthTotalAudience = dashboardDAO.selectLastMonthTotalAudience();
+                                currentMonthTotalAudience = dashboardDAO.selectCurrentMonthTotalAudience();
+                                todayTotalAudience = dashboardDAO.selectTodayTotalAudience();
+                                totalAudience = dashboardDAO.selectTotalAudience();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                            
+                            double ratio = ((double)currentMonthTotalAudience / lastMonthTotalAudience) * 100;
+                        %>
 
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -81,9 +103,9 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                지난달 총 관객수</div>
+                                                지난달 총 관람객수</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-												여긴 이제 쿼리 들어가야함
+												<%= lastMonthTotalAudience %>
 											</div>
                                         </div>
                                         <div class="col-auto">
@@ -101,8 +123,10 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                이번달 총 관객수</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                                이번달 총 관람객수</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <%= currentMonthTotalAudience %>
+											</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -121,8 +145,10 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                오늘 총 관객수</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                                오늘 총 관람객수</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <%= todayTotalAudience %>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -137,25 +163,29 @@
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">지난 달 대비
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">10%</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="10" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
+                                        <div class="row no-gutters align-items-center">
+										    <div class="col mr-2">
+										        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">지난 달 대비</div>
+										        <div class="row no-gutters align-items-center">
+										            <div class="col-auto">
+										                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+										                    <%= String.format("%.1f", ratio) + "%" %>
+										                </div>
+										            </div>
+										            <div class="col">
+										                <% double progressWidth = ((double) ratio / 100) * 100; %>
+										                <div class="progress progress-sm mr-2">
+										                    <div class="progress-bar bg-info" role="progressbar"
+										                        style="width: <%= progressWidth %>%" aria-valuenow="<%= ratio %>" aria-valuemin="0"
+										                        aria-valuemax="100"></div>
+										                </div>
+										            </div>
+										        </div>
+										    </div>
+										    <div class="col-auto">
+										        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+										    </div>
+										</div>
                                     </div>
                                 </div>
                             </div>
@@ -165,62 +195,105 @@
                     
                     <!-- Content Row 2 -->
                     <div class="row">
-
+					<%
+					 List<MovieReservationVO> ranking = dashboardDAO.getMovieReservationRankingLastMonth();
+					%>
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                지난달 예매순위</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						    <div class="card border-left-primary shadow h-100 py-2">
+						        <div class="card-body">
+						            <div class="row no-gutters align-items-center">
+						                <div class="col mr-2">
+						                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+						                        지난달 예매순위</div>
+						                    <div class="h6 mb-0 font-weight-bold text-gray-800">
+						                        <%
+						                        for (int i = 0; i < Math.min(3, ranking.size()); i++) {
+						                            MovieReservationVO reservation = ranking.get(i);
+						                        %>
+						                            <div>
+						                                <%= i+1 %>위 <%= reservation.getMovieTitle() %> <%= reservation.getReservationCount() %>건
+						                            </div>
+						                        <%
+						                        }
+						                        %>
+						                    </div>
+						                </div>
+						                <div class="col-auto">
+						                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+						                </div>
+						            </div>
+						        </div>
+						    </div>
+						</div>
 
                         <!-- Earnings (Monthly) Card Example -->
+                        <%
+					 List<MovieReservationVO> ranking2 = dashboardDAO.getMovieReservationRankingCurrentMonth();
+					%>
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                이번달 예매순위</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						    <div class="card border-left-primary shadow h-100 py-2">
+						        <div class="card-body">
+						            <div class="row no-gutters align-items-center">
+						                <div class="col mr-2">
+						                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+						                        이번달 예매순위</div>
+						                    <div class="h6 mb-0 font-weight-bold text-gray-800">
+						                        <%
+						                        for (int i = 0; i < Math.min(3, ranking2.size()); i++) {
+						                            MovieReservationVO reservation = ranking2.get(i);
+						                        %>
+						                            <div>
+						                                <%= i+1 %>위 <%= reservation.getMovieTitle() %> <%= reservation.getReservationCount() %>건
+						                            </div>
+						                        <%
+						                        }
+						                        %>
+						                    </div>
+						                </div>
+						                <div class="col-auto">
+						                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+						                </div>
+						            </div>
+						        </div>
+						    </div>
+						</div>
+
+
 
                         
 
                         <!-- Pending Requests Card Example -->
+                        <%
+					 List<MovieReservationVO> ranking3 = dashboardDAO.getMovieReservationRankingToday();
+					%>
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                오늘 예매순위</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						    <div class="card border-left-primary shadow h-100 py-2">
+						        <div class="card-body">
+						            <div class="row no-gutters align-items-center">
+						                <div class="col mr-2">
+						                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+						                        오늘 예매순위</div>
+						                    <div class="h6 mb-0 font-weight-bold text-gray-800">
+						                        <%
+						                        for (int i = 0; i < Math.min(3, ranking3.size()); i++) {
+						                            MovieReservationVO reservation = ranking3.get(i);
+						                        %>
+						                            <div>
+						                                 <%= i+1 %>위 <%= reservation.getMovieTitle() %> <%= reservation.getReservationCount() %>건
+						                            </div>
+						                        <%
+						                        }
+						                        %>
+						                    </div>
+						                </div>
+						                <div class="col-auto">
+						                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+						                </div>
+						            </div>
+						        </div>
+						    </div>
+						</div>
                         
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -230,7 +303,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">준비중입니다
                                             </div>
-                                            <div class="row no-gutters align-items-center">
+                                            <!-- <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
                                                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
                                                 </div>
@@ -241,7 +314,7 @@
                                                             aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -264,7 +337,9 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 방문한 인원 수</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <%=dashboardDAO.selectVisitant() %>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -282,7 +357,9 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 총 예매 수</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <%=totalAudience %>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -300,7 +377,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">준비중입니다
                                             </div>
-                                            <div class="row no-gutters align-items-center">
+                                            <!-- <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
                                                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
                                                 </div>
@@ -311,7 +388,7 @@
                                                             aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -329,7 +406,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 준비중입니다</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                            <!-- <div class="h5 mb-0 font-weight-bold text-gray-800">18</div> -->
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -350,7 +427,7 @@
 
     </div>
     <!-- End of Page Wrapper -->
-
+</div>
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.js"></script>

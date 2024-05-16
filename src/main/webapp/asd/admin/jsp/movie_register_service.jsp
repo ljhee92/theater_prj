@@ -55,7 +55,6 @@ try {
 
     // AdminMovieDAO 객체 생성
     AdminMovieDAO movieDAO = new AdminMovieDAO();
-    System.out.println("movieRegisterService : 작성된 resultMovieVO : " + resultMovieVO);
 
     try {
         // 영화 등록 메서드 호출

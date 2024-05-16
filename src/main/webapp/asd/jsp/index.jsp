@@ -1,3 +1,4 @@
+<%@page import="admin.DashboardDAO"%>
 <%@page import="admin.BoardVO"%>
 <%@page import="admin.DAO.BoardDAO"%>
 <%@page import="VO.MovieVO"%>
@@ -300,7 +301,8 @@
 						
 <%
  
- 
+ DashboardDAO dDAO = DashboardDAO.getInstance();
+dDAO.updateVisitant();
  MovieDAO mDAO = MovieDAO.getInstance();
  List<MovieVO> mVO = mDAO.selectMovieList();
  BoardDAO bDAO = BoardDAO.getInstance();
