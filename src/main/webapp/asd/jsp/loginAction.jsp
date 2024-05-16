@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>로그인 | 명화 그 이상의 감동. 띵화관</title>
 <link rel="icon" href="http://192.168.10.227/common/favicon.ico" />
 <!--bootstrap 시작-->
 <link

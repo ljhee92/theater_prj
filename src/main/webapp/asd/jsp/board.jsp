@@ -1,3 +1,4 @@
+<%@page import="user.DAO.BoardDetailDAO"%>
 <%@page import="java.io.Console"%> 
 <%@page import="oracle.net.aso.b"%> 
 <%@page import="oracle.net.aso.q"%> 
@@ -149,7 +150,7 @@
 			try {
 				currentPage = Integer.parseInt(tempPage);
 			} catch (NumberFormatException nfe) {
-
+				nfe.printStackTrace();
 			}
 		} //end if	
 		int startNum = currentPage * pageScale - pageScale + 1;
@@ -195,7 +196,7 @@
 							<input id="searchtext" type="text" class="c_input" title="검색어 입력"
 								placeholder="검색어를 입력해 주세요" value="" style="width: 275px;" />
 							<button type="button" class="round inblack" title="검색하기"
-								id="btn_search" onclick="searchContent(<%=startNum%>,<%=endNum%>,'<%=FAQS%>')">
+								id="btn_search" onclick="searchContent(<%=startNum%>,<%=endNum%>,'<%=FAQS%>',<%=currentPage%>)">
 								<span>검색하기</span>
 							</button>
 						</div>
@@ -222,7 +223,7 @@
 								%>
 								<li id="<%=category%>"><a href="javascript:void(0);"
 									style="font-size: 11px;"
-									onclick="selectCategory(<%=startNum%>,<%=endNum%>,'<%=FAQS%>','<%=category%>')">
+									onclick="selectCategory(<%=startNum%>,<%=endNum%>,'<%=FAQS%>','<%=category%>',<%=currentPage%>)">
 										<%=category%>
 								</a></li>
 								<%
@@ -246,18 +247,21 @@
 								</colgroup>
 								<thead>
 									<tr>
+										<th scope="col">번호</th>
 										<th scope="col">구분</th>
-										<th scope="col">등록일</th>
 										<th scope="col" class="tit" style="text-align: center">제목</th>
+										<th scope="col">등록일</th>
 										<th scope="col">조회수</th>
 									</tr>
 								</thead>
 								<tbody id="boardTable">
 									<c:forEach var="board" items="${list}">
 										<tr>
+											<td>${board.boardNumber}</td>
 											<td>${board.categoryName}</td>
+											<td id="title0"  style="text-align: center" class="txt"><a href="boardDetail.jsp?FAQS=<%=FAQS%>&boardNumber=${board.boardNumber}" 
+												onclick="addViews(${board.boardNumber})">${board.boardTitle }</a></td>
 											<td>${board.boardInputDate}</td>
-											<td id="title0"  style="text-align: center" class="txt"><a href="boardDetail.jsp?FAQS=<%=FAQS%>&boardNumber=${board.boardNumber}">${board.boardTitle }</a></td>
 											<td class="num">${board.boardViews}</td>
 										</tr>
 									</c:forEach>
@@ -276,7 +280,7 @@
 								%>
 
 							</ul>
-							<button class="btn-paging end" type="button" onclick="">끝</button>
+							<a href="board.jsp?FAQS=<%=FAQS%>&currentPage=<%=currentPage+1%>"><button class="btn-paging end" type="button" onclick="">끝</button></a>
 						</div>
 					</div>
 
@@ -309,16 +313,31 @@
 
 <script type="text/javascript">
 
+function addViews(boardNumber) {
+    $.ajax({
+        url: '/theater_prj/BoardViewServlet',
+        type: 'POST',
+        data: {
+            boardNumber: boardNumber
+        },
+        success: function(response) {
+        },
+        error: function(xhr) {
+            alert(xhr.status);
+        }
+
+    });
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////< BoardCategoryServlet ajax연결 >//////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 /*
     카테고리를 클릭했을 때 해당 카테고리의 게시물을 로드하는 함수
     */
-    function selectCategory(startNum, endNum ,FAQS,categoryId) {
-    	var textField = document.getElementById("searchtext");
-    	textField.value="";
-    	
+    function selectCategory(startNum, endNum ,FAQS,categoryId,currentPage) {
     	//카테고리 색상변경 함수 	
     	changColorCategory(categoryId);
     	
@@ -328,6 +347,7 @@
                 endNum: 10, // 종료 번호
                 FAQS: FAQS,
                 category: categoryId, // 카테고리 ID를 서버에 전달
+                currentPage: currentPage
             };
         $.ajax({
             type: 'POST',
@@ -396,6 +416,7 @@
 		var totalPage = object.totalPage;
 		var categoryId = object.category;
 		var FAQS = object.FAQS;
+		var currentPage = object.currentPage;
 		
 		var paginationList = document.createElement("ul");
 		    for (var i = 1; i <= totalPage; i++) {
@@ -412,13 +433,18 @@
 		    }
 		    // 페이지네이션 요소에 추가
 		    paging.appendChild(paginationList);
-
+			
 		    var endButton = document.createElement("button");
 		    endButton.classList.add("btn-paging", "end");
 		    endButton.type = "button";
 		    endButton.textContent = "끝";
+		    
+		    endButton.onclick = function () {
+		    	endButton.href="javascript:void(0);";
+		        var nextPage = currentPage + 1;
+		        selectPagingCategory(FAQS, categoryId, nextPage);
+		    };
 		    paging.appendChild(endButton);
-		
     }
 
     
@@ -507,18 +533,18 @@
 	검색어 검색후 해당 게시물 로드한함수
 	*/
 	
-	function searchContent(startNum,endNum,FAQS){
+	function searchContent(startNum,endNum,FAQS,currentPage){
 		var text = document.getElementById("searchtext").value;
 		if(text===""){
 			alert("검색어를 입력해 주십시오");
 			return;
 		}
-
 		var param={
 			startNum: 1,
 			endNum: 10,
 			text : text,
-			FAQS : FAQS
+			FAQS : FAQS,
+			currentPage : currentPage
 		}
 		
 		$.ajax({
@@ -530,6 +556,8 @@
 				var isEmpty = object.searchTextExists;
 				if(isEmpty){
 					alert("해당하는 제목이 없습니다.")
+					document.getElementById("searchtext").value = ""; // 검색어를 비웁니다.
+					document.getElementById("searchtext").focus(); //포커스주기
 					return;
 				}
 				
@@ -565,6 +593,8 @@
 		var totalPage = object.totalPage;
 		var FAQS = object.FAQS;
         var searchText = object.searchText;
+        var currentPage = object.currentPage;
+        
 		var paginationList = document.createElement("ul");
 		    for (var i = 1; i <= totalPage; i++) {
 		        var listItem = document.createElement("li");
@@ -586,7 +616,11 @@
 		    endButton.type = "button";
 		    endButton.textContent = "끝";
 		    // endButton.onclick에 필요한 동작을 추가하세요
-
+		    endButton.onclick = function () {
+		    endButton.href="javascript:void(0);";
+		       var nextPage = currentPage + 1;
+		       selectSearchPagingCategory(FAQS, searchText, nextPage);
+		    };
 		    paging.appendChild(endButton);
 		
     }
@@ -594,7 +628,6 @@
     검색후 클릭시 페이지네이션 비동기 처리
     */ 	 
 	function selectSearchPagingCategory(FAQS, searchText, pageNumber) {
-  		
 		var	startNum = (pageNumber - 1) * 10 + 1;
 		var	endNum = pageNumber * 10; 
   		
@@ -605,6 +638,7 @@
   	    	endNum: endNum,
   	        FAQS: FAQS,
   	     	text: searchText, 
+  	     	currentPage: pageNumber
   	    }
   	   
 		$.ajax({

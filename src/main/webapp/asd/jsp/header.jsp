@@ -11,7 +11,7 @@
 					<h1 onclick="">
 						<a href="index.jsp"><img
 							src="../logo.png"
-							alt="CGV" /></a><span>CULTUREPLEX</span>
+							alt="CGV" /></a><span style="font-weight: bold;">CULTUREPLEX</span>
 					</h1>
 					<ul class="memberInfo_wrap">
 

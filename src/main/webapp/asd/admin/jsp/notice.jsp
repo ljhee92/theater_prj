@@ -1,3 +1,4 @@
+<%@page import="admin.BoardUtil"%>
 <%@page import="java.util.List"%>
 <%@page import="admin.DAO.BoardDAO"%>
 <%@page import="admin.BoardVO"%>
@@ -96,6 +97,9 @@ window.location.href = "login.jsp?prevPage=notice.jsp";
                 	// 시작 번호와 끝 번호 사이의 게시물 불러오기
                 	List<BoardVO> boards = bDAO.selectNoticeBoard(sVO);
                 	pageContext.setAttribute("boards", boards);
+                	pageContext.setAttribute("totalCnt", totalCnt);
+        			pageContext.setAttribute("pageScale", pageScale);
+        			pageContext.setAttribute("currentPage", currentPage);
                 	
                 	// 카테고리명 얻기
                 	List<BoardVO> categories = bDAO.selectNoticeCategory();
@@ -113,9 +117,9 @@ window.location.href = "login.jsp?prevPage=notice.jsp";
 	                <div style = "display: flex;">
 	                	<select name="field" id="field" class = "form-control form-control-user" style = "width: 150px; margin-right: 20px;">
 	                		<option value = "NA">구분 선택</option>
-	                		<c:forEach var="bVO" items="${ categories }" varStatus="i">
-                			<option value = "${ bVO.categoryName }"${ param.field eq bVO.categoryName?" selected='selected'":"" }>
-                				<c:out value="${ bVO.categoryName }"/></option>
+	                		<c:forEach var="cVO" items="${ categories }" varStatus="i">
+                			<option value = "${ cVO.categoryName }"${ param.field eq cVO.categoryName?" selected='selected'":"" }>
+                				<c:out value="${ cVO.categoryName }"/></option>
 	                		</c:forEach>
 	                	</select>
 	                	<input type = "text" name="keyword" id="keyword" value="${ param.keyword }" class = "form-control form-control-user"
@@ -137,11 +141,11 @@ window.location.href = "login.jsp?prevPage=notice.jsp";
 		                	</tr>
 		                </thead>
 		                <tbody>
-		                	<c:forEach var="bVO" items="${ boards }" varStatus="i">
+		                	<c:forEach var="bVO" items="${ boards }" varStatus="j">
 		                	<tr>
-	                		<td><c:out value="${ bVO.boardNumber }"/></td>
+	                		<td><c:out value="${ totalCnt - (currentPage - 1) * pageScale - j.index }"/></td>
 	                		<td><c:out value="${ bVO.categoryName }"/></td>
-	                		<td><a href="noticeDetail.jsp?num=${ bVO.boardNumber }&currentPage=${ empty param.currentPage ?1:param.currentPage }">
+	                		<td><a href="noticeDetail.jsp?num=${ bVO.boardNumber }&currentPage=${ empty param.currentPage ? 1 : param.currentPage }">
 	                			<c:out value="${ bVO.boardTitle }"/></a></td>
 	                		<td><c:out value="${ bVO.boardDate }"/></td>
 	                		<td><c:out value="${ bVO.boardViews }"/></td>
@@ -153,22 +157,20 @@ window.location.href = "login.jsp?prevPage=notice.jsp";
 	                
 	                <div style="display: flex; justify-content: space-between; margin-top: 30px;">
 						<span style="display: flex; align-items: flex-end; margin: auto;">
-							<c:choose>
-							    <c:when test="${ param.field eq 'NA'}">
-							        <c:set var="link" value=""/>
-							    </c:when>
-							    <c:otherwise>
-							        <c:set var="link" value="&field=${ param.field }"/>
-							    </c:otherwise>
-							</c:choose>
-							<c:if test ="${ not empty param.keyword }">
-								<c:set var="link2" value="&keyword=${ param.keyword }"/>
-							</c:if>
-							<% for(int i = 1; i <= totalPage; i++) { %>
-								<input type="button" class="btn btn-primary btn-user btn-block"
-									style="width: 40px; height: 40px; margin-right: 10px; margin-bottom: 10px;"
-									value="<%= i %>" onclick="location.href='notice.jsp?currentPage=<%= i %>${ link }${ link2 }'">
-							<% } // end for %>
+						<%
+						String param = "";
+						
+						if(request.getParameter("field") != null && request.getParameter("keyword") != null) {
+							if(request.getParameter("field").equals("NA")) {
+								param = "&keyword=" + request.getParameter("keyword");
+							} else {
+								param = "&field=" + request.getParameter("field") + "&keyword=" + request.getParameter("keyword");
+							} // end if
+						} // end if
+						
+						String pageNation = BoardUtil.getInstance().pageNation("notice.jsp", param, totalPage, currentPage);
+						%>
+						<%= pageNation %>
 						</span>
 						<span style="align-self: flex-end;">
 							<input type="button" class="btn btn-primary btn-user btn-block" style="width: 120px; margin-bottom: 10px;" value="글쓰기" id = "btnWrite">
