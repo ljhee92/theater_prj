@@ -175,10 +175,14 @@ public class AdminReserveManageDAO {
 				seatMap.putIfAbsent(reservationNumber, new ArrayList<>());
 				seatMap.get(reservationNumber).add(rs.getString("seat_lownumber") + rs.getString("seat_colnumber"));
 
-				AdminReserveManageVO armVO = AdminReserveManageVO.builder().reservationNumber(reservationNumber)
-						.userId(rs.getString("user_id")).movieTitle(rs.getString("movie_title"))
-						.theaterName(rs.getString("theater_name")).theaterNumber(rs.getString("theater_number"))
-						.screeningDate(rs.getString("screening_date")).screeningTime(rs.getString("screening_time"))
+				AdminReserveManageVO armVO = AdminReserveManageVO.builder()
+						.reservationNumber(reservationNumber)
+						.userId(rs.getString("user_id"))
+						.movieTitle(rs.getString("movie_title"))
+						.theaterName(rs.getString("theater_name"))
+						.theaterNumber(rs.getString("theater_number"))
+						.screeningDate(rs.getString("screening_date"))
+						.screeningTime(rs.getString("screening_time"))
 						.build();
 
 				tempList.add(armVO);
