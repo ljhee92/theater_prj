@@ -51,7 +51,7 @@ public class BoardUtil {
 		
 		while(movePage <= endPage) {
 			if(movePage == currentPage) { // 현재 페이지에 대해서는 링크를 생성하지 않는다.
-				pageNation.append("<input type=\"button\" class=\"btn btn-primary focus btn-user btn-block\" ")
+				pageNation.append("<input type=\"button\" class=\"btn btn-primary hover btn-user btn-block\" ")
 						.append("style=\"width: 40px; height: 40px; margin-right: 10px; margin-bottom: 10px;\" ")
 						.append("value=\"").append(currentPage).append("\" onclick=\"#\">");
 			} else {
