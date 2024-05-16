@@ -86,7 +86,8 @@ window.location.href = "login.jsp?prevPage=noticeDetail.jsp";
 	                pageContext.setAttribute("selectedBVO", selectedBVO);
 	                %>
 	                
-	                <form name="frm" action="noticeDetailProcess.jsp" method="get">
+	                <form name="frm" action="noticeDetailProcess.jsp" method="post">
+	                <input type="hidden" name="hidden" value="${ param.currentPage }">
 	                <div style = "height: 610px;">
 	                	<div style = "display: flex; height: 50px;">
 	                		<label style = "width: 10%; height: 30px; text-align: center;">번호</label>
@@ -177,25 +178,24 @@ window.location.href = "login.jsp?prevPage=noticeDetail.jsp";
 			
 			function chkNull() {
 				let flagInputAll = true;
-				let arrNecessary = $(".necessary");
-				let arrLabel = ['제목', '내용'];
+
+				if(flagInputAll && $("[name='title']").val() == "") {
+					alert("제목은 필수 입력사항입니다.");
+					$("[name='title']").focus();
+					flagInputAll = false;
+					true;
+				} // end if
+
+				if(flagInputAll && $("#summernote").summernote('isEmpty')) {
+					alert("내용은 필수 입력사항입니다.");
+					$("#summernote").summernote({
+						focus:true
+					});
+					flagInputAll = false;
+					true;
+				} // end if
 				
-				$.each(arrNecessary, function(index, value) {
-					if($(value).val() == "") {
-						alert(arrLabel[index] + '은 필수 입력사항입니다.');
-						if(index == "제목") {
-							$(value).focus();
-						} else {
-							$(value).summernote({
-								focus: true
-							});
-						} // end else
-						flagInputAll = false;
-						return false;
-					} // end if
-				}); // each
-				
-				if(flagInputAll && $("#category").val()=='N/A') {
+				if(flagInputAll && $("[name='category']").val()=='N/A') {
 					alert('카테고리를 선택해주세요.');
 					flagInputAll = false;
 					return;
@@ -203,8 +203,6 @@ window.location.href = "login.jsp?prevPage=noticeDetail.jsp";
 				
 				if(flagInputAll) {
 					$("[name='frm']").submit();
-					alert("글수정 성공");
-					location.href="notice.jsp?currentPage=${ param.currentPage }";
 				}; // end if
 			} // chkNull
 		}); // ready

@@ -1,3 +1,4 @@
+<%@page import="java.sql.SQLException"%>
 <%@page import="admin.DAO.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
@@ -19,7 +20,38 @@
 <style type = "text/css">
 	
 </style>
+<%
+request.setCharacterEncoding("UTF-8");
+%>
+<jsp:useBean id="bVO" class="admin.BoardVO" scope="page"/>
+<jsp:setProperty property="*" name="bVO"/>
+
 <script type = "text/javascript">
+
+	<%
+	try {
+		// 넘어온 데이터 VO에 넣기
+		bVO.setBoardNumber(Integer.parseInt(request.getParameter("number")));
+		bVO.setBoardTitle(request.getParameter("title"));
+		bVO.setBoardContent(request.getParameter("textarea"));
+		bVO.setCategoryNumber(Integer.parseInt(request.getParameter("category")));
+		bVO.setAdminId(session.getAttribute("adminId").toString());
+		
+		BoardDAO bDAO = BoardDAO.getInstance();
+		bDAO.insertQuestion(bVO);
+	%>
+		alert("글쓰기 성공");
+		location.href = "question.jsp";
+	<%
+	} catch (SQLException se) {
+		se.printStackTrace();
+	%>
+		alert("죄송합니다. 잠시 후 다시 시도해주시기 바랍니다.");
+		location.href = "question.jsp";
+	<%
+	} // end catch
+	%>
+
 	$(function() {
 
 	}); // ready
@@ -27,32 +59,6 @@
 </head>
 <body>
 <div>
-	<%
-	request.setCharacterEncoding("UTF-8");
-	%>
-	<jsp:useBean id="bVO" class="admin.BoardVO" scope="page"/>
-	<jsp:setProperty property="*" name="bVO"/>
-	
-	<c:catch var="e">
-	<%
-	// 넘어온 데이터 VO에 넣기
-	bVO.setBoardNumber(Integer.parseInt(request.getParameter("number")));
-	bVO.setBoardTitle(request.getParameter("title"));
-	bVO.setBoardContent(request.getParameter("textarea"));
-	bVO.setCategoryNumber(Integer.parseInt(request.getParameter("category")));
-	bVO.setAdminId(session.getAttribute("adminId").toString());
-	
-	BoardDAO bDAO = BoardDAO.getInstance();
-	bDAO.insertQuestion(bVO);
-	response.sendRedirect("question.jsp");
-	%>
-	</c:catch>
-	<c:if test="${ not empty e }">
-		alert("죄송합니다. 잠시 후 다시 시도해주시기 바랍니다.");
-		<%
-		response.sendRedirect("question.jsp");
-		%>
-	</c:if>
 </div>
 </body>
 </html>

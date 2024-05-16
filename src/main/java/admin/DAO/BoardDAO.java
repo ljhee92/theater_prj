@@ -407,6 +407,12 @@ public class BoardDAO {
 			pstmt.setInt(5, bVO.getBoardNumber());
 			
 			pstmt.executeUpdate();
+			//int result = pstmt.executeUpdate();
+			//if (result > 0) {
+	        //    System.out.println("Update successful");
+	        //} else {
+	        //    System.out.println("Update failed");
+	        //}
 		} finally {
 			dbCon.dbClose(null, pstmt, con);
 		} // end finally
