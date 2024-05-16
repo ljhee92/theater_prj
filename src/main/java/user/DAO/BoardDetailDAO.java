@@ -10,25 +10,24 @@ import util.DbConnection;
 
 public class BoardDetailDAO {
 	private static BoardDetailDAO bdDAO;
-	
+
 	private BoardDetailDAO() {
-		
+
 	}
-	
+
 	public static BoardDetailDAO getInstance() {
-		if(bdDAO == null) {
+		if (bdDAO == null) {
 			bdDAO = new BoardDetailDAO();
 		}
 		return bdDAO;
 	}
-	
-	
-	public BoardVO selectBoardInfo(String FAQS, int boardNumber, int num ) throws SQLException {
+
+	public BoardVO selectBoardInfo(String FAQS, int boardNumber, int num) throws SQLException {
 		DbConnection dbcon = DbConnection.getInstance();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		BoardVO bVO = null;
 		try {
 			// 1. 데이터베이스 접속 정보
@@ -40,11 +39,10 @@ public class BoardDetailDAO {
 
 			// 3. SQL 쿼리 준비
 			StringBuilder sbQUery = new StringBuilder();
-	        sbQUery
-	        .append("SELECT c.CATEGORY_NAME, b.BOARD_NUMBER, b.BOARD_TITLE, b.BOARD_CONTENT, ")
-	        .append(" b.BOARD_INPUT_DATE, b.BOARD_VIEWS, b.ADMIN_ID FROM BOARD b ")
-	        .append("JOIN CATEGORY c on b.CATEGORY_NUMBER = c.CATEGORY_NUMBER ")
-	        .append("WHERE  c.CATEGORY_TYPE_FLAG = ? AND b.BOARD_NUMBER = ? + ?");
+			sbQUery.append("SELECT c.CATEGORY_NAME, b.BOARD_NUMBER, b.BOARD_TITLE, b.BOARD_CONTENT, ")
+					.append(" b.BOARD_INPUT_DATE, b.BOARD_VIEWS, b.ADMIN_ID FROM BOARD b ")
+					.append("JOIN CATEGORY c on b.CATEGORY_NUMBER = c.CATEGORY_NUMBER ")
+					.append("WHERE  c.CATEGORY_TYPE_FLAG = ? AND b.BOARD_NUMBER = ? + ?");
 			String selectQuery = sbQUery.toString();
 			pstmt = con.prepareStatement(selectQuery);
 			pstmt.setString(1, FAQS);
@@ -53,17 +51,12 @@ public class BoardDetailDAO {
 
 			// 4. 쿼리 실행 및 결과 처리
 			rs = pstmt.executeQuery();
-		
+
 			if (rs.next()) {
-				bVO = BoardVO.builder()
-						.categoryName(rs.getString("CATEGORY_NAME"))
-						.boardNumber(rs.getString("BOARD_NUMBER"))
-						.boardTitle(rs.getString("BOARD_TITLE"))
-						.boardContent(rs.getString("BOARD_CONTENT"))
-						.boardInputDate(rs.getDate("BOARD_INPUT_DATE"))
-						.boardViews(rs.getInt("BOARD_VIEWS"))
-						.adminId(rs.getString("ADMIN_ID"))
-						.build();
+				bVO = BoardVO.builder().categoryName(rs.getString("CATEGORY_NAME"))
+						.boardNumber(rs.getString("BOARD_NUMBER")).boardTitle(rs.getString("BOARD_TITLE"))
+						.boardContent(rs.getString("BOARD_CONTENT")).boardInputDate(rs.getDate("BOARD_INPUT_DATE"))
+						.boardViews(rs.getInt("BOARD_VIEWS")).adminId(rs.getString("ADMIN_ID")).build();
 			}
 		} finally {
 			// 6. 리소스 해제
@@ -71,5 +64,29 @@ public class BoardDetailDAO {
 		}
 
 		return bVO;
+	}
+
+	public void updateViews(int boardNumber) throws SQLException {
+		DbConnection dbcon = DbConnection.getInstance();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			// 1. 데이터베이스 접속 정보
+			String id = "son";
+			String pass = "jimin";
+
+			// 2. 데이터베이스 연결
+			con = dbcon.getConnection(id, pass);
+
+			// 3. SQL 쿼리 준비
+			String selectQuery ="UPDATE BOARD SET BOARD_VIEWS = BOARD_VIEWS + 1 WHERE BOARD_NUMBER = ? ";
+			pstmt = con.prepareStatement(selectQuery);
+			pstmt.setInt(1, boardNumber);
+			pstmt.executeUpdate();
+			
+		}finally {
+			dbcon.dbClose(null, pstmt, con);
+		}
 	}
 }

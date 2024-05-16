@@ -129,11 +129,7 @@
 <!--jQuery CDN ��-->
 <style type="text/css">
 </style>
-<script type="text/javascript">
-    $(function() {
-	
-    }); // ready
-</script>
+
 <link rel="stylesheet" media="all" type="text/css" href="http://img.cgv.co.kr/R2014/css/customer.css" />
 
 </head>
@@ -148,6 +144,7 @@
 		<%
 		String FAQS = request.getParameter("FAQS");
 		String bdNumber = request.getParameter("boardNumber");
+		int intBdNumber = Integer.parseInt(bdNumber);
 		
 		BoardDetailDAO bdDAO = BoardDetailDAO.getInstance();
 		
@@ -165,25 +162,17 @@
 		
 		int intBoardNumber = Integer.parseInt(bdNumber);
 		
-		// 현재
+		// board상세 조회 
 		BoardVO bVO = bdDAO.selectBoardInfo(FAQS, intBoardNumber, 0);
-		// 이전
-		BoardVO prevbVO = bdDAO.selectBoardInfo(FAQS, intBoardNumber, -1);
-		// 다음
-		BoardVO newtbVO = bdDAO.selectBoardInfo(FAQS, intBoardNumber, 1);
-		
+		// 조회수 1증가 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
-		String currentCategoryName = bVO.getCategoryName();
-		String currentBoardNumber = bVO.getBoardNumber();
-		String currentBoardTitle = bVO.getBoardTitle();
-		String currentBoardContent = bVO.getBoardContent();
-		String currentInputDate = sdf.format(bVO.getBoardInputDate());
-		String currentAdminId = bVO.getAdminId();
-		int currentBoardViews = bVO.getBoardViews();
+
 	
-			
+		//pageContext 에 bVO 등록
+		pageContext.setAttribute("bVO", bVO);
 		%>
+		
+
 		<!-- BoardVO 빈에 등록 -->
 		
 		<!-- Contaniner -->
@@ -216,14 +205,14 @@
 							</div>
 							<div class="board_view_area">
 								<ul class="top_title_faq">
-									<li class="title"><%=currentBoardTitle %></li>
+									<li class="title">${bVO.boardTitle }</li>
 									<li class="stit_area"><span>등록일<em
-											class="regist_day"><%=currentInputDate%></em></span> <span
-										class="check_tit_area">조회수<em class="check_num"><%=currentBoardViews%></em></span>
+											class="regist_day">${bVO.boardInputDate}</em></span> <span
+										class="check_tit_area">조회수<em class="check_num">${bVO.boardViews}</em></span>
 									</li>
 								</ul>
 								<div class="view_area">
-									<p><%=currentBoardContent%></p>
+									<p>${bVO.boardContent}</p>
 								</div>
 								<div class="customer_btn">
 									<button type="button" class="round inblack" id="btn_list">
@@ -263,4 +252,13 @@
 
 	</div>
 </body>
+		<!-- 목록으로 가는 함수 -->
+		<script type="text/javascript">
+   		 $(function() {
+		$("#btn_list").click(function(){
+			var FAQS = "<%=FAQS%>";
+			location.href="board.jsp?FAQS="+FAQS;
+		})
+    }); // ready
+</script>
 </html>
