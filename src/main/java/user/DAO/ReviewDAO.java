@@ -208,12 +208,15 @@ public class ReviewDAO {
 
 			//4. 쿼리문 생성 객체 얻기(Dynamic Query)
 			StringBuilder selectReview = new StringBuilder();
-			selectReview.append("	INSERT INTO review (review_number, reservation_number, review_content,	")
-					.append("	review_score, review_input_date, movie_code)	")
-					.append("	VALUES (review_sequence.nextval, ?, ?, ?, TO_CHAR(sysdate, 'YYYY-MM-DD'), ?");
+			selectReview.append("INSERT INTO review (review_number, reservation_number, review_content, review_score, movie_code) ")
+		    .append("VALUES (review_sequence.nextval, ?, ?, ?, ?)");
 
 			pstmt = con.prepareStatement(selectReview.toString());
 
+			
+			
+			
+			
 			//5. 바인드 변수에 값 설정
 			pstmt.setString(1, rVO.getReservationNumber());
 			pstmt.setString(2, rVO.getReviewContent());
@@ -232,12 +235,14 @@ public class ReviewDAO {
 	
 	
 	///////////////////////////////////리뷰 수정////////////////////////////////// 
-	public int modifyReview(ReviewVO rVO) throws SQLException {
+	public boolean modifyReview(ReviewVO rVO) throws SQLException {
 		int cnt = 0;
-
+		boolean result = false;
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+		
+
+
 
 		DbConnection dbCon = DbConnection.getInstance();
 
@@ -251,34 +256,40 @@ public class ReviewDAO {
 			con = dbCon.getConnection(id, pass);
 
 			//4. 쿼리문 생성 객체 얻기(Dynamic Query)
-			StringBuilder selectReview = new StringBuilder();
-			selectReview.append("	UPDATE review	")
+			StringBuilder modifyReview = new StringBuilder();
+			modifyReview.append("	UPDATE review	")
 					.append("	SET review_content = ?, review_score = ?,	")
-					.append("	review_input_date = TO_CHAR(sysdate, 'YYYY-MM-DD')	")
-					.append("	WHERE reservation_number = ?	");
+					.append("	review_input_date = TO_DATE(sysdate, 'YYYY-MM-DD')	")
+					.append("	WHERE REVIEW_NUMBER = ?	");
 
-			pstmt = con.prepareStatement(selectReview.toString());
+			pstmt = con.prepareStatement(modifyReview.toString());
 
 			//5. 바인드 변수에 값 설정
 			pstmt.setString(1, rVO.getReviewContent());
 			pstmt.setInt(2, rVO.getReviewScore());
-			pstmt.setString(3, rVO.getReservationNumber());
+			pstmt.setInt(3, rVO.getReviewNumber());
 			
 			//6. 쿼리문 수행 후 결과 얻기
 			cnt = pstmt.executeUpdate();
+			if(cnt==1) {
+				result = true;
+				
+			}
 
 		} finally {
 			//7. 연결 끊기
-			dbCon.dbClose(rs, pstmt, con);
+			dbCon.dbClose(null, pstmt, con);
 		} // end finally
-		return cnt;
+		
+
+		return result;
 	}// modifyReview
 	
 	
 	///////////////////////////////////리뷰 삭제////////////////////////////////// 
-	public int deleteReview(String reservationNumber) throws SQLException {
+	public boolean deleteReview(int reviewNumber) throws SQLException {
 		int cnt = 0;
-
+		boolean result = false;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -295,21 +306,25 @@ public class ReviewDAO {
 			con = dbCon.getConnection(id, pass);
 
 			//4. 쿼리문 생성 객체 얻기(Dynamic Query)
-			String deleteReview = "delete from review where reservation_number=?";
+			String deleteReview = "delete from review where REVIEW_NUMBER=?";
 
 			pstmt = con.prepareStatement(deleteReview);
 			
 			//5. 바인드 변수에 값 설정
-			pstmt.setString(1, reservationNumber);
+			pstmt.setInt(1, reviewNumber);
 
 			//6. 쿼리문 수행 후 결과 얻기
 			cnt = pstmt.executeUpdate();
+			
+			if(cnt == 1) {
+				result = true;
+			}
 
 		} finally {
 			//7. 연결 끊기
 			dbCon.dbClose(rs, pstmt, con);
 		} // end finally
-		return cnt;
+		return result;
 	}// deleteReview
 	
 }//class

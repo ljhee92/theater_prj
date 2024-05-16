@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import user.DAO.UserReviewDAO;
 import user.VO.ReviewVO;
 
-
+/**
+ * Servlet implementation class SelectReviewDetailServlet
+ */
 @WebServlet("/SelectReviewDetailServlet")
 public class SelectReviewDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -51,6 +53,7 @@ public class SelectReviewDetailServlet extends HttpServlet {
                 result.append("true,");
                 result.append("\"result\":[");
                 for (int i = 0; i < rVOList.size(); i++) {
+
                     result.append("{");
                     result.append("\"reservationNumber\": \"" + rVOList.get(i).getReservationNumber() + "\",");
                     result.append("\"movieCode\": \"" + rVOList.get(i).getMovieCode() + "\",");
@@ -62,7 +65,7 @@ public class SelectReviewDetailServlet extends HttpServlet {
                     result.append("\"screeningTime\": \"" + rVOList.get(i).getScreeningTime() + "\",");
                     result.append("\"reviewNumber\": \"" + rVOList.get(i).getReviewNumber() + "\",");
                     result.append("\"reviewScore\": \"" + rVOList.get(i).getReviewScore()+ "\",");
-                    result.append("\"reviewContent\": \"" + rVOList.get(i).getReviewContent() + "\"");
+                    result.append("\"reviewContent\": \"" + rVOList.get(i).getReviewContent()+ "\"");
                     result.append("}");
                     if (i < rVOList.size() - 1) {
                         result.append(",");

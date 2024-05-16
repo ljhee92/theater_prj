@@ -2,7 +2,7 @@ package user.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import user.DAO.UserReviewDAO;
+import user.DAO.ReviewDAO;
+
 import user.VO.ReviewVO;
 
 
@@ -20,7 +21,7 @@ public class InsertReviewServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	System.out.println("서블릿 입장");
+
         request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
         
@@ -29,7 +30,7 @@ public class InsertReviewServlet extends HttpServlet {
         int reviewScore = Integer.parseInt(request.getParameter("starScore"));
         String movieCode = request.getParameter("movieCode");
         
-        System.out.println("reservationNumber : " + reservationNumber+ "revieContent : "+ reviewContent+"reviewScore : "+ reviewScore + "movieCode : " + movieCode);
+       
         
         
         ReviewVO rVO = ReviewVO.builder()
@@ -60,43 +61,24 @@ public class InsertReviewServlet extends HttpServlet {
 
     }
 
-    public boolean getJSON(ReviewVO rVO) throws SQLException {
+    public String getJSON(ReviewVO rVO) throws SQLException {
         StringBuilder result = new StringBuilder("");
         result.append("{\"success\":");
-        UserReviewDAO urDAO = UserReviewDAO.getInstance();
+        ReviewDAO rDAO = ReviewDAO.getInstance();
         try {
-            List<ReviewVO> rVOList = urDAO.selectReview(userId);
-            if (rVOList.isEmpty()) {
+            int cnt = rDAO.insertReview(rVO);
+            if (cnt!=1) {
                 result.append("false}");
             } else {
-                result.append("true,");
-                result.append("\"result\":[");
-                for (int i = 0; i < rVOList.size(); i++) {
-                    result.append("{");
-                    result.append("\"reservationNumber\": \"" + rVOList.get(i).getReservationNumber() + "\",");
-                    result.append("\"movieCode\": \"" + rVOList.get(i).getMovieCode() + "\",");
-                    result.append("\"movieTitle\": \"" + rVOList.get(i).getMovieTitle() + "\",");
-                    result.append("\"moviePosterPath\": \"" + rVOList.get(i).getMoviePosterPath() + "\",");
-                    result.append("\"theaterName\": \"" + rVOList.get(i).getTheaterName() + "\",");
-                    result.append("\"theaterNumber\": \"" + rVOList.get(i).getTheaterNumber() + "\",");
-                    result.append("\"screeningDate\": \"" + rVOList.get(i).getScreeningDate() + "\",");
-                    result.append("\"screeningTime\": \"" + rVOList.get(i).getScreeningTime() + "\",");
-                    result.append("\"reviewNumber\": \"" + rVOList.get(i).getReviewNumber() + "\",");
-                    result.append("\"reviewScore\": \"" + rVOList.get(i).getReviewScore()+ "\",");
-                    result.append("\"reviewContent\": \"" + rVOList.get(i).getReviewContent() + "\"");
-                    result.append("}");
-                    if (i < rVOList.size() - 1) {
-                        result.append(",");
-                    }
-                }
-                result.append("]}");
+                result.append("true}");
+
             }
         } catch (SQLException e) {
             // 예외 처리
             e.printStackTrace();
             result.append("false}");
         }
-     
+
         return result.toString();
     }
 }

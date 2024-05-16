@@ -52,6 +52,13 @@ public class SelectReviewServlet extends HttpServlet {
                 result.append("true,");
                 result.append("\"result\":[");
                 for (int i = 0; i < rVOList.size(); i++) {
+                	
+                	String reviewContent = rVOList.get(i).getReviewContent();
+                	if (reviewContent != null) {
+                		reviewContent = reviewContent.replace("\n", " "); // Replace newline characters with escaped characters
+                        reviewContent = reviewContent.replace("\r", " "); // Replace carriage return characters with escaped characters
+                	}
+                	
                     result.append("{");
                     result.append("\"reservationNumber\": \"" + rVOList.get(i).getReservationNumber() + "\",");
                     result.append("\"movieCode\": \"" + rVOList.get(i).getMovieCode() + "\",");
@@ -63,7 +70,8 @@ public class SelectReviewServlet extends HttpServlet {
                     result.append("\"screeningTime\": \"" + rVOList.get(i).getScreeningTime() + "\",");
                     result.append("\"reviewNumber\": \"" + rVOList.get(i).getReviewNumber() + "\",");
                     result.append("\"reviewScore\": \"" + rVOList.get(i).getReviewScore()+ "\",");
-                    result.append("\"reviewContent\": \"" + rVOList.get(i).getReviewContent() + "\"");
+                    result.append("\"reviewContent\":\"" + reviewContent + "\",");
+                    result.append("\"reviewInputDate\": \"" + rVOList.get(i).getReviewInputDate() + "\"");
                     result.append("}");
                     if (i < rVOList.size() - 1) {
                         result.append(",");
@@ -77,6 +85,7 @@ public class SelectReviewServlet extends HttpServlet {
             result.append("false}");
         }
      
+
         return result.toString();
     }
 }
