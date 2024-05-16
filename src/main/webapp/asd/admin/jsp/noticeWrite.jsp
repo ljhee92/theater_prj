@@ -200,7 +200,6 @@ window.location.href = "login.jsp?prevPage=noticeWrite.jsp";
 			
 			if(flagInputAll) {
 				$("[name='frm']").submit();
-				alert("글쓰기 성공");
 			}; // end if
 		} // chkNull
 	</script>
