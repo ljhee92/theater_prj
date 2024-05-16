@@ -23,14 +23,13 @@ $(function(){
 	    		screeningRound: $("#screeningRound").val()
 	    };
 	    
-	    alert(JSON.stringify(param));
 	
 	    $.ajax({
 	        url: "screening_register_service.jsp",
 	        type: "post",
 	        data: param,
 	        success: function(response) {
-	            alert(response);
+	            alert("상영 저장 성공");
 	        },
 	        error: function(xhr, status, error) {
 	            alert("오류 발생: " + error);

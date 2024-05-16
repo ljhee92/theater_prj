@@ -89,7 +89,6 @@
 	                month: $("#monthDropdown").val(),
 	                day: $("#dayDropdown").val()
             };
-            alert(JSON.stringify(param));
 
             $.ajax({
                 url: "screening_service.jsp",
@@ -99,7 +98,6 @@
                 success: function(jsonArr) {
                     // 검색 결과를 테이블에 반영
                     updateTable(jsonArr);
-                    alert("searchButton:jsonArr response: " + JSON.stringify(jsonArr));
                 },
                 error: function(xhr) {
                     alert(xhr.statusText);
@@ -151,8 +149,6 @@
            
            
         function updateTable(jsonArr) {
-        	alert("update table 메서드");
-        	alert(JSON.stringify(jsonArr));
             // id="content"를 삭제하고
             $("#contentBoard").empty();
             // jsonArr를 반복하고, jsonObject을 parsing하여
