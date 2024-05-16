@@ -26,6 +26,7 @@ window.location.href = "login.jsp?prevPage=notice.jsp";
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>명화관 관리자 페이지</title>
 <link rel = "icon" href = "http://localhost/theater_prj/asd/favicon.ico">
 <!--bootstrap 시작-->
@@ -129,7 +130,7 @@ window.location.href = "login.jsp?prevPage=notice.jsp";
 	                </div>
 	                </form>
 	                
-	                <div style = "height: 520px;">
+	                <div class="table-responsive" style="height: 585px;">
 		                <table class="table" style = "margin-top: 25px;">
 		                <thead>
 		                	<tr>
@@ -155,7 +156,7 @@ window.location.href = "login.jsp?prevPage=notice.jsp";
 		                </table>
 	                </div>
 	                
-	                <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+	                <div style="display: flex; justify-content: space-between;">
 						<span style="display: flex; align-items: flex-end; margin: auto;">
 						<%
 						String param = "";
