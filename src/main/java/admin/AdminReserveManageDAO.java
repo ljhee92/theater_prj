@@ -96,10 +96,10 @@ public class AdminReserveManageDAO {
 		return list;
 	}// selectAllReserve
 	
-    
-    ////////////////////////조건에 맞는 예매리스트를 가져오는 메소드///////////////////////
-    public List<AdminReserveManageVO> searchReserve(String theater, String screeningRoom, String date, String reserveNum) throws SQLException {
-    	List<AdminReserveManageVO> list = new ArrayList<AdminReserveManageVO>();
+	/////////////////////////////////////////////////////////////조건에 따라 검색//////////////////////////////////////////////////////////////////
+	// Case 1: reservationNumber가 있는 경우
+	public List<AdminReserveManageVO> searchReserve(String theater, String screeningRoom, String date, String reserveNum) throws SQLException {
+	    List<AdminReserveManageVO> list = new ArrayList<AdminReserveManageVO>();
 	    DbConnection dbCon = DbConnection.getInstance();
 
 	    Connection con = null;
@@ -112,30 +112,34 @@ public class AdminReserveManageDAO {
 	        con = dbCon.getConnection(id, pass);
 	        
 	        // 검색 조건에 따라 동적으로 쿼리를 생성하여 실행
-	        String selectReserve = "SELECT rv.reservation_number, rv.user_id, m.movie_title,"
-	        		+ "s.theater_name, s.theater_number,"
-	        		+ "s.screening_date, st.screening_time,"
-	        		+ "rs.seat_lownumber, rs.seat_colnumber"
-	        		+ "FROM reservation"
-	        		+ "JOIN screening s ON rv.screening_code = s.screening_code"
-	        		+ "JOIN movie m ON s.movie_code = m.movie_code"
-	        		+ "JOIN screening_time st ON s.screening_round = st.screening_round"
-	        		+ "JOIN reserved_seat rs ON rv.reservation_number = rs.reservation_number"
-	                + "WHERE 1=1";
+	        String selectReserve = "SELECT rv.reservation_number, rv.user_id, m.movie_title, "
+	                + "s.theater_name, s.theater_number, s.screening_date, "
+	                + "st.screening_time, rs.seat_lownumber, rs.seat_colnumber "
+	                + "FROM reservation rv "
+	                + "JOIN screening s ON rv.screening_code = s.screening_code "
+	                + "JOIN movie m ON s.movie_code = m.movie_code "
+	                + "JOIN screening_time st ON s.screening_round = st.screening_round "
+	                + "JOIN reserved_seat rs ON rv.reservation_number = rs.reservation_number "
+	                + "WHERE 1=1 ";
 
 	        // theater 조건 추가
 	        if (theater != null && !theater.isEmpty()) {
-	        	selectReserve += " AND s.theater_name = ?";
+	            selectReserve += "AND s.theater_name = ? ";
 	        }
 
 	        // screeningRoom 조건 추가
 	        if (screeningRoom != null && !screeningRoom.isEmpty()) {
-	        	selectReserve += " AND s.theater_number = ?";
+	            selectReserve += "AND s.theater_number = ? ";
 	        }
 
 	        // year, month, day 조건 추가
 	        if (date != null && !date.isEmpty()) {
-	        	selectReserve += " AND s.screening_date = ?";
+	            selectReserve += "AND s.screening_date = ? ";
+	        }
+	        
+	        // reserveNum 조건 추가
+	        if (reserveNum != null && !reserveNum.isEmpty()) {
+	            selectReserve += "AND INSTR(rv.reservation_number, ?) > 0 ";
 	        }
 
 	        pstmt = con.prepareStatement(selectReserve);
@@ -151,49 +155,347 @@ public class AdminReserveManageDAO {
 	        if (date != null && !date.isEmpty()) {
 	            pstmt.setString(parameterIndex++, date);
 	        }
+	        if (reserveNum != null && !reserveNum.isEmpty()) {
+	            pstmt.setString(parameterIndex++, reserveNum);
+	        }
 
 	        rs = pstmt.executeQuery();
 
-			// Map to store the total seat count and seat numbers per reservation
-			Map<String, List<String>> seatMap = new HashMap<>();
-			List<AdminReserveManageVO> tempList = new ArrayList<>();
+	        while (rs.next()) {
+	            String reservationNumber = rs.getString("reservation_number");
+	            String userId = rs.getString("user_id");
+	            String movieTitle = rs.getString("movie_title");
+	            String theaterName = rs.getString("theater_name");
+	            String theaterNumber = rs.getString("theater_number");
+	            String screeningDate = rs.getString("screening_date");
+	            String screeningTime = rs.getString("screening_time");
+	            String seatInfo = rs.getString("seat_lownumber") + rs.getString("seat_colnumber");
 
-			while (rs.next()) {
-				String reservationNumber = rs.getString("reservation_number");
+	            // 이미 존재하는 예약번호인지 확인
+	            boolean exists = false;
+	            for (AdminReserveManageVO vo : list) {
+	                if (vo.getReservationNumber().equals(reservationNumber)) {
+	                    vo.setSeatNumber(vo.getSeatNumber() + ", " + seatInfo); // 기존의 좌석 정보에 추가
+	                    vo.setTotalPeopleNumber(vo.getTotalPeopleNumber() + 1); // 총 인원 수 증가
+	                    exists = true;
+	                    break;
+	                }
+	            }
 
-				// 좌석 정보 누적
-				seatMap.putIfAbsent(reservationNumber, new ArrayList<>());
-				seatMap.get(reservationNumber).add(rs.getString("seat_lownumber") + rs.getString("seat_colnumber"));
+	            // 존재하지 않는 경우 새로운 VO를 생성하고 리스트에 추가
+	            if (!exists) {
+	                AdminReserveManageVO armVO = new AdminReserveManageVO();
+	                armVO.setReservationNumber(reservationNumber);
+	                armVO.setUserId(userId);
+	                armVO.setMovieTitle(movieTitle);
+	                armVO.setTheaterName(theaterName);
+	                armVO.setTheaterNumber(theaterNumber);
+	                armVO.setScreeningDate(screeningDate);
+	                armVO.setScreeningTime(screeningTime);
+	                armVO.setSeatNumber(seatInfo);
+	                armVO.setTotalPeopleNumber(1); // 초기 총 인원 수는 1명
+	                list.add(armVO);
+	            }
+	        }
 
-				AdminReserveManageVO armVO = AdminReserveManageVO.builder()
-						.reservationNumber(reservationNumber)
-						.userId(rs.getString("user_id"))
-						.movieTitle(rs.getString("movie_title"))
-						.theaterName(rs.getString("theater_name"))
-						.theaterNumber(rs.getString("theater_number"))
-						.screeningDate(rs.getString("screening_date"))
-						.screeningTime(rs.getString("screening_time"))
-						.build();
+	    } finally {
+	        dbCon.dbClose(rs, pstmt, con);
+	    }
+	    return list;
+	}
+	
+	// Case 2: screeningRoom이 '전체'인 경우
+	public List<AdminReserveManageVO> searchReserve2(String theater, String date, String reserveNum) throws SQLException {
+	    List<AdminReserveManageVO> list = new ArrayList<AdminReserveManageVO>();
+	    DbConnection dbCon = DbConnection.getInstance();
 
-				tempList.add(armVO);
-			}
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
 
-			// Update the list with the total seat count and concatenated seat numbers for
-			// each reservation
-			for (AdminReserveManageVO vo : tempList) {
-				List<String> seats = seatMap.get(vo.getReservationNumber());
-				if (seats != null) {
-					vo.setSeatNumber(String.join(", ", seats));
-					vo.setTotalPeopleNumber(seats.size());
-				}
-				list.add(vo);
-			}
+	    try {
+	        String id = "son";
+	        String pass = "jimin";
+	        con = dbCon.getConnection(id, pass);
+	        
+	        // 검색 조건에 따라 동적으로 쿼리를 생성하여 실행
+	        String selectReserve = "SELECT rv.reservation_number, rv.user_id, m.movie_title, "
+	                + "s.theater_name, s.theater_number, s.screening_date, "
+	                + "st.screening_time, rs.seat_lownumber, rs.seat_colnumber "
+	                + "FROM reservation rv "
+	                + "JOIN screening s ON rv.screening_code = s.screening_code "
+	                + "JOIN movie m ON s.movie_code = m.movie_code "
+	                + "JOIN screening_time st ON s.screening_round = st.screening_round "
+	                + "JOIN reserved_seat rs ON rv.reservation_number = rs.reservation_number "
+	                + "WHERE 1=1 ";
 
-		} finally {
-			dbCon.dbClose(rs, pstmt, con);
-		}
-		return list;
-	}//searchReserve
+	        // theater 조건 추가
+	        if (theater != null && !theater.isEmpty()) {
+	            selectReserve += "AND s.theater_name = ? ";
+	        }
+
+
+	        // year, month, day 조건 추가
+	        if (date != null && !date.isEmpty()) {
+	            selectReserve += "AND s.screening_date = ? ";
+	        }
+	        
+	        // reserveNum 조건 추가
+	        if (reserveNum != null && !reserveNum.isEmpty()) {
+	            selectReserve += "AND INSTR(rv.reservation_number, ?) > 0 ";
+	        }
+
+	        pstmt = con.prepareStatement(selectReserve);
+
+	        // 검색 조건에 맞게 파라미터 설정
+	        int parameterIndex = 1;
+	        if (theater != null && !theater.isEmpty()) {
+	            pstmt.setString(parameterIndex++, theater);
+	        }
+	        if (date != null && !date.isEmpty()) {
+	            pstmt.setString(parameterIndex++, date);
+	        }
+	        if (reserveNum != null && !reserveNum.isEmpty()) {
+	            pstmt.setString(parameterIndex++, reserveNum);
+	        }
+
+	        rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            String reservationNumber = rs.getString("reservation_number");
+	            String userId = rs.getString("user_id");
+	            String movieTitle = rs.getString("movie_title");
+	            String theaterName = rs.getString("theater_name");
+	            String theaterNumber = rs.getString("theater_number");
+	            String screeningDate = rs.getString("screening_date");
+	            String screeningTime = rs.getString("screening_time");
+	            String seatInfo = rs.getString("seat_lownumber") + rs.getString("seat_colnumber");
+
+	            // 이미 존재하는 예약번호인지 확인
+	            boolean exists = false;
+	            for (AdminReserveManageVO vo : list) {
+	                if (vo.getReservationNumber().equals(reservationNumber)) {
+	                    vo.setSeatNumber(vo.getSeatNumber() + ", " + seatInfo); // 기존의 좌석 정보에 추가
+	                    vo.setTotalPeopleNumber(vo.getTotalPeopleNumber() + 1); // 총 인원 수 증가
+	                    exists = true;
+	                    break;
+	                }
+	            }
+
+	            // 존재하지 않는 경우 새로운 VO를 생성하고 리스트에 추가
+	            if (!exists) {
+	                AdminReserveManageVO armVO = new AdminReserveManageVO();
+	                armVO.setReservationNumber(reservationNumber);
+	                armVO.setUserId(userId);
+	                armVO.setMovieTitle(movieTitle);
+	                armVO.setTheaterName(theaterName);
+	                armVO.setTheaterNumber(theaterNumber);
+	                armVO.setScreeningDate(screeningDate);
+	                armVO.setScreeningTime(screeningTime);
+	                armVO.setSeatNumber(seatInfo);
+	                armVO.setTotalPeopleNumber(1); // 초기 총 인원 수는 1명
+	                list.add(armVO);
+	            }
+	        }
+
+	    } finally {
+	        dbCon.dbClose(rs, pstmt, con);
+	    }
+	    return list;
+	}
+	
+	// Case 3: screeningRoom이 '전체'이고 reservationNumber가 없는 경우
+	public List<AdminReserveManageVO> searchReserve3(String theater, String date) throws SQLException {
+	    List<AdminReserveManageVO> list = new ArrayList<AdminReserveManageVO>();
+	    DbConnection dbCon = DbConnection.getInstance();
+
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+
+	    try {
+	        String id = "son";
+	        String pass = "jimin";
+	        con = dbCon.getConnection(id, pass);
+	        
+	        // 검색 조건에 따라 동적으로 쿼리를 생성하여 실행
+	        String selectReserve = "SELECT rv.reservation_number, rv.user_id, m.movie_title, "
+	                + "s.theater_name, s.theater_number, s.screening_date, "
+	                + "st.screening_time, rs.seat_lownumber, rs.seat_colnumber "
+	                + "FROM reservation rv "
+	                + "JOIN screening s ON rv.screening_code = s.screening_code "
+	                + "JOIN movie m ON s.movie_code = m.movie_code "
+	                + "JOIN screening_time st ON s.screening_round = st.screening_round "
+	                + "JOIN reserved_seat rs ON rv.reservation_number = rs.reservation_number "
+	                + "WHERE 1=1 ";
+
+	        // theater 조건 추가
+	        if (theater != null && !theater.isEmpty()) {
+	            selectReserve += "AND s.theater_name = ? ";
+	        }
+
+	        // year, month, day 조건 추가
+	        if (date != null && !date.isEmpty()) {
+	            selectReserve += "AND s.screening_date = ? ";
+	        }
+	        
+	        pstmt = con.prepareStatement(selectReserve);
+
+	        // 검색 조건에 맞게 파라미터 설정
+	        int parameterIndex = 1;
+	        if (theater != null && !theater.isEmpty()) {
+	            pstmt.setString(parameterIndex++, theater);
+	        }
+	        if (date != null && !date.isEmpty()) {
+	            pstmt.setString(parameterIndex++, date);
+	        }
+
+	        rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            String reservationNumber = rs.getString("reservation_number");
+	            String userId = rs.getString("user_id");
+	            String movieTitle = rs.getString("movie_title");
+	            String theaterName = rs.getString("theater_name");
+	            String theaterNumber = rs.getString("theater_number");
+	            String screeningDate = rs.getString("screening_date");
+	            String screeningTime = rs.getString("screening_time");
+	            String seatInfo = rs.getString("seat_lownumber") + rs.getString("seat_colnumber");
+
+	            // 이미 존재하는 예약번호인지 확인
+	            boolean exists = false;
+	            for (AdminReserveManageVO vo : list) {
+	                if (vo.getReservationNumber().equals(reservationNumber)) {
+	                    vo.setSeatNumber(vo.getSeatNumber() + ", " + seatInfo); // 기존의 좌석 정보에 추가
+	                    vo.setTotalPeopleNumber(vo.getTotalPeopleNumber() + 1); // 총 인원 수 증가
+	                    exists = true;
+	                    break;
+	                }
+	            }
+
+	            // 존재하지 않는 경우 새로운 VO를 생성하고 리스트에 추가
+	            if (!exists) {
+	                AdminReserveManageVO armVO = new AdminReserveManageVO();
+	                armVO.setReservationNumber(reservationNumber);
+	                armVO.setUserId(userId);
+	                armVO.setMovieTitle(movieTitle);
+	                armVO.setTheaterName(theaterName);
+	                armVO.setTheaterNumber(theaterNumber);
+	                armVO.setScreeningDate(screeningDate);
+	                armVO.setScreeningTime(screeningTime);
+	                armVO.setSeatNumber(seatInfo);
+	                armVO.setTotalPeopleNumber(1); // 초기 총 인원 수는 1명
+	                list.add(armVO);
+	            }
+	        }
+
+	    } finally {
+	        dbCon.dbClose(rs, pstmt, con);
+	    }
+	    return list;
+	}
+	
+	// Case 4: screeningRoom이 '전체'가 아니고 reservationNumber가 없는 경우
+	public List<AdminReserveManageVO> searchReserve4(String theater, String screeningRoom, String date) throws SQLException {
+	    List<AdminReserveManageVO> list = new ArrayList<AdminReserveManageVO>();
+	    DbConnection dbCon = DbConnection.getInstance();
+
+	    Connection con = null;
+	    PreparedStatement pstmt = null;
+	    ResultSet rs = null;
+
+	    try {
+	        String id = "son";
+	        String pass = "jimin";
+	        con = dbCon.getConnection(id, pass);
+	        
+	        // 검색 조건에 따라 동적으로 쿼리를 생성하여 실행
+	        String selectReserve = "SELECT rv.reservation_number, rv.user_id, m.movie_title, "
+	                + "s.theater_name, s.theater_number, s.screening_date, "
+	                + "st.screening_time, rs.seat_lownumber, rs.seat_colnumber "
+	                + "FROM reservation rv "
+	                + "JOIN screening s ON rv.screening_code = s.screening_code "
+	                + "JOIN movie m ON s.movie_code = m.movie_code "
+	                + "JOIN screening_time st ON s.screening_round = st.screening_round "
+	                + "JOIN reserved_seat rs ON rv.reservation_number = rs.reservation_number "
+	                + "WHERE 1=1 ";
+
+	        // theater 조건 추가
+	        if (theater != null && !theater.isEmpty()) {
+	            selectReserve += "AND s.theater_name = ? ";
+	        }
+
+	        // screeningRoom 조건 추가
+	        if (screeningRoom != null && !screeningRoom.isEmpty()) {
+	            selectReserve += "AND s.theater_number = ? ";
+	        }
+
+	        // year, month, day 조건 추가
+	        if (date != null && !date.isEmpty()) {
+	            selectReserve += "AND s.screening_date = ? ";
+	        }
+	        
+	        pstmt = con.prepareStatement(selectReserve);
+
+	        // 검색 조건에 맞게 파라미터 설정
+	        int parameterIndex = 1;
+	        if (theater != null && !theater.isEmpty()) {
+	            pstmt.setString(parameterIndex++, theater);
+	        }
+	        if (screeningRoom != null && !screeningRoom.isEmpty()) {
+	            pstmt.setString(parameterIndex++, screeningRoom);
+	        }
+	        if (date != null && !date.isEmpty()) {
+	            pstmt.setString(parameterIndex++, date);
+	        }
+	        
+	        rs = pstmt.executeQuery();
+
+	        while (rs.next()) {
+	            String reservationNumber = rs.getString("reservation_number");
+	            String userId = rs.getString("user_id");
+	            String movieTitle = rs.getString("movie_title");
+	            String theaterName = rs.getString("theater_name");
+	            String theaterNumber = rs.getString("theater_number");
+	            String screeningDate = rs.getString("screening_date");
+	            String screeningTime = rs.getString("screening_time");
+	            String seatInfo = rs.getString("seat_lownumber") + rs.getString("seat_colnumber");
+
+	            // 이미 존재하는 예약번호인지 확인
+	            boolean exists = false;
+	            for (AdminReserveManageVO vo : list) {
+	                if (vo.getReservationNumber().equals(reservationNumber)) {
+	                    vo.setSeatNumber(vo.getSeatNumber() + ", " + seatInfo); // 기존의 좌석 정보에 추가
+	                    vo.setTotalPeopleNumber(vo.getTotalPeopleNumber() + 1); // 총 인원 수 증가
+	                    exists = true;
+	                    break;
+	                }
+	            }
+
+	            // 존재하지 않는 경우 새로운 VO를 생성하고 리스트에 추가
+	            if (!exists) {
+	                AdminReserveManageVO armVO = new AdminReserveManageVO();
+	                armVO.setReservationNumber(reservationNumber);
+	                armVO.setUserId(userId);
+	                armVO.setMovieTitle(movieTitle);
+	                armVO.setTheaterName(theaterName);
+	                armVO.setTheaterNumber(theaterNumber);
+	                armVO.setScreeningDate(screeningDate);
+	                armVO.setScreeningTime(screeningTime);
+	                armVO.setSeatNumber(seatInfo);
+	                armVO.setTotalPeopleNumber(1); // 초기 총 인원 수는 1명
+	                list.add(armVO);
+	            }
+	        }
+
+	    } finally {
+	        dbCon.dbClose(rs, pstmt, con);
+	    }
+	    return list;
+	}
+	
+	
+
     
     
     ////////////////////////예매 삭제///////////////////////

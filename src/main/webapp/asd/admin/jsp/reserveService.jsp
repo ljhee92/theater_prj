@@ -1,52 +1,40 @@
-<%@page import="admin.AdminReserveManageVO"%>
-<%@page import="admin.AdminReserveManageDAO"%>
-<%@page import="java.time.Year"%>
-<%@ page language="java" contentType="application/json; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="admin.ScreeningDAO1, admin.ScreeningVO" %>
-<%@ page import="java.util.List, java.sql.SQLException" %>
-
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%
-    // 클라이언트로부터 받은 검색 조건
-    String theater = request.getParameter("theater");
-    String screeningRoom = request.getParameter("screeningRoom");
-    String date = request.getParameter("year") + request.getParameter("month") + request.getParameter("day");
-    String reserveNum = request.getParameter("reservationNumber");
-	System.out.println(theater + " " + screeningRoom + " " + date + " " + reserveNum);
-    // 검색을 위한 DAO 객체 생성
-    AdminReserveManageDAO armDAO = AdminReserveManageDAO.getInstance();
-    List<AdminReserveManageVO> reserveList = null;
+    // 파라미터 값 받기
+    String theater = request.getParameter("theaterDropdown");
+    String screeningRoom = request.getParameter("screeningRoomDropdown");
+    String year = request.getParameter("yearDropdown");
+    String month = request.getParameter("monthDropdown");
+    String day = request.getParameter("dayDropdown");
+    String reservationNumber = request.getParameter("reservationNumber");
+    
+    System.out.println(theater);
+    System.out.println(screeningRoom);
+    System.out.println(year);
+    System.out.println(month);
+    System.out.println(day);
+    System.out.println(reservationNumber);
 
-    try {
-    	reserveList = armDAO.searchReserve(theater, screeningRoom, date, reserveNum);
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-
-    // 검색 결과를 JSON 형식으로 반환
-    response.setContentType("application/json");
-    response.setCharacterEncoding("UTF-8");
-
-    // JSON 형식으로 데이터 반환
-    StringBuilder jsonResponse = new StringBuilder();
-    jsonResponse.append("[");
-    if (reserveList != null && !reserveList.isEmpty()) {
-        for (int i = 0; i < reserveList.size(); i++) {
-            AdminReserveManageVO reserve = reserveList.get(i);
-            jsonResponse.append("{");
-            jsonResponse.append("\"reservationNumber\": \"" + reserve.getReservationNumber() + "\",");
-            jsonResponse.append("\"userId\": \"" + reserve.getUserId() + "\",");
-            jsonResponse.append("\"movieTitle\": \"" + reserve.getMovieTitle() + "\",");
-            jsonResponse.append("\"theaterName\": \"" + reserve.getTheaterName() + "\",");
-            jsonResponse.append("\"theaterNumber\": \"" + reserve.getTheaterNumber() + "\",");
-            jsonResponse.append("\"screeningDate\": \"" + reserve.getScreeningDate() + "\"");
-            jsonResponse.append("\"screeningTime\": \"" + reserve.getScreeningTime() + "\"");
-            jsonResponse.append("}");
-            if (i < reserveList.size() - 1) {
-                jsonResponse.append(",");
-            }
-        }
-    }
-    jsonResponse.append("]");
-    System.out.println(jsonResponse.toString());
-    out.println(jsonResponse.toString());
+    // 날짜 포맷 설정
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date date = sdf.parse(year + "-" + month + "-" + day);
+    String formattedDate = sdf.format(date);
 %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>예매 서비스</title>
+</head>
+<body>
+    <h1>예매 서비스</h1>
+    <p>예매 서비스를 처리하는 페이지입니다.</p>
+    <p>선택된 영화관: <%= theater %></p>
+    <p>선택된 상영관: <%= screeningRoom %></p>
+    <p>선택된 날짜: <%= formattedDate %></p>
+    <p>예매번호: <%= reservationNumber %></p>
+</body>
+</html>
