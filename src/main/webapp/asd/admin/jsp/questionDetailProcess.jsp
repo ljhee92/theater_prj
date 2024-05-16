@@ -1,3 +1,4 @@
+<%@page import="java.sql.SQLException"%>
 <%@page import="admin.DAO.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
@@ -36,7 +37,7 @@ request.setCharacterEncoding("UTF-8");
 	%>
 		alert("글 수정 성공");
 		var currentPage = "<%= currentPage %>";
-		location.href = "notice.jsp?currentPage="+currentPage;
+		location.href = "question.jsp?currentPage="+currentPage;
 	<%
 	} catch (SQLException se) {
 		se.printStackTrace();
