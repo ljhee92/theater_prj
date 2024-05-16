@@ -163,6 +163,9 @@
 
 		List<BoardVO> list = bDAO.selectBoard(startNum, endNum, FAQS);
 		pageContext.setAttribute("list", list);
+		pageContext.setAttribute("totalCount", totalCount);
+		pageContext.setAttribute("pageScale", pageScale);
+		pageContext.setAttribute("currentPage", currentPage);
 		%>
 		<!-- Contaniner -->
 		<div id="contaniner" class="">
@@ -217,7 +220,7 @@
 								<li class='on' id="allcategory"><a
 									href="javascript:void(0);" style="font-size: 11px;"
 									title="선택된 탭메뉴"
-									onclick="selectCategory(<%=startNum%>, <%=endNum%>,'<%=FAQS%>')">전체</a></li>
+									onclick="location.reload();">전체</a></li>
 								<%
 								for (String category : faqsList) {
 								%>
@@ -255,9 +258,9 @@
 									</tr>
 								</thead>
 								<tbody id="boardTable">
-									<c:forEach var="board" items="${list}">
+									<c:forEach var="board" items="${list}" varStatus="i">
 										<tr>
-											<td>${board.boardNumber}</td>
+											<td>${totalCount-(currentPage-1)*pageScale-i.index}</td>
 											<td>${board.categoryName}</td>
 											<td id="title0"  style="text-align: center" class="txt"><a href="boardDetail.jsp?FAQS=<%=FAQS%>&boardNumber=${board.boardNumber}" 
 												onclick="addViews(${board.boardNumber})">${board.boardTitle }</a></td>
@@ -379,6 +382,9 @@ function addViews(boardNumber) {
 		var object = JSON.parse(response);
 		var url = "";
 		var result = object.result;
+		var categorycount = object.Categorycount;
+		var currentPage = object.currentPage;
+		var pageScale = 10;
 		for(var i=0 ; i < result.length; i++){
 			
 			var row = table.insertRow(i); // 행 추가
@@ -393,7 +399,7 @@ function addViews(boardNumber) {
 		        var cell5 = row.insertCell(4);
 
 		        // 각 열에 데이터 입력
-		        cell1.innerHTML = result[i].boardNumber;
+		        cell1.innerHTML = categorycount-(currentPage-1)*pageScale-i;
 		        cell2.innerHTML = result[i].categoryName;
 		        cell3.innerHTML = '<a href="' + url + '">' + result[i].boardTitle + '</a>';
 		        cell4.innerHTML = result[i].boardInputDate;
