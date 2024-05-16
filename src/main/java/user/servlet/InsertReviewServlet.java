@@ -10,25 +10,45 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import user.DAO.UserReviewDAO;
 import user.VO.ReviewVO;
 
 
-@WebServlet("/SelectReviewServlet")
-public class SelectReviewServlet extends HttpServlet {
+@WebServlet("/InsertReviewServlet")
+public class InsertReviewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+    	System.out.println("서블릿 입장");
         request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
-        String userId = request.getParameter("id");
-       
+        
+        String reservationNumber = request.getParameter("reservationNumber");
+        String reviewContent = request.getParameter("reviewContent");
+        int reviewScore = Integer.parseInt(request.getParameter("starScore"));
+        String movieCode = request.getParameter("movieCode");
+        
+        System.out.println("reservationNumber : " + reservationNumber+ "revieContent : "+ reviewContent+"reviewScore : "+ reviewScore + "movieCode : " + movieCode);
+        
+        
+        ReviewVO rVO = ReviewVO.builder()
+        				.reservationNumber(reservationNumber)
+        				.reviewContent(reviewContent)
+        				.reviewScore(reviewScore)
+        				.movieCode(movieCode)
+        				.build();
+        
+        
+        
+        
+        
+        
+        
+
 
         try {
-            String resultJSON = getJSON(userId);
+            String resultJSON = getJSON(rVO);
             response.getWriter().write(resultJSON);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,7 +60,7 @@ public class SelectReviewServlet extends HttpServlet {
 
     }
 
-    public String getJSON(String userId) throws SQLException {
+    public boolean getJSON(ReviewVO rVO) throws SQLException {
         StringBuilder result = new StringBuilder("");
         result.append("{\"success\":");
         UserReviewDAO urDAO = UserReviewDAO.getInstance();

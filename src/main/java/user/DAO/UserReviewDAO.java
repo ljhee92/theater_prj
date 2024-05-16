@@ -50,6 +50,7 @@ public class UserReviewDAO {
 			StringBuilder sqlQuery = new StringBuilder();
 			sqlQuery.append("SELECT ")
 	        .append("    r.RESERVATION_NUMBER, ")
+	        .append("    m.MOVIE_CODE, ")
 	        .append("    m.MOVIE_TITLE, ")
 	        .append("    m.MOVIE_POSTER_PATH, ")
 	        .append("    s.THEATER_NAME, ")
@@ -85,6 +86,7 @@ public class UserReviewDAO {
 				rVO = null;
 				rVO = ReviewVO.builder()
 					   .reservationNumber(rs.getString("RESERVATION_NUMBER"))
+					   .movieCode(rs.getString("MOVIE_CODE"))
 					   .movieTitle(rs.getString("MOVIE_TITLE"))
 					   .moviePosterPath(rs.getString("MOVIE_POSTER_PATH"))
 					   .theaterName(rs.getString("THEATER_NAME"))

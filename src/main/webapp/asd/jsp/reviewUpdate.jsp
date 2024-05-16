@@ -163,16 +163,27 @@ html{
 	text-align: left;
 }
 
-.wrap_myReview{
-	position: relative;
-	width: 100%;
-}
-
 .wrapReviewContent{
 	float: left;
 	width: 50%;
 }
 </style>
+<style type="text/css">
+.updateContainer{
+	width: 629px;
+	height: 340px;
+	padding-left: 0; /* 왼쪽 여백 제거 */
+	padding-right: 0; /* 오른쪽 여백 제거 */
+}
+
+
+</style>
+
+
+
+
+
+
 
 
 <script type="text/javascript">
@@ -187,20 +198,9 @@ html{
     <jsp:include page="header.jsp"></jsp:include>
     
     <!-- Content -->
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="wrap_myReview">
-                    <div class="titleAndLine">
-                        <!-- 제목 및 선 -->
-                        <h1 class="display-6" style="margin-top: 30px; margin-bottom: 20px; font-weight: bold">My Review</h1>
-                        <div style="background: #FFFFFF url('http://192.168.10.230/theater_prj/asd/images/line/line.png') repeat-x; height: 3px;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
+    <div class="updateContainer">
+        <div style="width: 629px;" class="row">
+            <div style="width: 629px;" class="col-md-6">
                 <form>
                     <div class="reviewInfo">
                         <!-- 이미지 삽입 -->
@@ -210,7 +210,7 @@ html{
                         <div id="movielabel" style="margin-top: 20px; padding-top: 20px;">
                         <label style="font-size: 20px; font-weight: bold; margin-bottom: 15px;">영화제목</label><br>
                         <label style="font-size: 18px;">날짜</label><br>
-                        <div id="scoreLabel" style="width: 800px; height: 60px;">
+                        <div id="scoreLabel" style="width: 629px; height: 60px;">
                             <label style="display: inline-block; margin-top: 15px; margin-right: 10px; font-size: 18px;">별점</label>
                             <select style="display: inline-block; width: 200px; height: 50px;" class="form-select" name="starScore">
                                 <!-- 기본 선택 옵션 -->
@@ -233,7 +233,7 @@ html{
         <div class="row">
             <div class="col-md-12">
                 <div class="wrapReviewContent">
-                    <textarea class="form-control" id="reviewContent" name="reviewContent" style="width: 200%; height: 300px; margin-top:20px;"></textarea>
+                    <textarea class="form-control" id="reviewContent" name="reviewContent" style="width: 629px; height: 80px; margin-top:20px;"></textarea>
                 </div>
             </div>
         </div>

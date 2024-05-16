@@ -159,6 +159,9 @@
 	align-items: center; /* 세로 중앙 정렬 */
 }
 </style>
+
+
+
 <style type="text/css">
 .container2 {
 	width: 629px;
@@ -240,6 +243,43 @@
 .no-review {
     color: red;
 }
+</style>
+
+<style>
+    .update-container {
+        width: 629px;
+    }
+    .sub-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .sub-container{
+        width: 100%;
+
+    }
+    .reviewInfo {
+        height: 170px;
+        display: flex;
+        flex-direction: row;
+
+        
+    }
+    .reviewContent {
+        height: 120px;
+
+    }
+    .buttonList {
+        height: 50px;
+
+    }
+    .Rating {
+        height: 170px;
+        display: flex;
+        flex-direction: row;
+
+        
+    }
 </style>
 
 
@@ -463,14 +503,14 @@ $(document).ready(function(){
 	                            if (reviewContent === 'null') {
 	                                reviewContent = '리뷰를 입력해주세요!';
 	                                reviewClass = 'no-review';
-	                                buttonHTML = '<button type="button" class="btn btn-danger float-end" onclick="writeReview(\'' + reservation.reservationNumber + '\')">리뷰 작성</button>';
+	                                buttonHTML = '<button type="button" class="btn btn-danger float-end" onclick="writeReview(\''+ reservation.movieTitle + '\', \''  + reservation.reservationNumber + '\', \'' + reservation.movieCode + '\')">리뷰 작성</button>';
 	                            } else {
 	                                if (reviewContent.length > 20) {
 	                                    reviewContent = reviewContent.substring(0, 20) + '....';
 	                                }
-	                                buttonHTML = '<button type="button" class="btn btn-secondary float-end" onclick="reviewDetail(\'' + reservation.reservationNumber + '\')">상세보기</button>';
+	                                buttonHTML = '<button type="button" class="btn btn-secondary float-end" onclick="updateReview(\''+ reservation.reservationNumber + '\', \'' + reservation.movieCode + '\')">상세보기</button>';
 	                            }
-
+	                          		
 	                            // 문자열 연결 연산자를 사용하여 HTML 조립
 	                            reservationHTML +=
 	                                '<div class="container mt-5">' +
@@ -533,18 +573,282 @@ $(document).ready(function(){
 	
 	
 	//리뷰 상세 조회
-	function reviewDetail(reservationNumber) {
-	    alert("리뷰조회 -> 예매번호 : " + reservationNumber);
+	function updateReview(reservationNumber,movieCode) {
+	    alert("리뷰조회 -> 예매번호 : " + reservationNumber + " , 영화코드 : " + movieCode);
+	    
+        // 기존에 있는 내용을 삭제
+        $(".right-div").empty();
+
+        
+        var request = new XMLHttpRequest(); // request 변수를 선언
+
+	    request.open(
+	        "POST",
+	        "http://localhost/theater_prj/SelectReviewDetailServlet",
+	        true
+	    );
+	    request.setRequestHeader(
+	        "Content-Type",
+	        "application/x-www-form-urlencoded; charset=UTF-8"
+	    );
+
+	    // 에러 핸들링
+	    request.onerror = function() {
+	        alert("요청을 보낼 때 오류가 발생했습니다.");
+	    };
+
+	    request.onreadystatechange = function() {
+	        if (request.readyState == 4) {
+	            if (request.status == 200) {
+	                // 응답을 받으면 처리
+	                var jsonResponse = request.responseText;
+	                var responseObject = JSON.parse(jsonResponse);
+
+
+
+	                    // 예매 내역 데이터
+	                    var reviewData = responseObject.result;
+
+
+	            } else {
+	                alert("문제발생.");
+	            }
+	        }
+	    };
+
+	    // POST 요청의 파라미터를 설정하여 보냄
+	    request.send("id=" + encodeURIComponent(id));
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        // 리뷰업데이트 디자인
+        var updateFormHTML = `
+        	<div class="update-container">
+            <div class="sub-container">
+                <div class="reviewInfo">
+                	<div class = "postBox" style="width: 150px; height: 170px; ">
+                		<div style="width: 130px; height: 150px; margin-left:15px;">
+                			<img src="http://192.168.10.230/theater_prj/asd/images/movie/MOV001.jpg" style="width: 130px; height: 150px; margin-top:10px;">
+                		</div>
+                	</div>
+                	<div class="infoBox" style="width: 484px; height: 170px;  ">
+            			<div class="movieTitle" style="width: 484px; height: 50px; margin-top:10px; ">
+            				<div id = "movieTitle" style="width: 200px; margin-left:5px; margin-top:10px; font-size: 20px; font-weight: bold;  ">영화제목</div>
+            			</div>
+            			<div class="reviewDate" style="width: 484px; height: 50px; ">
+            				<div id = "reviewInputDate" style="width: 200px; margin-left:5px; margin-top:10px ; font-size: 20px; font-weight: bold; ">작성일</div>
+            			</div>
+            			<div class="Rating" style="width: 484px; height: 50px;  ">
+            				<div style="width: 70px; height: 40px;  ">
+								<div style="width: 70px;   ">
+									<div id = "reviewRating" style=" margin-left:10px;  margin-top:10px; font-size: 24px; font-weight: bold;  "> 별점 : </div>
+									
+								</div>
+            				</div>
+            				<div style=" margin-left:5px; margin-top:5px;">
+                            <select style="display: inline-block; width: 200px; height: 40px;" class="form-select" name="starScore">
+
+                            <!-- 기본 선택 옵션 -->
+                            <option selected="selected">별점 선택</option>
+                                <% for (int i = 1; i <= 5; i++) { %>
+                                    <!-- 각 별점 옵션 -->
+                                    <option value="<%=i%>">
+                                        <% for (int j = 0; j < i; j++) { %>
+                                            ⭐ <!-- 별표 표시 -->
+                                        <% } %>
+                                    </option>
+                                <% } %>
+                        </select>
+            				</div>
+            				
+
+            			</div>
+            		</div>
+
+                
+                
+                </div>
+                <div class="reviewContent">
+                	<div style="margin-left : 15px;margin-top : 10px;">
+                	<textarea id = "reviewContent" class="form-control" id="reviewContent" name="reviewContent" style="width: 600px; height: 100px;  "></textarea>
+                	</div>
+                </div>
+                <div class="buttonList" style="margin-left : auto ; margin-right: 15px;">
+        			<div class="reviewButtons">
+    				<button type="button" class="btn btn-primary" style="width: 80px; height: 50px; margin-right: 10px;">수정</button>
+        			<button type="button" class="btn btn-danger" style="width: 80px; height: 50px; margin-right: 10px;">삭제</button>
+        			<button type="button" class="btn btn-secondary" style="width: 80px; height: 50px;" onclick="myReview()">취소</button>
+    				</div>
+                </div>
+            </div>
+        </div>`
+
+        $(".right-div").append(updateFormHTML);
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
 	}//reviewDetail
 
+	
+	
+	
+	
 	//리뷰 작성
-	function writeReview(reservationNumber) {
-	    alert("리뷰작성 -> 예매번호 : " + reservationNumber);
-	}//writeReview
+function writeReview(movieTitle, reservationNumber, movieCode) {
+    alert("리뷰작성 -> 영화제목 : " + movieTitle + " 예매번호 : " + reservationNumber + " , 영화코드 : " + movieCode);
+    
+    var year = new Date().getFullYear();
+    var month = ("0" + (new Date().getMonth() + 1)).slice(-2); // 월을 두 자리로 표현
+    var day = ("0" + new Date().getDate()).slice(-2); // 날짜를 두 자리로 표현
+
+    var today = year + '-' + month + '-' + day;
+
+    // 기존에 있는 내용을 삭제
+    $(".right-div").empty();
+
+    // 리뷰작성 디자인
+    var insertFormHTML = 
+        '<div class="update-container">' +
+            '<div class="sub-container">' +
+                '<div class="reviewInfo">' +
+                    '<div class="postBox" style="width: 150px; height: 170px;">' +
+                        '<div style="width: 130px; height: 150px; margin-left:15px;">' +
+                            '<img src="http://192.168.10.230/theater_prj/asd/images/movie/MOV001.jpg" style="width: 130px; height: 150px; margin-top:10px;">' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="infoBox" style="width: 484px; height: 170px;">' +
+                        '<div class="movieTitle" style="width: 484px; height: 50px; margin-top:10px;">' +
+                            '<div id="movieTitle" style="width: 470px; margin-left:5px; margin-top:10px; font-size: 20px; font-weight: bold;">' + movieTitle + '</div>' +
+                        '</div>' +
+                        '<div class="reviewDate" style="width: 484px; height: 50px;">' +
+                            '<div id="reviewInputDate" style="width: 200px; margin-left:5px; margin-top:10px; font-size: 20px; font-weight: bold;">' + today + '</div>' +
+                        '</div>' +
+                        '<div class="Rating" style="width: 484px; height: 50px;">' +
+                            '<div style="width: 70px; height: 40px;">' +
+                                '<div style="width: 70px;">' +
+                                    '<div id="reviewRating" style="margin-left:10px; margin-top:10px; font-size: 24px; font-weight: bold;"> 별점 : </div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div style="margin-left:5px; margin-top:5px;">' +
+                                '<select style="display: inline-block; width: 200px; height: 40px;" class="form-select" id="starScore">' +
+                                    '<option selected="selected">별점 선택</option>' +
+                                    '<% for (int i = 1; i <= 5; i++) { %>' +
+                                        '<option value="<%=i%>">' +
+                                            '<% for (int j = 0; j < i; j++) { %>' +
+                                                '⭐' +
+                                            '<% } %>' +
+                                        '</option>' +
+                                    '<% } %>' +
+                                '</select>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="reviewContent">' +
+                    '<div style="margin-left: 15px;margin-top: 10px;">' +
+                        '<textarea id="reviewContent" class="form-control"  name="reviewContent" style="width: 600px; height: 100px;"></textarea>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="buttonList" style="margin-left:auto; margin-right: 15px;">' +
+                    '<div class="reviewButtons">' +
+                        '<button type="button" class="btn btn-primary" style="width: 80px; height: 50px; margin-right: 10px;" onclick="insertReview(\''  + reservationNumber +  '\', \'' + movieCode  + '\')">등록</button>' +
+                        '<button type="button" class="btn btn-secondary" style="width: 80px; height: 50px;" onclick="myReview()">취소</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+
+    $(".right-div").append(insertFormHTML);
+}
 
 
+function insertReview(reservationNumber,movieCode) {//리뷰등록메서드
+
+	var reviewContent = $("#reviewContent").val();
+	var starScore = $("#starScore").val();
+	
+	
+	
+/*     alert("예매번호 : "+reservationNumber+"리뷰내용 : " + reviewContent + "평점 : " +starScore + "영화코드 : " +movieCode); */
+    alert("예매번호 : "+reservationNumber+ "리뷰내용 : "+  reviewContent +"평점"+starScore+"영화코드 : "+movieCode );
+    
+    
+    
+    
+    var request = new XMLHttpRequest(); // request 변수를 선언
+
+    request.open(
+        "POST",
+        "http://localhost/theater_prj/InsertReviewServlet",
+        true
+    );
+    request.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded; charset=UTF-8"
+    );
+
+    // 에러 핸들링
+    request.onerror = function() {
+        alert("요청을 보낼 때 오류가 발생했습니다.");
+    };
+
+    request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+            if (request.status == 200) {
+				alert("리뷰 등록을 완료했습니다.");
+				myReview();
 
 
+            } else {
+                alert("문제발생.");
+            }
+        }
+    };
+
+    // POST 요청의 파라미터를 설정하여 보냄
+    request.send(
+    		"reservationNumber=" + encodeURIComponent(reservationNumber)
+    		+ "&reviewContent=" + encodeURIComponent(reviewContent)
+    		+ "&starScore=" + encodeURIComponent(starScore)
+    		+ "&movieCode=" + encodeURIComponent(movieCode));
+    
+    
+    
+    
+    
+    
+    
+}
+
+	
+	
+	
+	
+	
+	
 
 
 
@@ -1011,9 +1315,6 @@ function showMyInformation() {
 
 function checkPassword(currentPassword) {//비밀번호 확인 메서드
 
-
-	
-	
 	
 	
 	var id = "<%=userId%>" ;
