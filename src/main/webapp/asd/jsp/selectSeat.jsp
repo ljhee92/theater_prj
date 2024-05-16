@@ -451,6 +451,12 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 						</div>
 					</div>
 
+					<%
+						} catch(Exception e) {
+							out.println("에러 발생. 담당자에게 문의해주세요.");
+							e.printStackTrace();
+						}
+					%>
 					<!--/ Contents End -->
 				</div>
 				<!-- /Contents Area -->
@@ -470,11 +476,5 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 			<jsp:include page="footer.jsp"></jsp:include>
 			<!-- E footer_area -->
 		</div>
-<%
-	} catch(Exception e) {
-		out.println("에러 발생. 담당자에게 문의해주세요.");
-		e.printStackTrace();
-	}
-%>
 </body>
 </html>

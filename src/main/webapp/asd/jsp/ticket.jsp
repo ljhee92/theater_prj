@@ -1,3 +1,4 @@
+<%@page import="java.sql.SQLException"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="user.VO.ReservingVO"%>
 <%@page import="java.util.List"%>
@@ -581,6 +582,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 		
 		ReservingDAO rsDAO = ReservingDAO.getInstance();
 		List<ReservingVO> screeningDates = new ArrayList<>();
+		try {
 		screeningDates = rsDAO.selectScreeningDate("N");
 		pageContext.setAttribute("screeningDates", screeningDates);
 		
@@ -683,7 +685,7 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 							<h4 class="title">시간표</h4>
 						</div>
 						
-						<div class="wrap-timetable">
+						<div class="wrap-timetable" style=" height: 510px;">
 							<p class="ready">영화관과 영화를 선택하면 시간표가 나옵니다.</p>
 						</div>
 					</div>
@@ -696,6 +698,14 @@ window.location.href = "login.jsp?prevPage=ticket.jsp";
 					</div>
 				</div>
 
+				<%
+				} catch (SQLException se) {			
+				%>
+					alert("죄송합니다. 잠시 후 다시 시도해주세요.");
+				<%
+					se.printStackTrace();
+				} // end catch
+				%>
 				<!--/ Contents End -->
 			</div>
 			<!-- /Contents Area -->
