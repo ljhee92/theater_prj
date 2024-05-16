@@ -567,8 +567,7 @@ public class BoardDAO {
 			} // end else
 			
 			selectBoard.append(") ")
-			.append("where rnum between ? and ? ")
-			.append("order by board_number desc");
+			.append("where rnum between ? and ? ");
 			
 			pstmt = con.prepareStatement(selectBoard.toString());
 			int bindIndex = 0;
