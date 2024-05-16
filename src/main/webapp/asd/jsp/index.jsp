@@ -422,11 +422,7 @@ for (MovieVO tempMovie : mVO) {
 								</dl>
 
 								<div class="client_btn_wrap" id="client_btn_wrap">
-									<a href="board.jsp?FAQS=Q">자주
-										찾는 질문</a> <a href="http://www.cgv.co.kr/support/qna/default.aspx">할만한거
-										1</a>
-									<!--<a href="http://www.cgv.co.kr/support/lost/default.aspx">분실물 문의</a>//-->
-									<a href="http://www.cgv.co.kr/support/lease/default.aspx">할만한거2</a>
+									<a href="board.jsp?FAQS=Q">자주찾는 질문</a>
 								</div>
 							</div>
 						</div>
