@@ -197,8 +197,8 @@ public class BoardDAO {
 			.append("    JOIN category c ON b.category_number = c.category_number ")
 			.append("    WHERE c.category_type_flag = ? ")
 			.append(") sub ")
-			.append("WHERE rnum BETWEEN ? AND ? ")
-			.append("ORDER BY BOARD_NUMBER desc");
+			.append("WHERE rnum BETWEEN ? AND ? ");
+			//.append("ORDER BY BOARD_NUMBER desc");
 
 			
 			
