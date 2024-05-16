@@ -219,7 +219,6 @@ function updateMovieChart(response) {
 					<div class="sect-movie-chart">
 						<h4 class="hidden">무비차트 - 평점순</h4>
 						<ol>
-							<%-- 4행 5열 반복문 시작 --%>
 							<%
 							//MovieChartDAO 객체 생성
 							int rank = 1;

@@ -553,14 +553,14 @@ $(document).ready(function(){
 	                        });
 	                    } else {
 	                        reservationHTML =
-	                            '<img src="../images/myPage/noReservation2.png" style="width: 600px; height: 330px;">';
+	                            '<img src="../images/myPage/noReservation.png" style="width: 330px; height: 330px; margin-left:100px;">';
 	                    }
 
 	                    // 생성된 예매 내역 HTML을 .right-div 요소에 삽입
 	                    $(".right-div").html(reservationHTML);
 	                } else {
 	                    reservationHTML =
-	                        '<img src="../images/myPage/noReservation2.png" style="width: 600px; height: 330px;">';
+	                        '<img src="../images/myPage/noReservation.png" style="width: 330px; height: 330px; margin-left:100px;">';
 	                    $(".right-div").html(reservationHTML);
 	                }
 	            } else {
@@ -1096,7 +1096,7 @@ function selectReservation() {
                     
                 }else{
                 	reservationHTML = 
-                		'<img src="../images/myPage/noReservation.png" style="width: 600px; height: 330px;">'
+                		'<img src="../images/myPage/noReservation.png" style="width: 330px; height: 330px; margin-left:100px;">'
                 
                 }//end else
                 
