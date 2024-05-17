@@ -165,8 +165,6 @@ public class DashboardDAO {
             // 4. 파라미터 설정
             pstmt.setDate(1, java.sql.Date.valueOf(startDate));
             pstmt.setDate(2, java.sql.Date.valueOf(endDate));
-            System.out.println(startDate);
-            System.out.println(endDate);
 
             // 5. 쿼리 실행 및 결과 처리
             rs = pstmt.executeQuery();
@@ -182,7 +180,6 @@ public class DashboardDAO {
             dbcon.dbClose(rs, pstmt, con);
         }
         
-        System.out.println(ranking.toString());
         return ranking;
     }
 	
@@ -216,13 +213,9 @@ public class DashboardDAO {
             YearMonth currentMonth = YearMonth.from(currentDate);
             LocalDate startDate = currentMonth.atDay(1);
             LocalDate endDate = currentMonth.atEndOfMonth();
-
             // 4. 파라미터 설정
             pstmt.setDate(1, java.sql.Date.valueOf(startDate));
             pstmt.setDate(2, java.sql.Date.valueOf(endDate));
-            System.out.println(startDate);
-            System.out.println(endDate);
-
             // 5. 쿼리 실행 및 결과 처리
             rs = pstmt.executeQuery();
             int rank = 1;
@@ -237,7 +230,6 @@ public class DashboardDAO {
             dbcon.dbClose(rs, pstmt, con);
         }
         
-        System.out.println(ranking.toString());
         return ranking;
     }
 	
@@ -261,18 +253,16 @@ public class DashboardDAO {
                     "FROM movie m " +
                     "JOIN screening s ON s.movie_code = m.movie_code " +
                     "JOIN reservation r ON r.screening_code = s.screening_code " +
-                    "WHERE r.reservation_date = ? " +
+                    "WHERE TRUNC(r.reservation_date) = TO_DATE(?, 'YYYY-MM-DD') " +
                     "GROUP BY m.movie_title " +
                     "ORDER BY reservation_count DESC";
             pstmt = con.prepareStatement(selectQuery);
 
             // 현재 날짜를 기준으로 지난달의 첫째 날과 마지막 날을 계산
             LocalDate currentDate = LocalDate.now();
-            
 
             // 4. 파라미터 설정
-            pstmt.setDate(1, java.sql.Date.valueOf(currentDate));
-            System.out.println(currentDate);
+            pstmt.setString(1, currentDate.toString());
 
             // 5. 쿼리 실행 및 결과 처리
             rs = pstmt.executeQuery();
@@ -288,7 +278,6 @@ public class DashboardDAO {
             dbcon.dbClose(rs, pstmt, con);
         }
         
-        System.out.println(ranking.toString());
         return ranking;
     }
 	

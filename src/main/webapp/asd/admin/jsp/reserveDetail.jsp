@@ -89,7 +89,9 @@ $(document).ready(function() {
     }
     
     $("#cancelButton").click(function() {
-        if ($("input[name='reservationNumber']:checked").length === 0) {
+        var checkedBoxes = $("input[name='reservationNumber']:checked");
+
+        if (checkedBoxes.length === 0) {
             alert("예매번호를 선택해주세요");
         } else if (confirm("취소하시겠습니까?")) {
             $("#cancelForm").submit();
@@ -97,22 +99,8 @@ $(document).ready(function() {
     });
     
     $(function() {
-        $("#reservationNumber").keydown(function(evt) {
-            if (evt.which == 13) {
-                chkNull();
-            } //end if
-        }); //keydown
-    }); // ready
 
-    function chkNull(){
-        var reservationNumber = $("#reservationNumber").val().trim();
-        if(reservationNumber != ""){
-            $("#searchMemberForm").submit();
-        } else {
-            alert("회원 아이디를 입력하세요.");
-            window.location.href = "reservation.jsp";
-        }
-    }//chkNull
+    }); // ready
     
     function searchReserve() {
         var theater = document.getElementById("theaterDropdown").value;
@@ -122,21 +110,36 @@ $(document).ready(function() {
         var day = document.getElementById("dayDropdown").value;
         var reservationNumber = document.getElementById("reservationNumber").value.trim();
         
-        // 예매번호 검색 텍스트가 비어 있는 경우, 빈 문자열로 대체
-        reservationNumber = reservationNumber === '' ? '' : '&reservationNumber=' + reservationNumber;
+        // screeningRoomDropdown의 값이 '전체'이거나 reservationNumber가 비어있는 경우
+        if (screeningRoom === '전체' || reservationNumber === '') {
+            // 알림 창 표시
+            alert("모든 값을 선택 또는 입력하세요.");
+            return; // 함수 종료
+        }
 
-        // 검색 폼의 action 속성을 reserveDetail.jsp로 변경
+        var tableRows = document.querySelectorAll("#contentBoard tr");
+
+        tableRows.forEach(function(row) {
+            var rowScreeningRoom = row.querySelector("td:nth-child(6)").textContent.trim(); // 상영관 열의 값
+            var rowReservationNumber = row.querySelector("td:nth-child(2)").textContent.trim(); // 예매번호 열의 값
+
+            // screeningRoom이 '전체'이거나 입력된 값과 일치할 경우 또는 reservationNumber가 입력되지 않았을 경우
+            if ((screeningRoom === '전체' || rowScreeningRoom === screeningRoom) &&
+                (reservationNumber === '' || rowReservationNumber === reservationNumber)) {
+                row.style.display = ""; // 해당 행을 보여줌
+            } else {
+                row.style.display = "none"; // 해당 행을 숨김
+            }
+        });
+
+        // 날짜 문자열을 YYYYMMDD 형식으로 조합
+        var dateString = year + month + day;
+
+        // 검색 폼 제출
         var form = document.getElementById("reserveDropDown");
-        form.action = "reserveDetail.jsp?theaterDropdown=" + theater +
-                        "&screeningRoomDropdown=" + screeningRoom +
-                        "&yearDropdown=" + year +
-                        "&monthDropdown=" + month +
-                        "&dayDropdown=" + day +
-                        reservationNumber;
-
-        // 폼 제출
         form.submit();
     }
+    
 
     updateDays(); // 초기화
     yearDropdown.addEventListener("change", updateDays);
@@ -218,10 +221,13 @@ $(document).ready(function() {
 
         <!-- 예매번호 검색 텍스트 -->
         <div class="form-group">
+            <input type="text" class="form-control" id="reservationNumber"
+                name="reservationNumber" value="${param.reservationNumber}"
+                placeholder="예매번호 입력" />
         </div>
 
         <div class="form-group">
-            <button type="submit" id="searchButton" name="searchButton" class="btn btn-primary" onclick="chkNull()">검색</button>
+            <button type="submit" id="searchButton" name="searchButton" class="btn btn-primary" onclick="searchReserve()">검색</button>
         </div>
     </div>
 </form>
@@ -246,36 +252,46 @@ $(document).ready(function() {
 								</tr>
 							</thead>
 							<tbody id="contentBoard">
-							
+
 								<%
-    try {
-        AdminReserveManageDAO armDAO = AdminReserveManageDAO.getInstance();
-        List<AdminReserveManageVO> reserveList;
+								try {
+									AdminReserveManageDAO armDAO = AdminReserveManageDAO.getInstance();
+									List<AdminReserveManageVO> reserveList;
 
-        String reservationNumber = request.getParameter("reservationNumber");
-        String theater = request.getParameter("theaterDropdown"); // HTML 폼에서 선택한 이름으로 수정
-        String screeningRoom = request.getParameter("screeningRoomDropdown"); // HTML 폼에서 선택한 이름으로 수정
-        String dateString = request.getParameter("yearDropdown") + request.getParameter("monthDropdown") + request.getParameter("dayDropdown");
+									String reservationNumber = request.getParameter("reservationNumber");
+									String theater = request.getParameter("theaterDropdown"); // HTML 폼에서 선택한 이름으로 수정
+									String screeningRoom = request.getParameter("screeningRoomDropdown"); // HTML 폼에서 선택한 이름으로 수정
+									String dateString = request.getParameter("yearDropdown") + request.getParameter("monthDropdown")
+									+ request.getParameter("dayDropdown");
 
-        // reservationNumber가 있을 경우 해당 예약 검색, 없을 경우 모든 예약 검색
-        if (reservationNumber != null && !reservationNumber.isEmpty()) {
-            reserveList = armDAO.searchReserve(theater, screeningRoom, dateString, reservationNumber.trim());
-            System.out.println(theater);
-            System.out.println(screeningRoom);
-            System.out.println(dateString);
-            System.out.println(reservationNumber.trim());
-        } else {
-            reserveList = armDAO.selectAllReserve();
-        }
+									// reservationNumber가 있을 경우 해당 예약 검색, 없을 경우 모든 예약 검색
+									if (reservationNumber != null && !reservationNumber.isEmpty()) {
+										reserveList = armDAO.searchReserve(theater, screeningRoom, dateString, reservationNumber.trim());
+										System.out.println(theater);
+										System.out.println(screeningRoom);
+										System.out.println(dateString);
+										System.out.println(reservationNumber.trim());
+									} else {
+										// 상영관이 '전체'인 경우와 아닌 경우를 나눠서 처리
+										if ("전체".equals(screeningRoom)) {
+									// Case 2: screeningRoom이 '전체'인 경우
+									reserveList = armDAO.searchReserve2(theater, dateString, null); // reserveNum 파라미터 추가하여 전달
+										} else {
+									// Case 4: screeningRoom이 '전체'가 아니고 reservationNumber가 없는 경우
+									reserveList = armDAO.searchReserve4(theater, screeningRoom, dateString);
+										}
+									}
 
-        for (AdminReserveManageVO reserve : reserveList) {
-%>
+									for (AdminReserveManageVO reserve : reserveList) {
+								%>
 								<tr>
 									<td>
 										<div class="form-check" style="margin-left: 15px;">
-											<input type="checkbox" class="form-check-input" style="width: 20px; height: 20px;" 
-											name="reservationNumber" value="<%=reserve.getReservationNumber()%>">
-										</div></td>
+											<input type="checkbox" class="form-check-input"
+												style="width: 20px; height: 20px;" name="reservationNumber"
+												value="<%=reserve.getReservationNumber()%>">
+										</div>
+									</td>
 									<!-- 체크박스 열 -->
 									<td><%=reserve.getReservationNumber()%></td>
 									<td><%=reserve.getUserId()%></td>
@@ -292,6 +308,7 @@ $(document).ready(function() {
 								e.printStackTrace();
 								}
 								%>
+
 							</tbody>
 						</table>
 					</form>
