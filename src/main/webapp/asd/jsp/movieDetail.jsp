@@ -12,7 +12,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title id="ctl00_headerTitle">명화 그 이상의 감동. 띵화관</title>
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
