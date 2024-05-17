@@ -243,23 +243,32 @@ html{
 
 
 <script type="text/javascript">
+    // 캘린더에서 선택 가능한 날짜 범위 정의 (예: 1900년부터 현재 년도까지)
+    var minDate = new Date(1900, 0, 1);
+    var maxDate = new Date(); // 현재 날짜
 
-	//datepicker 사용
-	$(function() {
-		// 기본 사용
-		//$( "#datepicker" ).datepicker();
+    // 날짜가 유효한지 확인하는 함수
+    function isValidDate(year, month, day) {
+        var date = new Date(year, month - 1, day);
+        return date.getFullYear() == year && date.getMonth() + 1 == month && date.getDate() == day;
+    }
 
-		// 옵션 부여
-		$("#datepicker").datepicker(
-				{
-					dayNamesMin : [ "일", "월", "화", "수", "목", "금", "토" ],
-					dateFormat : "yy-mm-dd",
-					monthNames : [ "1월", "2월", "3월", "4월", "5월", "6월", "7월",
-							"8월", "9월", "10월", "11월", "12월" ],
-					showMonthAfterYear : true
-				});
-	});
-	
+    //datepicker 사용
+    $(function() {
+        // 기본 사용
+        //$( "#datepicker" ).datepicker();
+
+        // 옵션 부여
+        $("#datepicker").datepicker(
+                {
+                    dayNamesMin : [ "일", "월", "화", "수", "목", "금", "토" ],
+                    dateFormat : "yy-mm-dd",
+                    monthNames : [ "1월", "2월", "3월", "4월", "5월", "6월", "7월",
+                            "8월", "9월", "10월", "11월", "12월" ],
+                    showMonthAfterYear : true
+                });
+    });
+    
     // 팝업 창 가운데로 띄우는 함수
     function openPopup(url) {
         var popupWidth = 800;
@@ -268,96 +277,135 @@ html{
         var top = (window.innerHeight - popupHeight) / 2;
         window.open(url, '_blank', 'width=800, height=600, left=' + left + ', top=' + top);
     }
-	
-	document.addEventListener('DOMContentLoaded', function() {
-	    //idChk버튼이 클릭되면 idChkDupWin 함수 호출
-	    document.getElementById('idChk').addEventListener('click', idChkDupWin);
-	    
-	    // 회원 이용약관 내용 보기 링크
-	    document.getElementById("term1_link").addEventListener("click",
-	            function(event) {
-	                event.preventDefault(); // 링크의 기본 동작 중지
-	                openPopup("join_term1.jsp");
-	            });
-	    
-	    // 개인정보처리방침 내용 보기 링크
-	    document.getElementById("term2_link").addEventListener("click",
-	            function(event) {
-	                event.preventDefault(); // 링크의 기본 동작 중지
-	                openPopup("join_term2.jsp");
-	    });
-	});
-	
-	// 중복확인 버튼 클릭 시 실행되는 함수
-	function idChkDupWin() {
-	    // 입력된 아이디 가져오기
-	    var userId = document.getElementById('userId').value;
-	    
-	    // 팝업창 열기
-	    var popupUrl = 'idChk_dup.jsp?userId=' + userId;
-	    var popupWidth = 1000;
-		var popupHeight = 600;
-		var left = (window.innerWidth - popupWidth) / 2;
-		var top = (window.innerHeight - popupHeight) / 2;
-	    var popupOptions = 'width=600, height=400, left=' + left
-		+ ', top=' + top;
-	    window.open(popupUrl, 'idChkDup', popupOptions);
-	}
-	
-	$(function() {
-	    $("#reUserPassword").focusout(function() {
-	        //비밀번호 확인 함수 호출
-	        chkCorrectPw();
-	    }); // focusout
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        //idChk버튼이 클릭되면 idChkDupWin 함수 호출
+        document.getElementById('idChk').addEventListener('click', idChkDupWin);
+        
+        // 회원 이용약관 내용 보기 링크
+        document.getElementById("term1_link").addEventListener("click",
+                function(event) {
+                    event.preventDefault(); // 링크의 기본 동작 중지
+                    openPopup("join_term1.jsp");
+                });
+        
+        // 개인정보처리방침 내용 보기 링크
+        document.getElementById("term2_link").addEventListener("click",
+                function(event) {
+                    event.preventDefault(); // 링크의 기본 동작 중지
+                    openPopup("join_term2.jsp");
+        });
+    });
+    
+    // 중복확인 버튼 클릭 시 실행되는 함수
+    function idChkDupWin() {
+        // 입력된 아이디 가져오기
+        var userId = document.getElementById('userId').value;
+        
+        // 팝업창 열기
+        var popupUrl = 'idChk_dup.jsp?userId=' + userId;
+        var popupWidth = 1000;
+        var popupHeight = 600;
+        var left = (window.innerWidth - popupWidth) / 2;
+        var top = (window.innerHeight - popupHeight) / 2;
+        var popupOptions = 'width=600, height=400, left=' + left
+        + ', top=' + top;
+        window.open(popupUrl, 'idChkDup', popupOptions);
+    }
+    
+    $(function() {
+        $("#reUserPassword").focusout(function() {
+            //비밀번호 확인 함수 호출
+            chkCorrectPw();
+        }); // focusout
 
-	    $("#btnSubmit").click(function() {
-	        //모든 요소 입력되었는지 확인 함수
-	        chkInputAll();
-	    }); // click
-	});
-
-	//비밀번호 확인 함수
-	function chkCorrectPw() {
-	    if($("#userPassword").val() != $("#reUserPassword").val()) {
-	        alert('비밀번호가 다릅니다');
-	        $("#userPassword").val('');
-	        $("#reUserPassword").val('');
-	        $("#userPassword").focus();
-	    } // end if
-	} // chkCorrectPw
-	
-	//모든 요소 필수 입력 함수
-	function chkInputAll() {
-    let flagInputArrAll = true;
-    let arrEssential = [ $("#userId"), $("#userPassword"), $("#reUserPassword"), $("#userName"), $("#datepicker"),
-            $("#userPhone"), $("[name='terms'][value='회원 이용약관']"),
-            $("[name='terms'][value='개인정보처리방침']") ];
-    let arrLabel = [ '아이디', '비밀번호', '비밀번호 확인', '이름', '생년월일', '전화번호', '회원 이용약관',
-            '개인정보처리방침' ];
-
-    // 폼 객체 가져오기
-    let joinForm = document.forms["joinFrm"];
-
-    $.each(arrEssential, function(index, value) {
-        if (index < 6 && $(value).val() == "") {
-            alert(arrLabel[index] + '는 필수 입력입니다');
-            flagInputArrAll = false;
-            return false;
-        } else if (index >= 6 && !$(value).is(":checked")) {
-            alert(arrLabel[index] + '는 필수 동의사항입니다');
-            flagInputArrAll = false;
-            return false;
-        }
+        $("#btnSubmit").click(function() {
+            //모든 요소 입력되었는지 확인 함수
+            chkInputAll();
+        }); // click
     });
 
-    if (flagInputArrAll) {
-        joinForm.submit();
+    //비밀번호 확인 함수
+    function chkCorrectPw() {
+        if($("#userPassword").val() != $("#reUserPassword").val()) {
+            alert('비밀번호가 다릅니다');
+            $("#userPassword").val('');
+            $("#reUserPassword").val('');
+            $("#userPassword").focus();
+        } // end if
+    } // chkCorrectPw
+    
+    //모든 요소 필수 입력 함수
+    function chkInputAll() {
+        let flagInputArrAll = true;
+        let arrEssential = [ $("#userId"), $("#userPassword"), $("#reUserPassword"), $("#userName"), $("#datepicker"),
+                $("#userPhone"), $("[name='terms'][value='회원 이용약관']"),
+                $("[name='terms'][value='개인정보처리방침']") ];
+        let arrLabel = [ '아이디', '비밀번호', '비밀번호 확인', '이름', '생년월일', '전화번호', '회원 이용약관',
+                '개인정보처리방침' ];
+
+        // 폼 객체 가져오기
+        let joinForm = document.forms["joinFrm"];
+
+        $.each(arrEssential, function(index, value) {
+            if (index < 6 && $(value).val() == "") {
+                alert(arrLabel[index] + '는 필수 입력입니다');
+                flagInputArrAll = false;
+                return false;
+            } else if (index == 4) {
+                var inputDate = $(value).val();
+                // 입력된 날짜가 유효한지 확인
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(inputDate)) {
+                    alert("생년월일은 yyyy-mm-dd 형식으로 입력해주세요.");
+                    $(value).val(""); // 입력 필드를 비움
+                    $(value).focus();
+                    flagInputArrAll = false;
+                    return false;
+                }
+                // yyyy-mm-dd 형식으로 입력된 날짜를 분해하여 유효한 날짜인지 확인
+                var dateParts = inputDate.split("-");
+                var year = parseInt(dateParts[0]);
+                var month = parseInt(dateParts[1]);
+                var day = parseInt(dateParts[2]);
+                if (!isValidDate(year, month, day)) {
+                    alert("유효하지 않은 날짜입니다.");
+                    $(value).val(""); // 입력 필드를 비움
+                    $(value).focus();
+                    flagInputArrAll = false;
+                    return false;
+                }
+                // 캘린더에서 선택 가능한 날짜 범위에 있는지 확인
+                var selectedDate = new Date(inputDate);
+                if (selectedDate < minDate || selectedDate > maxDate) {
+                    alert("생년월일은 1900년 이후의 날짜로 입력해주세요.");
+                    $(value).val(""); // 입력 필드를 비움
+                    $(value).focus();
+                    flagInputArrAll = false;
+                    return false;
+                }
+            } else if (index == 5) {
+                // 전화번호가 숫자로만 11자리인지 확인
+                let telValue = $(value).val();
+                if (!/^\d{11}$/.test(telValue)) {
+                    alert("전화번호는 숫자 11자리로만 입력해주세요.");
+                    $(value).val(""); // 입력 필드를 비움
+                    $(value).focus();
+                    flagInputArrAll = false;
+                    return false;
+                }
+            } else if (index >= 6 && !$(value).is(":checked")) {
+                alert(arrLabel[index] + '는 필수 동의사항입니다');
+                flagInputArrAll = false;
+                return false;
+            }
+        });
+
+        if (flagInputArrAll) {
+            joinForm.submit();
+        }
     }
-}
-	
-	
-	
 </script>
+
 </head>
 
 
