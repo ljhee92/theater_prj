@@ -181,7 +181,7 @@ window.location.href = "login.jsp?prevPage=questionDetail.jsp";
 					alert("제목은 필수 입력사항입니다.");
 					$("[name='title']").focus();
 					flagInputAll = false;
-					true;
+					return;
 				} // end if
 
 				if(flagInputAll && $("#summernote").summernote('isEmpty')) {
@@ -190,7 +190,7 @@ window.location.href = "login.jsp?prevPage=questionDetail.jsp";
 						focus:true
 					});
 					flagInputAll = false;
-					true;
+					return;
 				} // end if
 				
 				if(flagInputAll && $("[name='category']").val()=='N/A') {

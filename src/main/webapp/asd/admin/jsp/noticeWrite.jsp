@@ -174,23 +174,22 @@ window.location.href = "login.jsp?prevPage=noticeWrite.jsp";
 		
 		function chkNull() {
 			let flagInputAll = true;
-			let arrNecessary = $(".necessary");
-			let arrLabel = ['제목', '내용'];
-			
-			$.each(arrNecessary, function(index, value) {
-				if($(value).val() == "") {
-					alert(arrLabel[index] + '은 필수 입력사항입니다.');
-					if(index == "제목") {
-						$(value).focus();
-					} else {
-						$(value).summernote({
-							focus: true
-						});
-					} // end else
-					flagInputAll = false;
-					return false;
-				} // end if
-			}); // each
+
+			if(flagInputAll && $("[name='title']").val() == "") {
+				alert("제목은 필수 입력사항입니다.");
+				$("[name='title']").focus();
+				flagInputAll = false;
+				return;
+			} // end if
+
+			if(flagInputAll && $("#summernote").summernote('isEmpty')) {
+				alert("내용은 필수 입력사항입니다.");
+				$("#summernote").summernote({
+					focus:true
+				});
+				flagInputAll = false;
+				return;
+			} // end if
 			
 			if(flagInputAll && $("#category").val()=='N/A') {
 				alert('카테고리를 선택해주세요.');

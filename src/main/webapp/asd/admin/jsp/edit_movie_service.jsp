@@ -16,7 +16,6 @@
     
     if ("update".equals(action)) {
         // 업데이트 요청 처리
-        System.out.println("edit_movie_service의 action:update 실행됨");
         String movieCode = request.getParameter("movieCode");
         String movieGenre = request.getParameter("movieGenre");
         String movieDirector = request.getParameter("movieDirector");
