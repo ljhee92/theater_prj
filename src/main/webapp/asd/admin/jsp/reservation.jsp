@@ -89,12 +89,11 @@ $(document).ready(function() {
     }
     
     $("#cancelButton").click(function() {
-    	
-    if( confirm("취소하시겠습니까?")){
-    $("#cancelForm").submit();
-    	
-    }
-      //  $("#reserveDropDown").submit(); // 폼 제출
+        if ($("input[name='reservationNumber']:checked").length === 0) {
+            alert("예매번호를 선택해주세요");
+        } else if (confirm("취소하시겠습니까?")) {
+            $("#cancelForm").submit();
+        }
     });
     
     $(function() {
