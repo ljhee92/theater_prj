@@ -221,9 +221,6 @@ $(document).ready(function() {
 
         <!-- 예매번호 검색 텍스트 -->
         <div class="form-group">
-            <input type="text" class="form-control" id="reservationNumber"
-                name="reservationNumber" value="${param.reservationNumber}"
-                placeholder="예매번호 입력" />
         </div>
 
         <div class="form-group">
