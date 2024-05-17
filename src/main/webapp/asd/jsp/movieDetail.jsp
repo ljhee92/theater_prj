@@ -395,7 +395,6 @@ $(function() {
     	    		reviewList =rvDAO.selectScoreReviewList(movieCode);
     	    	}//end else
     	    	
-    	    	
     	    	ReviewVO rvVO = null;
     	    %>
     	    var starData = [
@@ -405,6 +404,7 @@ $(function() {
     	    	{ userId: "<%= rvVO.getUserId()%>", rating: <%= rvVO.getReviewScore()%>, reviewContent: "<%= rvVO.getReviewContent() %>" },
     	   <%}%>
     	    ];
+    	    console.log(starData);
     	    
     	    /*
     	    // 가상의 별점 데이터 (예시)

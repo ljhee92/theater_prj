@@ -259,7 +259,8 @@ html{
 
 	    // 현재 연도를 기준으로 2000년 이후와 2000년 이전의 구분
 	    var currentYear = new Date().getFullYear();
-	    var century = currentYear < 2000 ? "19" : "20";
+	    //var century = currentYear < 2000 ? "19" : "20";
+	    var century = year > 21 ? "19" : "20";
 
 	    // YY 형식의 연도를 YYYY 형식으로 변환
 	    year = century + year;

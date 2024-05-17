@@ -208,6 +208,11 @@ window.location.href = "login.jsp?prevPage=ticket.jsp"; // 로그인하지 않�
 			var selectedPerson = $(".input-select").val();
 			var checkedSeat = $("input[type='checkbox']:checked").length;
 			
+			if(selectedPerson == 0 && checkedSeat == 0) {
+				alert("좌석선택을 해주세요.");
+				return;
+			} // end if
+			
 			if(selectedPerson > checkedSeat) {
 				alert("좌석선택을 완료해주세요.");
 				return;
