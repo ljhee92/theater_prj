@@ -89,12 +89,13 @@ $(document).ready(function() {
     }
     
     $("#cancelButton").click(function() {
-    	
-    if( confirm("취소하시겠습니까?")){
-    $("#cancelForm").submit();
-    	
-    }
-      //  $("#reserveDropDown").submit(); // 폼 제출
+        var checkedBoxes = $("input[name='reservationNumber']:checked");
+
+        if (checkedBoxes.length === 0) {
+            alert("예매번호를 선택해주세요");
+        } else if (confirm("취소하시겠습니까?")) {
+            $("#cancelForm").submit();
+        }
     });
     
     $(function() {
@@ -220,6 +221,9 @@ $(document).ready(function() {
 
         <!-- 예매번호 검색 텍스트 -->
         <div class="form-group">
+            <input type="text" class="form-control" id="reservationNumber"
+                name="reservationNumber" value="${param.reservationNumber}"
+                placeholder="예매번호 입력" />
         </div>
 
         <div class="form-group">
